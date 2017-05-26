@@ -1,0 +1,43 @@
+\documentclass[answers]{exam}
+\usepackage[utf8]{inputenc}
+\usepackage[demo]{graphicx}
+\usepackage{amssymb}
+\checkboxchar{$\square$}
+\parindent=0pt
+
+\title{test}
+\author{cedric.drrnm }
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{minipage}
+{\linewidth}
+Niveau {1}
+\part{}
+Le nombre qui suit le nombre 9 en système hexadécimal est :
+\bigskip
+
+\begin{checkboxes}
+\choice 0
+\choice impossible, hexa signifie que ce système ne va pas au-delà de 6 chiffres
+\choice 10
+\correctchoice A
+\end{checkboxes}
+\end{minipage}
+\bigskip
+
+\begin{minipage}
+{\linewidth}
+\part{}
+La conversion binaire (sur 4 bits) du nombre hexadécimal F est~:
+\bigskip
+
+\begin{checkboxes}
+\choice 1010
+\choice impossible, F est trop grand pour être codé sur 4 bits
+\correctchoice 1111
+\choice 0101
+\end{checkboxes}
+\end{minipage}
+\end{document}
