@@ -78,6 +78,8 @@ namespace WF_TPI_QCM
         {
             if (reponses.Count < 4)
                 return "Il a pas assez de réponses !";
+            else if (reponses.Count > 6)
+                return "Il a trop de réponses !";
             else if (!reponses.ContainsValue(true))
                 return "Il a pas de réponse correcte !";
             else
@@ -90,6 +92,8 @@ namespace WF_TPI_QCM
         {
             if (reponses.Count < 4)
                 return "Il a pas assez de réponses !";
+            else if (reponses.Count > 6)
+                return "Il a trop de réponses !";
             else if (!reponses.ContainsValue(true))
                 return "Il a pas de réponse correcte !";
             else
@@ -97,6 +101,37 @@ namespace WF_TPI_QCM
 
                 string tempError = DeleteQuestionByIdQuestion(idQuestion);
                 return (tempError + Environment.NewLine + InsertQuestion(idQCM, question, reponses)).Trim();
+            }
+        }
+
+        public string InsertMotCle(int idQCM, string[] motCle)
+        {
+            if (motCle.Length > 4)
+                return "Il a trop de mots-clés !";
+            else
+            {
+                string tempError = "";
+                foreach (string item in motCle)
+                {
+                    tempError += DAO.InsertMotCle(idQCM, item);
+                }
+                return tempError;
+            }
+        }
+
+        public string UpdateMotCle(int _idQCM, Dictionary<int,string> motCle)
+        {
+            if(motCle.Count > 4)
+                return "Il a trop de mots-clés !";
+            else
+            {
+                string tempError = "";
+                foreach (KeyValuePair<int, string> item in motCle)
+                {
+                    tempError += DAO.DeleteMotCleByIdMotCle(item.Key);
+                }
+                tempError += InsertMotCle(_idQCM, motCle.Values.ToArray());
+                return tempError;
             }
         }
     }

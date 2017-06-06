@@ -52,6 +52,9 @@ namespace WF_TPI_QCM
                                 MessageBox.Show("[QCM] Erreur: " + error);
                         }
                     break;
+                default:
+                    new NotImplementedException();
+                    break;
             }
         }
 
@@ -104,8 +107,38 @@ namespace WF_TPI_QCM
 
         private void btnMotCle_Click(object sender, EventArgs e)
         {
-            _nextForm = new FrmCreateEditMotCle();
-            _nextForm.ShowDialog();
+            int idQCM;
+            int idQuestion;
+            switch (_mode)
+            {
+                case Modes.Create:
+                case Modes.Update:
+                    idQCM = Ask(_qcmController.GetQCM());
+                    if (idQCM != 0)
+                    {
+                        _nextForm = new FrmCreateEditMotCle(idQCM, _mode);
+                        _nextForm.ShowDialog();
+                    }
+                    break;
+                case Modes.Delete:
+                    idQCM = Ask(_qcmController.GetQCM());
+                    if (idQCM != 0)
+                    {
+                        idQuestion = Ask(_qcmController.GetQuestionsByIdQCM(idQCM));
+                        if (idQuestion != 0)
+                        {
+                            if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer cette question ?", "Suppression d'un QCM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                string error = _qcmController.DeleteQuestionByIdQuestion(idQuestion);
+                                if (error == "")
+                                    MessageBox.Show("Suppression de la question avec succès !");
+                                else
+                                    MessageBox.Show("[QCM] Erreur: " + error);
+                            }
+                        }
+                    }
+                    break;
+            }
         }
 
         public int Ask(Dictionary<int, string> datas)

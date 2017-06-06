@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblQuestion = new System.Windows.Forms.Label();
+            this.lblQCM = new System.Windows.Forms.Label();
             this.gbMotCle1 = new System.Windows.Forms.GroupBox();
             this.tbxMotCle1 = new System.Windows.Forms.TextBox();
             this.gbMotCle2 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbxMotCle2 = new System.Windows.Forms.TextBox();
             this.gbMotCle3 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tbxMotCle3 = new System.Windows.Forms.TextBox();
             this.gbMotCle4 = new System.Windows.Forms.GroupBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.tbxMotCle4 = new System.Windows.Forms.TextBox();
             this.btnAction = new System.Windows.Forms.Button();
             this.gbMotCle1.SuspendLayout();
             this.gbMotCle2.SuspendLayout();
@@ -44,14 +44,14 @@
             this.gbMotCle4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // lblQuestion
+            // lblQCM
             // 
-            this.lblQuestion.AutoSize = true;
-            this.lblQuestion.Location = new System.Drawing.Point(13, 13);
-            this.lblQuestion.Name = "lblQuestion";
-            this.lblQuestion.Size = new System.Drawing.Size(55, 13);
-            this.lblQuestion.TabIndex = 0;
-            this.lblQuestion.Text = "Question: ";
+            this.lblQCM.AutoSize = true;
+            this.lblQCM.Location = new System.Drawing.Point(13, 13);
+            this.lblQCM.Name = "lblQCM";
+            this.lblQCM.Size = new System.Drawing.Size(37, 13);
+            this.lblQCM.TabIndex = 0;
+            this.lblQCM.Text = "QCM: ";
             // 
             // gbMotCle1
             // 
@@ -72,7 +72,7 @@
             // 
             // gbMotCle2
             // 
-            this.gbMotCle2.Controls.Add(this.textBox1);
+            this.gbMotCle2.Controls.Add(this.tbxMotCle2);
             this.gbMotCle2.Location = new System.Drawing.Point(13, 99);
             this.gbMotCle2.Name = "gbMotCle2";
             this.gbMotCle2.Size = new System.Drawing.Size(523, 51);
@@ -80,16 +80,16 @@
             this.gbMotCle2.TabStop = false;
             this.gbMotCle2.Text = "Mot-Clé 2";
             // 
-            // textBox1
+            // tbxMotCle2
             // 
-            this.textBox1.Location = new System.Drawing.Point(7, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(510, 20);
-            this.textBox1.TabIndex = 1;
+            this.tbxMotCle2.Location = new System.Drawing.Point(7, 19);
+            this.tbxMotCle2.Name = "tbxMotCle2";
+            this.tbxMotCle2.Size = new System.Drawing.Size(510, 20);
+            this.tbxMotCle2.TabIndex = 1;
             // 
             // gbMotCle3
             // 
-            this.gbMotCle3.Controls.Add(this.textBox2);
+            this.gbMotCle3.Controls.Add(this.tbxMotCle3);
             this.gbMotCle3.Location = new System.Drawing.Point(13, 159);
             this.gbMotCle3.Name = "gbMotCle3";
             this.gbMotCle3.Size = new System.Drawing.Size(523, 51);
@@ -97,16 +97,16 @@
             this.gbMotCle3.TabStop = false;
             this.gbMotCle3.Text = "Mot-Clé 3";
             // 
-            // textBox2
+            // tbxMotCle3
             // 
-            this.textBox2.Location = new System.Drawing.Point(7, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(510, 20);
-            this.textBox2.TabIndex = 2;
+            this.tbxMotCle3.Location = new System.Drawing.Point(7, 19);
+            this.tbxMotCle3.Name = "tbxMotCle3";
+            this.tbxMotCle3.Size = new System.Drawing.Size(510, 20);
+            this.tbxMotCle3.TabIndex = 2;
             // 
             // gbMotCle4
             // 
-            this.gbMotCle4.Controls.Add(this.textBox3);
+            this.gbMotCle4.Controls.Add(this.tbxMotCle4);
             this.gbMotCle4.Location = new System.Drawing.Point(13, 219);
             this.gbMotCle4.Name = "gbMotCle4";
             this.gbMotCle4.Size = new System.Drawing.Size(523, 51);
@@ -114,12 +114,12 @@
             this.gbMotCle4.TabStop = false;
             this.gbMotCle4.Text = "Mot-Clé 4";
             // 
-            // textBox3
+            // tbxMotCle4
             // 
-            this.textBox3.Location = new System.Drawing.Point(7, 19);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(510, 20);
-            this.textBox3.TabIndex = 3;
+            this.tbxMotCle4.Location = new System.Drawing.Point(7, 19);
+            this.tbxMotCle4.Name = "tbxMotCle4";
+            this.tbxMotCle4.Size = new System.Drawing.Size(510, 20);
+            this.tbxMotCle4.TabIndex = 3;
             // 
             // btnAction
             // 
@@ -129,6 +129,7 @@
             this.btnAction.TabIndex = 2;
             this.btnAction.Text = "Créer";
             this.btnAction.UseVisualStyleBackColor = true;
+            this.btnAction.Click += new System.EventHandler(this.btnAction_Click);
             // 
             // FrmCreateEditMotCle
             // 
@@ -140,7 +141,7 @@
             this.Controls.Add(this.gbMotCle3);
             this.Controls.Add(this.gbMotCle2);
             this.Controls.Add(this.gbMotCle1);
-            this.Controls.Add(this.lblQuestion);
+            this.Controls.Add(this.lblQCM);
             this.Name = "FrmCreateEditMotCle";
             this.Text = "FrmCreateEditMotCle";
             this.gbMotCle1.ResumeLayout(false);
@@ -158,15 +159,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblQuestion;
+        private System.Windows.Forms.Label lblQCM;
         private System.Windows.Forms.GroupBox gbMotCle1;
         private System.Windows.Forms.GroupBox gbMotCle2;
         private System.Windows.Forms.GroupBox gbMotCle3;
         private System.Windows.Forms.GroupBox gbMotCle4;
         private System.Windows.Forms.Button btnAction;
         private System.Windows.Forms.TextBox tbxMotCle1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox tbxMotCle2;
+        private System.Windows.Forms.TextBox tbxMotCle3;
+        private System.Windows.Forms.TextBox tbxMotCle4;
     }
 }
