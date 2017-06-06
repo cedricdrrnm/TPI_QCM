@@ -31,6 +31,9 @@
             this.tbxTitreQCM = new System.Windows.Forms.TextBox();
             this.lblTitreQCM = new System.Windows.Forms.Label();
             this.btnAction = new System.Windows.Forms.Button();
+            this.nudLevelQCM = new System.Windows.Forms.NumericUpDown();
+            this.lblLevelQCM = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelQCM)).BeginInit();
             this.SuspendLayout();
             // 
             // tbxTitreQCM
@@ -51,23 +54,58 @@
             // 
             // btnAction
             // 
-            this.btnAction.Location = new System.Drawing.Point(10, 39);
+            this.btnAction.Location = new System.Drawing.Point(10, 65);
             this.btnAction.Name = "btnAction";
             this.btnAction.Size = new System.Drawing.Size(474, 43);
             this.btnAction.TabIndex = 2;
             this.btnAction.Text = "Créer";
             this.btnAction.UseVisualStyleBackColor = true;
+            this.btnAction.Click += new System.EventHandler(this.btnAction_Click);
+            // 
+            // nudLevelQCM
+            // 
+            this.nudLevelQCM.Location = new System.Drawing.Point(104, 39);
+            this.nudLevelQCM.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nudLevelQCM.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLevelQCM.Name = "nudLevelQCM";
+            this.nudLevelQCM.Size = new System.Drawing.Size(380, 20);
+            this.nudLevelQCM.TabIndex = 3;
+            this.nudLevelQCM.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblLevelQCM
+            // 
+            this.lblLevelQCM.AutoSize = true;
+            this.lblLevelQCM.Location = new System.Drawing.Point(12, 41);
+            this.lblLevelQCM.Name = "lblLevelQCM";
+            this.lblLevelQCM.Size = new System.Drawing.Size(86, 13);
+            this.lblLevelQCM.TabIndex = 4;
+            this.lblLevelQCM.Text = "Niveau du QCM:";
             // 
             // FrmCreateEditQCM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 90);
+            this.ClientSize = new System.Drawing.Size(496, 118);
+            this.Controls.Add(this.lblLevelQCM);
+            this.Controls.Add(this.nudLevelQCM);
             this.Controls.Add(this.btnAction);
             this.Controls.Add(this.lblTitreQCM);
             this.Controls.Add(this.tbxTitreQCM);
             this.Name = "FrmCreateEditQCM";
             this.Text = "FrmCreateEditQCM";
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelQCM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -78,5 +116,7 @@
         private System.Windows.Forms.TextBox tbxTitreQCM;
         private System.Windows.Forms.Label lblTitreQCM;
         private System.Windows.Forms.Button btnAction;
+        private System.Windows.Forms.NumericUpDown nudLevelQCM;
+        private System.Windows.Forms.Label lblLevelQCM;
     }
 }

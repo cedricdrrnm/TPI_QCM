@@ -30,7 +30,6 @@
         {
             this.btnQCM = new System.Windows.Forms.Button();
             this.btnQuestion = new System.Windows.Forms.Button();
-            this.btnReponse = new System.Windows.Forms.Button();
             this.btnMotCle = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -42,6 +41,7 @@
             this.btnQCM.TabIndex = 0;
             this.btnQCM.Text = "QCM";
             this.btnQCM.UseVisualStyleBackColor = true;
+            this.btnQCM.Click += new System.EventHandler(this.btnQCM_Click);
             // 
             // btnQuestion
             // 
@@ -51,32 +51,24 @@
             this.btnQuestion.TabIndex = 0;
             this.btnQuestion.Text = "Question";
             this.btnQuestion.UseVisualStyleBackColor = true;
-            // 
-            // btnReponse
-            // 
-            this.btnReponse.Location = new System.Drawing.Point(13, 161);
-            this.btnReponse.Name = "btnReponse";
-            this.btnReponse.Size = new System.Drawing.Size(507, 68);
-            this.btnReponse.TabIndex = 0;
-            this.btnReponse.Text = "Reponse";
-            this.btnReponse.UseVisualStyleBackColor = true;
+            this.btnQuestion.Click += new System.EventHandler(this.btnQuestion_Click);
             // 
             // btnMotCle
             // 
-            this.btnMotCle.Location = new System.Drawing.Point(13, 235);
+            this.btnMotCle.Location = new System.Drawing.Point(13, 161);
             this.btnMotCle.Name = "btnMotCle";
             this.btnMotCle.Size = new System.Drawing.Size(507, 68);
             this.btnMotCle.TabIndex = 0;
             this.btnMotCle.Text = "Mot-Clé";
             this.btnMotCle.UseVisualStyleBackColor = true;
+            this.btnMotCle.Click += new System.EventHandler(this.btnMotCle_Click);
             // 
             // FrmChooseOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(532, 313);
+            this.ClientSize = new System.Drawing.Size(532, 237);
             this.Controls.Add(this.btnMotCle);
-            this.Controls.Add(this.btnReponse);
             this.Controls.Add(this.btnQuestion);
             this.Controls.Add(this.btnQCM);
             this.Name = "FrmChooseOptions";
@@ -89,7 +81,6 @@
 
         private System.Windows.Forms.Button btnQCM;
         private System.Windows.Forms.Button btnQuestion;
-        private System.Windows.Forms.Button btnReponse;
         private System.Windows.Forms.Button btnMotCle;
     }
 }

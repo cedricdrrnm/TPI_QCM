@@ -47,6 +47,7 @@
             this.btnChoisir.TabIndex = 1;
             this.btnChoisir.Text = "Choisir";
             this.btnChoisir.UseVisualStyleBackColor = true;
+            this.btnChoisir.Click += new System.EventHandler(this.btnChoisir_Click);
             // 
             // FrmSelectDatas
             // 
