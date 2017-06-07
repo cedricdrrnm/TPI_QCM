@@ -12,35 +12,48 @@ namespace WF_TPI_QCM
 {
     public partial class FrmSelectDatas : Form
     {
-        private int _returnValue;
+        private int _returnId;
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="datas">Toutes les données</param>
         public FrmSelectDatas(Dictionary<int, string> datas)
         {
             InitializeComponent();
-            ReturnValue = 0;
+            ReturnId = 0;
             foreach (KeyValuePair<int, string> item in datas)
             {
                 tvDatas.Nodes.Add(item.Key.ToString(), item.Value);
             }
         }
 
-        public int ReturnValue
+        /// <summary>
+        /// Id contenu dans la Form (utilisé pour savoir la sélection)
+        /// </summary>
+        public int ReturnId
         {
             get
             {
-                return _returnValue;
+                return _returnId;
             }
 
             set
             {
-                _returnValue = value;
+                _returnId = value;
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnChoisir"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnChoisir_Click(object sender, EventArgs e)
         {
             if (tvDatas.SelectedNode != null)
             {
-                ReturnValue = Convert.ToInt32(tvDatas.SelectedNode.Name);
+                ReturnId = Convert.ToInt32(tvDatas.SelectedNode.Name);
                 this.Close();
             }
         }

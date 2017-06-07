@@ -16,6 +16,11 @@ namespace WF_TPI_QCM
         FrmSelectDatas _frmSelectDatas;
         Modes _mode;
         Form _nextForm;
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="mode">Types de choix (Création, Edition, Suppression)</param>
         public FrmChooseOptions(Modes mode)
         {
             InitializeComponent();
@@ -23,6 +28,12 @@ namespace WF_TPI_QCM
             _qcmController = new QCMController();
         }
 
+
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnQCM"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnQCM_Click(object sender, EventArgs e)
         {
             int idQCM;
@@ -58,6 +69,12 @@ namespace WF_TPI_QCM
             }
         }
 
+
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnQuestion"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnQuestion_Click(object sender, EventArgs e)
         {
             int idQCM;
@@ -91,13 +108,13 @@ namespace WF_TPI_QCM
                         idQuestion = Ask(_qcmController.GetQuestionsByIdQCM(idQCM));
                         if (idQuestion != 0)
                         {
-                            if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer cette question ?", "Suppression d'un QCM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer cette question ?", "Suppression d'une question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                             {
                                 string error = _qcmController.DeleteQuestionByIdQuestion(idQuestion);
                                 if (error == "")
                                     MessageBox.Show("Suppression de la question avec succès !");
                                 else
-                                    MessageBox.Show("[QCM] Erreur: " + error);
+                                    MessageBox.Show("[Question] Erreur: " + error);
                             }
                         }
                     }
@@ -105,10 +122,15 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnMotCle"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnMotCle_Click(object sender, EventArgs e)
         {
             int idQCM;
-            int idQuestion;
+            int idMotCle;
             switch (_mode)
             {
                 case Modes.Create:
@@ -124,16 +146,16 @@ namespace WF_TPI_QCM
                     idQCM = Ask(_qcmController.GetQCM());
                     if (idQCM != 0)
                     {
-                        idQuestion = Ask(_qcmController.GetQuestionsByIdQCM(idQCM));
-                        if (idQuestion != 0)
+                        idMotCle = Ask(_qcmController.GetMotsClesByIdQCM(idQCM));
+                        if (idMotCle != 0)
                         {
-                            if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer cette question ?", "Suppression d'un QCM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce mot-clé ?", "Suppression d'un mot-clé", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                             {
-                                string error = _qcmController.DeleteQuestionByIdQuestion(idQuestion);
+                                string error = _qcmController.DeleteMotCleByIdMotCle(idMotCle);
                                 if (error == "")
-                                    MessageBox.Show("Suppression de la question avec succès !");
+                                    MessageBox.Show("Suppression du mot-clé avec succès !");
                                 else
-                                    MessageBox.Show("[QCM] Erreur: " + error);
+                                    MessageBox.Show("[Mot-Clé] Erreur: " + error);
                             }
                         }
                     }
@@ -141,11 +163,16 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Fait s'ouvrir une form pour la sélection des données
+        /// </summary>
+        /// <param name="datas">Toutes les données</param>
+        /// <returns>Donnée sélectionnée</returns>
         public int Ask(Dictionary<int, string> datas)
         {
             _frmSelectDatas = new FrmSelectDatas(datas);
             _frmSelectDatas.ShowDialog();
-            return _frmSelectDatas.ReturnValue;
+            return _frmSelectDatas.ReturnId;
         }
     }
 }

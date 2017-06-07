@@ -57,7 +57,7 @@
             this.Controls.Add(this.btnChoisir);
             this.Controls.Add(this.tvDatas);
             this.Name = "FrmSelectDatas";
-            this.Text = "FrmSelectDatas";
+            this.Text = "Sélection des données";
             this.ResumeLayout(false);
 
         }

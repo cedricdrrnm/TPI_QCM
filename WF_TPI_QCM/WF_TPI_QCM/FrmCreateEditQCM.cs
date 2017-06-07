@@ -17,9 +17,16 @@ namespace WF_TPI_QCM
         const string TEXT_UPDATE = "Modifier";
         int _idQCM;
 
+        /// <summary>
+        /// Constructeur (Create)
+        /// </summary>
         public FrmCreateEditQCM() : this(0)
         { }
 
+        /// <summary>
+        /// Constructeur (Update)
+        /// </summary>
+        /// <param name="idQCM">Id du QCM à modifier, "idQCM = 0" s'il faut le créer</param>
         public FrmCreateEditQCM(int idQCM)
         {
             InitializeComponent();
@@ -34,6 +41,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnAction"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnAction_Click(object sender, EventArgs e)
         {
             if (_idQCM == 0)

@@ -1,4 +1,5 @@
 ﻿/*
+ * Changements de la méthode par array en la méthode "GetString", "GetInt32" ou "GetBoolean"
  https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqldatareader.getstring(v=vs.110).aspx
  https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqldatareader.getint32(v=vs.110).aspx
  https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqldatareader.getboolean%28v=vs.110%29.aspx
@@ -19,7 +20,7 @@ namespace WF_TPI_QCM
         static MySqlConnection conn;
 
         /// <summary>
-        /// Créer la connection et l'initialise dans la variable "conn"
+        /// Initialise la connection
         /// </summary>
         static public void CreateConnection()
         {
@@ -33,6 +34,8 @@ namespace WF_TPI_QCM
         /// <returns>Retourne vrai (true) s'il n'y a aucun problème sinon retourne faux (false)</returns>
         static public bool OpenConnection()
         {
+            if (conn == null)
+                CreateConnection();
             try
             {
                 if (conn.State != System.Data.ConnectionState.Open)
@@ -81,46 +84,6 @@ namespace WF_TPI_QCM
         }
 
         #region Select
-
-        /// <summary>
-        /// Retourne tous les sujets
-        /// </summary>
-        /// <returns>Tous les sujets</returns>
-        static public Dictionary<int, string> SelectAllSubject()
-        {
-            string query = "SELECT * FROM subject";
-
-            //Create a list to store the result
-            Dictionary<int, string> dictionnaire = new Dictionary<int, string>();
-
-            //Open connection
-            if (OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                {
-                    dictionnaire.Add(dataReader.GetInt32("idSubject"), dataReader.GetString("nomSubject"));
-                }
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                CloseConnection();
-
-                //return list to be displayed
-                return dictionnaire;
-            }
-            else
-            {
-                return dictionnaire;
-            }
-        }
 
         /// <summary>
         /// Retourne tous les QCMs
@@ -382,7 +345,6 @@ namespace WF_TPI_QCM
                 return nomQCM;
             }
         }
-
 
         /// <summary>
         /// Retourne le texte de la question donnée par l'id
@@ -827,7 +789,7 @@ namespace WF_TPI_QCM
         /// <returns>Message d'erreur</returns>
         static public string UpdateQCMByIdQCM(string nomQCM, string level, int idQCM)
         {
-            string query = "UPDATE `qcm` SET `nomQCM`=@nomQCM,`level`=@level WHERE `idQCM`=@idQCM";
+            string query = "UPDATE `qcm` SET `nomQCM`=@nomQCM,`level`=@level WHERE `idQCM`= @idQCM";
 
             //open connection
             if (OpenConnection())

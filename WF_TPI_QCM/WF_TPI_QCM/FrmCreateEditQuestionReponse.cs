@@ -21,9 +21,18 @@ namespace WF_TPI_QCM
         TextBox[] _tbxReponseTab;
         RadioButton[] _rbReponseTab;
 
+        /// <summary>
+        /// Constructeur (Create)
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
         public FrmCreateEditQuestionReponse(int idQCM) : this(idQCM, 0)
         { }
 
+        /// <summary>
+        /// Constructeur (Update)
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <param name="idQuestion">Id de la question à modifier, "idQuestion = 0" s'il faut le créer</param>
         public FrmCreateEditQuestionReponse(int idQCM, int idQuestion)
         {
             InitializeComponent();
@@ -55,6 +64,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnAction"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnAction_Click(object sender, EventArgs e)
         {
             Dictionary<string, bool> dictReponses = new Dictionary<string, bool>();

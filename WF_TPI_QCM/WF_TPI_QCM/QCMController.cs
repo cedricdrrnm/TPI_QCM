@@ -134,5 +134,10 @@ namespace WF_TPI_QCM
                 return tempError;
             }
         }
+
+        public string DeleteMotCleByIdMotCle(int idMotCle)
+        {
+            return DAO.DeleteMotCleByIdMotCle(idMotCle);
+        }
     }
 }

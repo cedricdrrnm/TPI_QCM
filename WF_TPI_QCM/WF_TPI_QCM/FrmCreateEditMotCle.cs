@@ -20,8 +20,11 @@ namespace WF_TPI_QCM
         Modes _mode;
         private TextBox[] _tbxMotCleTab;
 
-        public FrmCreateEditMotCle(int idQCM)
-        { }
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <param name="mode">Types de choix (Création, Edition, Suppression)</param>
         public FrmCreateEditMotCle(int idQCM, Modes mode)
         {
             InitializeComponent();
@@ -55,6 +58,11 @@ namespace WF_TPI_QCM
 
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnAction"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnAction_Click(object sender, EventArgs e)
         {
             if (_mode == Modes.Create)
@@ -67,7 +75,7 @@ namespace WF_TPI_QCM
                 }
                 string error = _qcmController.InsertMotCle(_idQCM, listMotCles.ToArray());
                 if (error == "")
-                    MessageBox.Show("Création du QCM avec succès !");
+                    MessageBox.Show("Création des mots-clés avec succès !");
                 else
                     MessageBox.Show("[QCM] Erreur: " + error);
             }
@@ -82,7 +90,7 @@ namespace WF_TPI_QCM
                 }
                 string error = _qcmController.UpdateMotCle(_idQCM, dictMotCles);
                 if (error == "")
-                    MessageBox.Show("Modification du QCM avec succès !");
+                    MessageBox.Show("Modification des mots-clés avec succès !");
                 else
                     MessageBox.Show("[QCM] Erreur: " + error);
 

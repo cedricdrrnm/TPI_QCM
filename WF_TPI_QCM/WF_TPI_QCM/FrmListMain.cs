@@ -14,6 +14,7 @@ namespace WF_TPI_QCM
     {
         const string TEXT_QUESTION = "Questions";
         const string TEXT_MOT_CLE = "Mot-Clé";
+        const string TEXT_NIVEAU = "Niveau: ";
         const string TEXT_REPONSE = "Réponse";
 
         QCMController _qcmController;
@@ -48,14 +49,14 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void tvQCM_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node.Level == 0)
+            if (e.Node.Level == 0) //https://msdn.microsoft.com/en-us/library/system.windows.forms.treenode.level%28v=vs.110%29.aspx
             {
                 e.Node.Nodes.Clear();
                 e.Node.Nodes.AddRange(
                     new TreeNode[] {
                         new TreeNode(TEXT_QUESTION, new TreeNode[] {new TreeNode("")}),
                         new TreeNode(TEXT_MOT_CLE, new TreeNode[] { new TreeNode("") }),
-                        new TreeNode("Niveau: " + _qcmController.GetLevelByIdQCM(Convert.ToInt32(e.Node.Name)).ToString())
+                        new TreeNode(TEXT_NIVEAU + _qcmController.GetLevelByIdQCM(Convert.ToInt32(e.Node.Name)).ToString())
                     });
             }
             else if (e.Node.Level == 1)
