@@ -82,6 +82,7 @@
             this.btnExporter.TabIndex = 4;
             this.btnExporter.Text = "Exporter";
             this.btnExporter.UseVisualStyleBackColor = true;
+            this.btnExporter.Click += new System.EventHandler(this.btnExporter_Click);
             // 
             // btnRaffraichir
             // 

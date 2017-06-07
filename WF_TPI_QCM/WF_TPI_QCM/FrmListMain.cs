@@ -120,5 +120,10 @@ namespace WF_TPI_QCM
             _frmChooseOption = new FrmChooseOptions(Modes.Delete);
             _frmChooseOption.ShowDialog();
         }
+
+        private void btnExporter_Click(object sender, EventArgs e)
+        {
+            _qcmController.Export();
+        }
     }
 }

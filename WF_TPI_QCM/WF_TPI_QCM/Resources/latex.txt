@@ -1,0 +1,37 @@
+%\documentclass[answers]{exam}
+\documentclass{exam}
+\usepackage[utf8]{inputenc}
+\usepackage[demo]{graphicx}
+\usepackage{amssymb}
+\checkboxchar{$\square$}
+\parindent=0pt
+\title{test}
+\author{cedric.drrnm }
+\date{\today}
+
+\begin{document}
+\maketitle
+%loopQuestion%
+\begin{minipage}
+{\linewidth}
+\part{}
+%textQuestion%
+\bigskip
+
+\begin{checkboxes}
+	
+%loopBadAnswer%
+\choice %badAnswer%
+%loopBadAnswer%
+
+%loopGoodAnswer% 
+\correctchoice %goodAnswer% 
+%loopGoodAnswer%
+
+\end{checkboxes}
+\end{minipage}
+\bigskip
+
+%loopQuestion%
+
+\end{document}

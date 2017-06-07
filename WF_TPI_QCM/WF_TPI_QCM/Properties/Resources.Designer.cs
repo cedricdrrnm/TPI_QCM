@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WF_TPI_QCM.Properties
-{
-
-
+namespace WF_TPI_QCM.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
     /// </summary>
@@ -22,49 +22,75 @@ namespace WF_TPI_QCM.Properties
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    internal class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WF_TPI_QCM.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Remplace la propriété CurrentUICulture du thread actuel pour toutes
         ///   les recherches de ressources à l'aide de cette classe de ressource fortement typée.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à \documentclass[answers]{exam}
+        ///\usepackage[utf8]{inputenc}
+        ///\usepackage[demo]{graphicx}
+        ///\usepackage{amssymb}
+        ///\checkboxchar{$\square$}
+        ///\parindent=0pt
+        ///
+        ///\title{test}
+        ///\author{cedric.drrnm }
+        ///\date{\today}
+        ///
+        ///\begin{document}
+        ///\maketitle
+        ///\begin{minipage}
+        ///{\linewidth}
+        ///Niveau {1}
+        ///\part{}
+        ///Le nombre qui suit le nombre 9 en système hexadécimal est :
+        ///\bigskip
+        ///
+        ///\begin{checkboxes}
+        ///\choice 0
+        ///\choice impossible, hexa signifie que ce système ne va pas au-delà de 6 chiffres
+        ///\choice 10
+        ///\correctchoice A
+        ///\en [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string latex {
+            get {
+                return ResourceManager.GetString("latex", resourceCulture);
             }
         }
     }

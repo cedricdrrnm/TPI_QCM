@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ namespace WF_TPI_QCM
 
     class QCMController
     {
+        private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
+        FrmExportSelect _frmExportSelect;
+
         #region Select
 
         public QCMController()
@@ -119,9 +123,9 @@ namespace WF_TPI_QCM
             }
         }
 
-        public string UpdateMotCle(int _idQCM, Dictionary<int,string> motCle)
+        public string UpdateMotCle(int _idQCM, Dictionary<int, string> motCle)
         {
-            if(motCle.Count > 4)
+            if (motCle.Count > 4)
                 return "Il a trop de mots-clés !";
             else
             {
@@ -138,6 +142,33 @@ namespace WF_TPI_QCM
         public string DeleteMotCleByIdMotCle(int idMotCle)
         {
             return DAO.DeleteMotCleByIdMotCle(idMotCle);
+        }
+
+        public List<string> GetListModeles()
+        {
+            List<string> listModeles = new List<string>();
+
+
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS))
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS);
+
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\latex.txt"))
+            {
+                File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\latex.txt", Properties.Resources.latex);
+            }
+
+            //http://www.csharp-examples.net/get-files-from-directory/
+            foreach (string item in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS))
+            {
+                listModeles.Add(item.Split('\\').Last());
+            }
+            return listModeles;
+        }
+
+        public void Export()
+        {
+            _frmExportSelect = new FrmExportSelect(GetListModeles());
+            _frmExportSelect.ShowDialog();
         }
     }
 }
