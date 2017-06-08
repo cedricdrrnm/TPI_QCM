@@ -16,7 +16,7 @@ namespace WF_TPI_QCM
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmListMain());
+            Application.Run(/*new frmListMain()*/ new frmListQCMMain());
         }
     }
 }
