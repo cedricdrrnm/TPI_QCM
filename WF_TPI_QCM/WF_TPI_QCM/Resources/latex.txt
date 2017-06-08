@@ -5,8 +5,8 @@
 \usepackage{amssymb}
 \checkboxchar{$\square$}
 \parindent=0pt
-\title{test}
-\author{cedric.drrnm }
+\title{%title%}
+\author{%author%}
 \date{\today}
 
 \begin{document}

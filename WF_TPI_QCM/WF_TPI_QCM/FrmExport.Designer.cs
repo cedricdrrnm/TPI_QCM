@@ -33,6 +33,8 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.tbxContent = new System.Windows.Forms.TextBox();
             this.lsbMarkers = new System.Windows.Forms.ListBox();
+            this.lblNameOfDocument = new System.Windows.Forms.Label();
+            this.tbxNameOfDocument = new System.Windows.Forms.TextBox();
             this.msExport.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +71,7 @@
             this.tbxContent.Multiline = true;
             this.tbxContent.Name = "tbxContent";
             this.tbxContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbxContent.Size = new System.Drawing.Size(661, 384);
+            this.tbxContent.Size = new System.Drawing.Size(661, 381);
             this.tbxContent.TabIndex = 2;
             // 
             // lsbMarkers
@@ -77,15 +79,33 @@
             this.lsbMarkers.FormattingEnabled = true;
             this.lsbMarkers.Location = new System.Drawing.Point(667, 27);
             this.lsbMarkers.Name = "lsbMarkers";
-            this.lsbMarkers.Size = new System.Drawing.Size(172, 381);
+            this.lsbMarkers.Size = new System.Drawing.Size(172, 329);
             this.lsbMarkers.TabIndex = 3;
             this.lsbMarkers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsbMarkers_MouseDoubleClick);
+            // 
+            // lblNameOfDocument
+            // 
+            this.lblNameOfDocument.AutoSize = true;
+            this.lblNameOfDocument.Location = new System.Drawing.Point(667, 372);
+            this.lblNameOfDocument.Name = "lblNameOfDocument";
+            this.lblNameOfDocument.Size = new System.Drawing.Size(93, 13);
+            this.lblNameOfDocument.TabIndex = 4;
+            this.lblNameOfDocument.Text = "Titre du document";
+            // 
+            // tbxNameOfDocument
+            // 
+            this.tbxNameOfDocument.Location = new System.Drawing.Point(670, 388);
+            this.tbxNameOfDocument.Name = "tbxNameOfDocument";
+            this.tbxNameOfDocument.Size = new System.Drawing.Size(169, 20);
+            this.tbxNameOfDocument.TabIndex = 5;
             // 
             // FrmExport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(851, 488);
+            this.Controls.Add(this.tbxNameOfDocument);
+            this.Controls.Add(this.lblNameOfDocument);
             this.Controls.Add(this.lsbMarkers);
             this.Controls.Add(this.tbxContent);
             this.Controls.Add(this.btnExport);
@@ -107,5 +127,7 @@
         private System.Windows.Forms.TextBox tbxContent;
         private System.Windows.Forms.ToolStripMenuItem tsmiModel;
         private System.Windows.Forms.ListBox lsbMarkers;
+        private System.Windows.Forms.Label lblNameOfDocument;
+        private System.Windows.Forms.TextBox tbxNameOfDocument;
     }
 }

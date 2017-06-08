@@ -41,7 +41,7 @@ namespace WF_TPI_QCM
                 if (item.Checked)
                     ListSelectedIdQCMs.Add(Convert.ToInt32(item.Name));
             }
-
+            
             if (lsbModeles.SelectedItem != null)
                 _frmExport = new FrmExport(ListSelectedIdQCMs, lsbModeles.SelectedItem.ToString());
             else

@@ -19,10 +19,16 @@ namespace WF_TPI_QCM
         private const string MARQUE_TEXT_QUESTION = "%textQuestion%";
         private const string MARQUE_TEXT_BAD_ANSWER = "%badAnswer%";
         private const string MARQUE_TEXT_GOOD_ANSWER = "%goodAnswer%";
+        private const string MARQUE_AUTHOR = "%author%";
+        private const string MARQUE_TITLE = "%title%";
 
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
         private List<int> _listSelectedIdQCMs;
         QCMController _qcmController;
+        SaveFileDialog _sfd;
+
+        public FrmExport(List<int> listSelectedIdQCMs) : this(listSelectedIdQCMs, null)
+        { }
 
         public FrmExport(List<int> listSelectedIdQCMs, string modelName)
         {
@@ -41,20 +47,18 @@ namespace WF_TPI_QCM
             lsbMarkers.Items.AddRange(new string[] { MARQUE_LOOP_QUESTION, MARQUE_LOOP_BAD_ANSWER, MARQUE_LOOP_GOOD_ANSWER, MARQUE_TEXT_QUESTION, MARQUE_TEXT_BAD_ANSWER, MARQUE_TEXT_GOOD_ANSWER });
         }
 
-        public FrmExport(List<int> listSelectedIdQCMs) : this(listSelectedIdQCMs, null)
-        { }
-
         private void LoadModel(string modelName)
         {
             //https://msdn.microsoft.com/en-us/library/system.environment.specialfolder%28v=vs.110%29.aspx
             if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\" + modelName))
             {
-                MessageBox.Show("Ce modèle n'existe pas !");
+                if (!_qcmController.GetListModeles().Contains(modelName))
+                {
+                    MessageBox.Show("Ce modèle n'existe pas !");
+                    return;
+                }
             }
-            else
-            {
-                tbxContent.Text = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\" + modelName);
-            }
+            tbxContent.Text = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\" + modelName);
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -64,7 +68,8 @@ namespace WF_TPI_QCM
             string[] str = tbxContent.Text.Split(new string[] { MARQUE_LOOP_QUESTION, MARQUE_LOOP_BAD_ANSWER, MARQUE_LOOP_GOOD_ANSWER }, StringSplitOptions.None);
             if (str.Length == 7)
             {
-                string returnString = str[0];
+                //https://msdn.microsoft.com/en-us/library/system.environment.username%28v=vs.110%29.aspx
+                string returnString = str[0].Replace(MARQUE_AUTHOR, Environment.UserName).Replace(MARQUE_TITLE, tbxNameOfDocument.Text);
                 foreach (int idQCM in _listSelectedIdQCMs)
                 {
                     foreach (KeyValuePair<int, string> question in _qcmController.GetQuestionsByIdQCM(idQCM))
@@ -82,7 +87,14 @@ namespace WF_TPI_QCM
                 }
 
                 returnString += str[6];
-                tbxContent.Text = returnString;
+                _sfd = new SaveFileDialog();
+                _sfd.Filter = "Format texte (*.txt) | *.txt";
+                if (_sfd.ShowDialog() == DialogResult.OK)
+                {
+                    if (_sfd.FileName.Split('.').Last() != "txt")
+                        _sfd.FileName += ".txt";
+                    File.WriteAllText(_sfd.FileName, returnString);
+                }
             }
         }
 
@@ -96,7 +108,7 @@ namespace WF_TPI_QCM
 
         private void lsbMarkers_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if(lsbMarkers.SelectedItem != null)
+            if (lsbMarkers.SelectedItem != null)
             {
                 tbxContent.Text = tbxContent.Text.Remove(tbxContent.SelectionStart, tbxContent.SelectionLength);
                 //https://stackoverflow.com/questions/526540/how-do-i-find-the-position-of-a-cursor-in-a-text-box-c-sharp
@@ -104,7 +116,7 @@ namespace WF_TPI_QCM
                 tbxContent.Text = tbxContent.Text.Insert(selectedIndex, lsbMarkers.SelectedItem.ToString());
                 tbxContent.SelectionStart = selectedIndex + lsbMarkers.SelectedItem.ToString().Length; //Replace le curseur après l'insertion (pas à 0)
             }
-                
+
         }
     }
 }
