@@ -48,16 +48,16 @@ namespace WF_TPI_QCM
             {
                 tbxQuestion.Text = _qcmController.GetTextQuestionByIdQuestion(idQuestion);
                 int index = 0;
-                foreach (KeyValuePair<string, bool> item in _qcmController.GetReponsesByIdQuestion(idQuestion))
+                foreach (ReponseModele item in _qcmController.GetReponsesByIdQuestion(idQuestion))
                 {
                     if (index < _tbxReponseTab.Length)
                     {
-                        _tbxReponseTab[index].Text = item.Key;
+                        _tbxReponseTab[index].Text = item.IdReponse.ToString();
                     }
 
                     if (index < _rbReponseTab.Length)
                     {
-                        _rbReponseTab[index].Checked = item.Value;
+                        _rbReponseTab[index].Checked = item.BonneReponse;
                     }
                     index++;
                 }

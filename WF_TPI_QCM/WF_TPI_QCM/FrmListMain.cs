@@ -27,6 +27,7 @@ namespace WF_TPI_QCM
         {
             InitializeComponent();
             _qcmController = new QCMController();
+            _qcmController.GetQCMById(11);
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void frmListMain_Load(object sender, EventArgs e)
         {
-            foreach (KeyValuePair<int, string> item in _qcmController.GetQCM())
+            foreach (KeyValuePair<int, string> item in _qcmController.GetListQCM())
             {
                 tvQCM.Nodes.Add(item.Key.ToString(), item.Value).Nodes.Add("");
             }
@@ -64,9 +65,9 @@ namespace WF_TPI_QCM
                 if (e.Node.Text == TEXT_QUESTION)
                 {
                     e.Node.Nodes.Clear();
-                    foreach (KeyValuePair<int,string> item in _qcmController.GetQuestionsByIdQCM(Convert.ToInt32(e.Node.Parent.Name)))
+                    foreach (QuestionModele item in _qcmController.GetQuestionsByIdQCM(Convert.ToInt32(e.Node.Parent.Name)))
                     {
-                        e.Node.Nodes.Add(item.Key.ToString(), item.Value).Nodes.Add(TEXT_REPONSE).Nodes.Add("");
+                        e.Node.Nodes.Add(item.IdQuestion.ToString(), item.Question).Nodes.Add(TEXT_REPONSE).Nodes.Add("");
                     }
                 }
                 else if (e.Node.Text == TEXT_MOT_CLE)
@@ -81,9 +82,9 @@ namespace WF_TPI_QCM
             else if (e.Node.Level == 3)
             {
                 e.Node.Nodes.Clear();
-                foreach (KeyValuePair<string, bool> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(e.Node.Parent.Name)))
+                foreach (ReponseModele item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(e.Node.Parent.Name)))
                 {
-                    e.Node.Nodes.Add(item.Key.ToString()).ForeColor = ((item.Value) ? Color.Green : Color.Red);
+                    e.Node.Nodes.Add(item.IdReponse.ToString()).ForeColor = ((item.BonneReponse) ? Color.Green : Color.Red);
                 }
             }
         }

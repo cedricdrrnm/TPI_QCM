@@ -44,7 +44,7 @@ namespace WF_TPI_QCM
                     _nextForm.ShowDialog();
                     break;
                 case Modes.Update:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                     {
                         _nextForm = new FrmCreateEditQCM(idQCM);
@@ -52,7 +52,7 @@ namespace WF_TPI_QCM
                     }
                     break;
                 case Modes.Delete:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    /*idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                         if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce QCM ?", "Suppression d'un QCM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
@@ -62,7 +62,7 @@ namespace WF_TPI_QCM
                             else
                                 MessageBox.Show("[QCM] Erreur: " + error);
                         }
-                    break;
+                    break;*/
                 default:
                     new NotImplementedException();
                     break;
@@ -82,7 +82,7 @@ namespace WF_TPI_QCM
             switch (_mode)
             {
                 case Modes.Create:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                     {
                         _nextForm = new FrmCreateEditQuestionReponse(idQCM);
@@ -90,10 +90,10 @@ namespace WF_TPI_QCM
                     }
                     break;
                 case Modes.Update:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                     {
-                        idQuestion = Ask(_qcmController.GetQuestionsByIdQCM(idQCM));
+                        idQuestion = _qcmController.AskQuestion();
                         if (idQuestion != 0)
                         {
                             _nextForm = new FrmCreateEditQuestionReponse(idQCM, idQuestion);
@@ -102,10 +102,10 @@ namespace WF_TPI_QCM
                     }
                     break;
                 case Modes.Delete:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                     {
-                        idQuestion = Ask(_qcmController.GetQuestionsByIdQCM(idQCM));
+                        idQuestion = _qcmController.AskQuestion();
                         if (idQuestion != 0)
                         {
                             if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer cette question ?", "Suppression d'une question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -135,7 +135,7 @@ namespace WF_TPI_QCM
             {
                 case Modes.Create:
                 case Modes.Update:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                     {
                         _nextForm = new FrmCreateEditMotCle(idQCM, _mode);
@@ -143,10 +143,10 @@ namespace WF_TPI_QCM
                     }
                     break;
                 case Modes.Delete:
-                    idQCM = Ask(_qcmController.GetQCM());
+                    idQCM = _qcmController.Ask(_qcmController.GetListQCM());
                     if (idQCM != 0)
                     {
-                        idMotCle = Ask(_qcmController.GetMotsClesByIdQCM(idQCM));
+                        idMotCle = _qcmController.Ask(_qcmController.GetMotsClesByIdQCM(idQCM));
                         if (idMotCle != 0)
                         {
                             if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce mot-clé ?", "Suppression d'un mot-clé", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -161,18 +161,6 @@ namespace WF_TPI_QCM
                     }
                     break;
             }
-        }
-
-        /// <summary>
-        /// Fait s'ouvrir une form pour la sélection des données
-        /// </summary>
-        /// <param name="datas">Toutes les données</param>
-        /// <returns>Donnée sélectionnée</returns>
-        public int Ask(Dictionary<int, string> datas)
-        {
-            _frmSelectDatas = new FrmSelectDatas(datas);
-            _frmSelectDatas.ShowDialog();
-            return _frmSelectDatas.ReturnId;
         }
     }
 }

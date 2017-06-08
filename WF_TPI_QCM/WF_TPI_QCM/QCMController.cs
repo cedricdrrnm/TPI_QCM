@@ -13,6 +13,8 @@ namespace WF_TPI_QCM
     {
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
         FrmExportSelect _frmExportSelect;
+        QCMModele qcm;
+        private FrmSelectDatas _frmSelectDatas;
 
         #region Select
 
@@ -21,39 +23,59 @@ namespace WF_TPI_QCM
             DAO.CreateConnection();
         }
 
-        public Dictionary<int, string> GetQCM()
+        public bool GetQCMById(int idQCM)
+        {
+            qcm = DAO.SelectQCMById(idQCM);
+            return true;
+        }
+
+        public Dictionary<int, string> GetListQCM()
         {
             return DAO.SelectAllQCM();
         }
 
         public int GetLevelByIdQCM(int idQCM)
         {
-            return DAO.SelectLevelByIdQCM(idQCM);
+            return qcm.Level;
         }
 
-        public Dictionary<int, string> GetQuestionsByIdQCM(int idQCM)
+        public List<QuestionModele> GetQuestionsByIdQCM(int idQCM)
         {
-            return DAO.SelectAllQuestionByIdQCM(idQCM);
+            return qcm.ListQuestionModele;
         }
 
         public Dictionary<int, string> GetMotsClesByIdQCM(int idQCM)
         {
-            return DAO.SelectAllMotCleByIdQCM(idQCM);
+            return qcm.DictMotCle;
         }
 
-        public Dictionary<string, bool> GetReponsesByIdQuestion(int idQuestion)
+        public List<ReponseModele> GetReponsesByIdQuestion(int idQuestion)
         {
-            return DAO.SelectAllReponseByIdQuestion(idQuestion);
+            foreach (QuestionModele item in qcm.ListQuestionModele)
+            {
+                if(item.IdQuestion == idQuestion)
+                {
+                    return item.ListReponseModele;
+                }
+            }
+            return null;
         }
 
         public string GetTitreQCMByIdQCM(int idQCM)
         {
-            return DAO.SelectTitreQCMByIdQCM(idQCM);
+            return qcm.NomQCM;
         }
 
         public string GetTextQuestionByIdQuestion(int idQuestion)
         {
-            return DAO.SelectTextQuestionByIdQuestion(idQuestion);
+            foreach (QuestionModele item in qcm.ListQuestionModele)
+            {
+                if (item.IdQuestion == idQuestion)
+                {
+                    return item.Question;
+                }
+            }
+            return null;
         }
 
         #endregion
@@ -68,10 +90,10 @@ namespace WF_TPI_QCM
             return DAO.UpdateQCMByIdQCM(nouveauTitreQCM, nouveauLevelQCM.ToString(), idQCM);
         }
 
-        public string DeleteQCMByIdQCM(int idQCM)
+        /*public string DeleteQCMByIdQCM(int idQCM)
         {
             return DAO.DeleteQCMByIdQCM(idQCM);
-        }
+        }*/
 
         public string DeleteQuestionByIdQuestion(int idQuestion)
         {
@@ -169,6 +191,42 @@ namespace WF_TPI_QCM
         {
             _frmExportSelect = new FrmExportSelect(GetListModeles());
             _frmExportSelect.ShowDialog();
+        }
+
+        public int AskQuestion()
+        {
+            Dictionary<int, string> dictQuestionModele = new Dictionary<int, string>();
+            foreach (QuestionModele item in qcm.ListQuestionModele)
+            {
+                dictQuestionModele.Add(item.IdQuestion, item.Question);
+            }
+            return Ask(dictQuestionModele);
+        }
+
+        /*public int AskReponse(int idQuestion)
+        {
+            Dictionary<int, string> dictReponseModele = new Dictionary<int, string>();
+            foreach (QuestionModele question in qcm.ListQuestionModele)
+            {
+                if(question.IdQuestion == idQuestion)
+                    foreach (var reponse in question.ListReponseModele)
+                    {
+                        dictReponseModele.Add(reponse.IdReponse, reponse.Reponse);
+                    }
+            }
+            return Ask(dictReponseModele);
+        }*/
+
+        /// <summary>
+        /// Fait s'ouvrir une form pour la sélection des données
+        /// </summary>
+        /// <param name="datas">Toutes les données</param>
+        /// <returns>Donnée sélectionnée</returns>
+        public int Ask(Dictionary<int,string> datas)
+        {
+            _frmSelectDatas = new FrmSelectDatas(datas);
+            _frmSelectDatas.ShowDialog();
+            return _frmSelectDatas.ReturnId;
         }
     }
 }

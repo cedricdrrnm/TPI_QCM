@@ -83,48 +83,9 @@ namespace WF_TPI_QCM
             }
         }
 
+        /*
         #region Select
-
-        /// <summary>
-        /// Retourne tous les QCMs
-        /// </summary>
-        /// <returns>Tous les QCMs</returns>
-        static public Dictionary<int, string> SelectAllQCM()
-        {
-            string query = "SELECT * FROM qcm";
-
-            //Create a list to store the result
-            Dictionary<int, string> listQCMModele = new Dictionary<int, string>();
-
-            //Open connection
-            if (OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                {
-                    listQCMModele.Add(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"));
-                }
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                CloseConnection();
-
-                //return list to be displayed
-                return listQCMModele;
-            }
-            else
-            {
-                return listQCMModele;
-            }
-        }
-
+        
         /// <summary>
         /// Retourne toutes les questions qui sont dans le QCM donné par l'id
         /// </summary>
@@ -390,6 +351,7 @@ namespace WF_TPI_QCM
         }
 
         #endregion
+        */
 
         #region Insert
 
@@ -942,7 +904,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Retire le QCM donné par l'id
         /// </summary>
         /// <param name="idQCM">Id du QCM</param>
@@ -951,7 +913,7 @@ namespace WF_TPI_QCM
         {
             string tempError;
             string errorReturn = "";
-            foreach (KeyValuePair<int, string> item in SelectAllQuestionByIdQCM(idQCM))
+            foreach (QuestionModele<int, string> item in SelectAllQuestionByIdQCM(idQCM))
             {
                 tempError = DeleteQuestionByIdQuestion(item.Key);
                 errorReturn += ((errorReturn != "") ? errorReturn + Environment.NewLine + tempError : "");
@@ -999,8 +961,128 @@ namespace WF_TPI_QCM
             {
                 return "Erreur avec la connection !";
             }
+        }*/
+        #endregion
+
+        /// <summary>
+        /// Retourne tous les QCMs
+        /// </summary>
+        /// <returns>Tous les QCMs</returns>
+        static public Dictionary<int, string> SelectAllQCM()
+        {
+            string query = "SELECT * FROM qcm";
+
+            //Create a list to store the result
+            Dictionary<int, string> listQCMModele = new Dictionary<int, string>();
+
+            //Open connection
+            if (OpenConnection() == true)
+            {
+                //Create Command
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                {
+                    listQCMModele.Add(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"));
+                }
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close Connection
+                CloseConnection();
+
+                //return list to be displayed
+                return listQCMModele;
+            }
+            else
+            {
+                return listQCMModele;
+            }
         }
 
-        #endregion
+        public static QCMModele SelectQCMById(int idQCM)
+        {
+            //Open connection
+            if (OpenConnection() == true)
+            {
+                string query = "SELECT qcm.`idQCM`, qcm.`nomQCM`, qcm.`level`, q.`idQuestion`, q.`question`, r.`idReponse`, r.`reponse`, qhr.`bonneReponse`, m.`idMotCle`, m.`motCle` " +
+    "FROM `qcm`, " +
+    "`qcm_has_question` as qhq, " +
+    "`question` as q, " +
+    "`question_has_reponse` as qhr, " +
+    "`reponse` as r, " +
+    "`qcm_has_motcle` as qhm, " +
+    "`motcle` as m " +
+    "WHERE " +
+    "qcm.`idQCM` = qhq.`idQCM` AND " +
+    "qhq.`idQuestion` = q.`idQuestion` AND " +
+    "q.`idQuestion` = qhr.`idQuestion` AND " +
+    "qhr.`idReponse` = r.`idReponse` AND " +
+    "qcm.`idQCM` = qhm.`idQCM` AND " +
+    "qhm.`idMotCle` = m.`idMotCle` AND " +
+    "qcm.`idQCM` = @idQCM " +
+    "ORDER BY `q`.`idQuestion` ASC";
+
+                //Create a QCMModele to store the result
+                QCMModele qcmModele = null;
+
+                //Create Command
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                //Parameters
+                cmd.Parameters.AddWithValue("@idQCM", idQCM);
+
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                QuestionModele question = null;
+                ReponseModele reponse = null;
+                List<ReponseModele> listReponse = new List<ReponseModele>();
+                Dictionary<QuestionModele, List<ReponseModele>> dictQuestionReponse = new Dictionary<QuestionModele, List<ReponseModele>>();
+                List<string> listMotCles = new List<string>();
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                {
+                    if (qcmModele == null)
+                    {
+                        qcmModele = new QCMModele(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"), dataReader.GetInt32("level"));
+                    }
+
+                    qcmModele.AddMotsCles(dataReader.GetInt32("idMotCle"), dataReader.GetString("motCle"));
+
+                    if (question == null || question.IdQuestion != dataReader.GetInt32("idQuestion"))
+                    {
+                        question = new QuestionModele(dataReader.GetInt32("idQuestion"), dataReader.GetString("question"));
+                        qcmModele.AddQuestion(question);
+                    }
+
+                    if (reponse == null || reponse.IdReponse != dataReader.GetInt32("idReponse"))
+                    {
+                        reponse = new ReponseModele(dataReader.GetInt32("idReponse"), dataReader.GetString("reponse"), dataReader.GetBoolean("bonneReponse"));
+                        question.AddReponse(reponse);
+                    }
+
+                    listReponse.Add(reponse);
+                }
+
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close Connection
+                CloseConnection();
+
+                //return list to be displayed
+                return qcmModele;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

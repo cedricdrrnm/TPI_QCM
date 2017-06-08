@@ -107,6 +107,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="QCMController.cs" />
+    <Compile Include="QCMModele.cs" />
+    <Compile Include="QuestionModele.cs" />
+    <Compile Include="ReponseModele.cs" />
     <EmbeddedResource Include="FrmChooseOptions.resx">
       <DependentUpon>FrmChooseOptions.cs</DependentUpon>
     </EmbeddedResource>

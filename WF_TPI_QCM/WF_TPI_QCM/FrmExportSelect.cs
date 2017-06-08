@@ -27,7 +27,7 @@ namespace WF_TPI_QCM
                 lsbModeles.Items.Add(item);
             }
 
-            foreach (KeyValuePair<int, string> item in _controller.GetQCM())
+            foreach (KeyValuePair<int, string> item in _controller.GetListQCM())
             {
                 tvQCM.Nodes.Add(item.Key.ToString(), item.Value);
             }

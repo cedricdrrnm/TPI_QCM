@@ -72,15 +72,15 @@ namespace WF_TPI_QCM
                 string returnString = str[0].Replace(MARQUE_AUTHOR, Environment.UserName).Replace(MARQUE_TITLE, tbxNameOfDocument.Text);
                 foreach (int idQCM in _listSelectedIdQCMs)
                 {
-                    foreach (KeyValuePair<int, string> question in _qcmController.GetQuestionsByIdQCM(idQCM))
+                    foreach (QuestionModele question in _qcmController.GetQuestionsByIdQCM(idQCM))
                     {
-                        returnString += str[1].Replace(MARQUE_TEXT_QUESTION, question.Value);
-                        foreach (KeyValuePair<string, bool> reponse in _qcmController.GetReponsesByIdQuestion(question.Key))
+                        returnString += str[1].Replace(MARQUE_TEXT_QUESTION, question.Question);
+                        foreach (ReponseModele reponse in _qcmController.GetReponsesByIdQuestion(question.IdQuestion))
                         {
-                            if (!reponse.Value)
-                                returnString += str[2].Replace(MARQUE_TEXT_BAD_ANSWER, reponse.Key);
+                            if (!reponse.BonneReponse)
+                                returnString += str[2].Replace(MARQUE_TEXT_BAD_ANSWER, reponse.Reponse);
                             else
-                                returnString += str[4].Replace(MARQUE_TEXT_GOOD_ANSWER, reponse.Key);
+                                returnString += str[4].Replace(MARQUE_TEXT_GOOD_ANSWER, reponse.Reponse);
                         }
                         returnString += str[5];
                     }
