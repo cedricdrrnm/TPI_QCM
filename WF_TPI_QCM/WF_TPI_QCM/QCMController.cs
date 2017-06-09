@@ -13,7 +13,9 @@ namespace WF_TPI_QCM
     {
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
         FrmExportSelect _frmExportSelect;
-        QCMModele qcm;
+        static QCMModele qcm;
+        private Dictionary<QuestionModele, Modes> _listEditedQuestion;
+        private Dictionary<ReponseModele, Modes> _listEditedReponse;
         private FrmSelectDatas _frmSelectDatas;
 
         #region Select
@@ -21,6 +23,8 @@ namespace WF_TPI_QCM
         public QCMController()
         {
             DAO.CreateConnection();
+            _listEditedQuestion = new Dictionary<QuestionModele, Modes>();
+            _listEditedReponse = new Dictionary<ReponseModele, Modes>();
         }
 
         public bool GetQCMById(int idQCM)
@@ -39,9 +43,9 @@ namespace WF_TPI_QCM
             return qcm.Level;
         }
 
-        public List<QuestionModele> GetQuestionsByIdQCM(int idQCM)
+        public Dictionary<int, QuestionModele> GetQuestionsByIdQCM(int idQCM)
         {
-            return qcm.ListQuestionModele;
+            return qcm.DictQuestionModele;
         }
 
         public Dictionary<int, string> GetMotsClesByIdQCM(int idQCM)
@@ -49,13 +53,13 @@ namespace WF_TPI_QCM
             return qcm.DictMotCle;
         }
 
-        public List<ReponseModele> GetReponsesByIdQuestion(int idQuestion)
+        public Dictionary<int, ReponseModele> GetReponsesByIdQuestion(int idQuestion)
         {
-            foreach (QuestionModele item in qcm.ListQuestionModele)
+            foreach (KeyValuePair<int, QuestionModele> item in qcm.DictQuestionModele)
             {
-                if(item.IdQuestion == idQuestion)
+                if (item.Key == idQuestion)
                 {
-                    return item.ListReponseModele;
+                    return item.Value.DictReponseModele;
                 }
             }
             return null;
@@ -66,19 +70,41 @@ namespace WF_TPI_QCM
             return qcm.NomQCM;
         }
 
+        public int GetIdQCM()
+        {
+            return qcm.IdQCM;
+        }
+
         public string GetTextQuestionByIdQuestion(int idQuestion)
         {
-            foreach (QuestionModele item in qcm.ListQuestionModele)
+            foreach (KeyValuePair<int, QuestionModele> item in qcm.DictQuestionModele)
             {
-                if (item.IdQuestion == idQuestion)
+                if (item.Key == idQuestion)
                 {
-                    return item.Question;
+                    return item.Value.Question;
                 }
             }
             return null;
         }
 
         #endregion
+
+        public int GetNextIdQuestion()
+        {
+            return qcm.NextIdQuestion;
+        }
+
+        public int GetNextIdReponse()
+        {
+            return qcm.NextIdReponse;
+        }
+
+        public int GetNextIdMotCle()
+        {
+            return qcm.NextIdMotCle;
+        }
+
+
 
         public string InsertQCM(string titreQCM, int levelQCM)
         {
@@ -100,7 +126,7 @@ namespace WF_TPI_QCM
             return DAO.DeleteQuestionByIdQuestion(idQuestion);
         }
 
-        public string InsertQuestion(int idQCM, string question, Dictionary<string, bool> reponses)
+        public string InsertQuestion(string question, Dictionary<string, bool> reponses)
         {
             if (reponses.Count < 4)
                 return "Il a pas assez de réponses !";
@@ -110,7 +136,84 @@ namespace WF_TPI_QCM
                 return "Il a pas de réponse correcte !";
             else
             {
-                return DAO.InsertQuestion(idQCM, question, reponses);
+                QuestionModele qm = new QuestionModele(question);
+                foreach (KeyValuePair<string, bool> item in reponses)
+                {
+                    qm.AddReponse(0, new ReponseModele(item.Key, item.Value));
+                    qcm.NextIdReponse++;
+                }
+                _listEditedQuestion.Add(qm, Modes.Create);
+                string rep = qcm.AddQuestion(qcm.NextIdQuestion, qm);
+                qcm.NextIdQuestion++;
+                return rep;
+            }
+        }
+
+        public string UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseModele reponseModele)
+        {
+            QuestionModele qm;
+            if (qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
+            {
+                ReponseModele rm;
+                if (qm.DictReponseModele.TryGetValue(idReponse, out rm))
+                {
+                    if (rm.Reponse != reponseModele.Reponse || rm.BonneReponse != reponseModele.BonneReponse)
+                    {
+                        rm.Reponse = reponseModele.Reponse;
+                        rm.BonneReponse = reponseModele.BonneReponse;
+                        return "Réponse modifiée !";
+                    }
+                    else
+                        return "";
+                }
+                else
+                {
+                    return "Réponse introuvable !";
+                }
+            }
+            else
+            {
+                return "Question introuvable !";
+            }
+        }
+
+        public string InsertReponse(int idQuestion, string reponseText, bool bonneReponse)
+        {
+            QuestionModele qm = null;
+            foreach (KeyValuePair<int, QuestionModele> item in qcm.DictQuestionModele)
+            {
+                if (item.Key == idQuestion)
+                {
+                    qm = item.Value;
+                }
+            }
+            if (qm != null)
+            {
+                if (qm.DictReponseModele.Count >= 6)
+                    return "Il a trop de réponses !";
+                else
+                {
+                    ReponseModele rm = new ReponseModele(reponseText, bonneReponse);
+                    qm.AddReponse(qcm.NextIdReponse, rm);
+                    qcm.NextIdReponse++;
+                    _listEditedReponse.Add(rm, Modes.Create);
+                    return "Réponse créé avec succès !";
+                }
+            }
+            return "Cette question est introuvable !";
+        }
+
+        public bool DeleteReponseByIdReponse(int idQuestion, int idReponse)
+        {
+            QuestionModele qm;
+            if (qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
+            {
+                qm.DictReponseModele.Remove(idReponse);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -126,7 +229,7 @@ namespace WF_TPI_QCM
             {
 
                 string tempError = DeleteQuestionByIdQuestion(idQuestion);
-                return (tempError + Environment.NewLine + InsertQuestion(idQCM, question, reponses)).Trim();
+                return (tempError + Environment.NewLine + InsertQuestion(question, reponses)).Trim();
             }
         }
 
@@ -196,9 +299,9 @@ namespace WF_TPI_QCM
         public int AskQuestion()
         {
             Dictionary<int, string> dictQuestionModele = new Dictionary<int, string>();
-            foreach (QuestionModele item in qcm.ListQuestionModele)
+            foreach (KeyValuePair<int, QuestionModele> item in qcm.DictQuestionModele)
             {
-                dictQuestionModele.Add(item.IdQuestion, item.Question);
+                dictQuestionModele.Add(item.Key, item.Value.Question);
             }
             return Ask(dictQuestionModele);
         }
@@ -222,7 +325,7 @@ namespace WF_TPI_QCM
         /// </summary>
         /// <param name="datas">Toutes les données</param>
         /// <returns>Donnée sélectionnée</returns>
-        public int Ask(Dictionary<int,string> datas)
+        public int Ask(Dictionary<int, string> datas)
         {
             _frmSelectDatas = new FrmSelectDatas(datas);
             _frmSelectDatas.ShowDialog();

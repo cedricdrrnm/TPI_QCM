@@ -964,52 +964,12 @@ namespace WF_TPI_QCM
         }*/
         #endregion
 
-        /// <summary>
-        /// Retourne tous les QCMs
-        /// </summary>
-        /// <returns>Tous les QCMs</returns>
-        static public Dictionary<int, string> SelectAllQCM()
-        {
-            string query = "SELECT * FROM qcm";
-
-            //Create a list to store the result
-            Dictionary<int, string> listQCMModele = new Dictionary<int, string>();
-
-            //Open connection
-            if (OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                {
-                    listQCMModele.Add(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"));
-                }
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                CloseConnection();
-
-                //return list to be displayed
-                return listQCMModele;
-            }
-            else
-            {
-                return listQCMModele;
-            }
-        }
-
         public static QCMModele SelectQCMById(int idQCM)
         {
             //Open connection
             if (OpenConnection() == true)
             {
-                string query = "SELECT qcm.`idQCM`, qcm.`nomQCM`, qcm.`level`, q.`idQuestion`, q.`question`, r.`idReponse`, r.`reponse`, qhr.`bonneReponse`, m.`idMotCle`, m.`motCle` " +
+                string query = "SELECT qcm.`idQCM`, qcm.`nomQCM`, qcm.`level`, q.`idQuestion`, q.`question`, r.`idReponse`, r.`reponse`, qhr.`bonneReponse`, m.`idMotCle`, m.`motCle`" +
     "FROM `qcm`, " +
     "`qcm_has_question` as qhq, " +
     "`question` as q, " +
@@ -1054,21 +1014,60 @@ namespace WF_TPI_QCM
 
                     qcmModele.AddMotsCles(dataReader.GetInt32("idMotCle"), dataReader.GetString("motCle"));
 
-                    if (question == null || question.IdQuestion != dataReader.GetInt32("idQuestion"))
-                    {
-                        question = new QuestionModele(dataReader.GetInt32("idQuestion"), dataReader.GetString("question"));
-                        qcmModele.AddQuestion(question);
-                    }
+                    question = new QuestionModele(dataReader.GetString("question"));
+                    qcmModele.AddQuestion(dataReader.GetInt32("idQuestion"), question);
 
-                    if (reponse == null || reponse.IdReponse != dataReader.GetInt32("idReponse"))
-                    {
-                        reponse = new ReponseModele(dataReader.GetInt32("idReponse"), dataReader.GetString("reponse"), dataReader.GetBoolean("bonneReponse"));
-                        question.AddReponse(reponse);
-                    }
+                    reponse = new ReponseModele(dataReader.GetString("reponse"), dataReader.GetBoolean("bonneReponse"));
+                    qcmModele.AddReponseToQuestion(dataReader.GetInt32("idQuestion"), dataReader.GetInt32("idReponse"), reponse);
 
                     listReponse.Add(reponse);
                 }
 
+                //close Data Reader
+                dataReader.Close();
+
+                //close Connection
+                CloseConnection();
+
+                Dictionary<string, int> auto_increment_value = SelectAutoIncrement();
+
+                int _nextID;
+                auto_increment_value.TryGetValue("motcle", out _nextID);
+                qcmModele.NextIdMotCle = _nextID;
+                auto_increment_value.TryGetValue("question", out _nextID);
+                qcmModele.NextIdQuestion = _nextID;
+                auto_increment_value.TryGetValue("reponse", out _nextID);
+                qcmModele.NextIdReponse = _nextID;
+
+                //return list to be displayed
+                return qcmModele;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static Dictionary<int, string> SelectAllQCM()
+        {
+            string query = "SELECT * FROM qcm";
+
+            //Create a list to store the result
+            Dictionary<int, string> listQCMModele = new Dictionary<int, string>();
+
+            //Open connection
+            if (OpenConnection() == true)
+            {
+                //Create Command
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                {
+                    listQCMModele.Add(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"));
+                }
 
                 //close Data Reader
                 dataReader.Close();
@@ -1077,11 +1076,47 @@ namespace WF_TPI_QCM
                 CloseConnection();
 
                 //return list to be displayed
-                return qcmModele;
+                return listQCMModele;
             }
             else
             {
-                return null;
+                return listQCMModele;
+            }
+        }
+
+        private static Dictionary<string, int> SelectAutoIncrement()
+        {
+            string query = "SELECT `TABLE_NAME`, `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" + Properties.Settings.Default.DB_Name + "' AND AUTO_INCREMENT IS NOT null";
+
+            //Create a list to store the result
+            Dictionary<string, int> dictQCMIncrement = new Dictionary<string, int>();
+
+            //Open connection
+            if (OpenConnection() == true)
+            {
+                //Create Command
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                {
+                    dictQCMIncrement.Add(dataReader.GetString("TABLE_NAME"), dataReader.GetInt32("AUTO_INCREMENT"));
+                }
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close Connection
+                CloseConnection();
+
+                //return list to be displayed
+                return dictQCMIncrement;
+            }
+            else
+            {
+                return dictQCMIncrement;
             }
         }
     }

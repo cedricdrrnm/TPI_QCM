@@ -48,16 +48,16 @@ namespace WF_TPI_QCM
             {
                 tbxQuestion.Text = _qcmController.GetTextQuestionByIdQuestion(idQuestion);
                 int index = 0;
-                foreach (ReponseModele item in _qcmController.GetReponsesByIdQuestion(idQuestion))
+                foreach (KeyValuePair<int,ReponseModele> item in _qcmController.GetReponsesByIdQuestion(idQuestion))
                 {
                     if (index < _tbxReponseTab.Length)
                     {
-                        _tbxReponseTab[index].Text = item.IdReponse.ToString();
+                        _tbxReponseTab[index].Text = item.Key.ToString();
                     }
 
                     if (index < _rbReponseTab.Length)
                     {
-                        _rbReponseTab[index].Checked = item.BonneReponse;
+                        _rbReponseTab[index].Checked = item.Value.BonneReponse;
                     }
                     index++;
                 }
@@ -79,7 +79,7 @@ namespace WF_TPI_QCM
             }
             if (_idQuestion == 0)
             {
-                string error = _qcmController.InsertQuestion(_idQCM, tbxQuestion.Text, dictReponses);
+                string error = _qcmController.InsertQuestion(tbxQuestion.Text, dictReponses);
                 if (error == "")
                     MessageBox.Show("Création de la question avec succès !");
                 else

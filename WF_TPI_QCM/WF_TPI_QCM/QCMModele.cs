@@ -18,7 +18,11 @@ namespace WF_TPI_QCM
         private string _nomQCM;
         private int _level;
         private Dictionary<int, string> _dictMotCle;
-        private List<QuestionModele> _listQuestionModele;
+        private Dictionary<int, QuestionModele> _dictQuestionModele;
+
+        private int _nextIdQuestion;
+        private int _nextIdReponse;
+        private int _nextIdMotCle;
 
         public int IdQCM
         {
@@ -59,16 +63,16 @@ namespace WF_TPI_QCM
             }
         }
 
-        public List<QuestionModele> ListQuestionModele
+        public Dictionary<int, QuestionModele> DictQuestionModele
         {
             get
             {
-                return _listQuestionModele;
+                return _dictQuestionModele;
             }
 
             set
             {
-                _listQuestionModele = value;
+                _dictQuestionModele = value;
             }
         }
 
@@ -85,6 +89,45 @@ namespace WF_TPI_QCM
             }
         }
 
+        public int NextIdQuestion
+        {
+            get
+            {
+                return _nextIdQuestion;
+            }
+
+            set
+            {
+                _nextIdQuestion = value;
+            }
+        }
+
+        public int NextIdReponse
+        {
+            get
+            {
+                return _nextIdReponse;
+            }
+
+            set
+            {
+                _nextIdReponse = value;
+            }
+        }
+
+        public int NextIdMotCle
+        {
+            get
+            {
+                return _nextIdMotCle;
+            }
+
+            set
+            {
+                _nextIdMotCle = value;
+            }
+        }
+
         /*public QCMModele(int idQCM, string nomQCM) : this(idQCM, nomQCM, 1, new Dictionary<QuestionModele, List<ReponseModele>>())
         { }
 
@@ -98,18 +141,37 @@ namespace WF_TPI_QCM
             Level = level;
 
             DictMotCle = new Dictionary<int, string>();
-            ListQuestionModele = new List<QuestionModele>();
+            DictQuestionModele = new Dictionary<int, QuestionModele>();
         }
 
-        public void AddQuestion(QuestionModele questionModele)
+        public string AddQuestion(int idQuestion, QuestionModele questionModele)
         {
-            ListQuestionModele.Add(questionModele);
+            if (DictQuestionModele.Keys.Contains(idQuestion))
+            {
+                return "Cette question existe déjà !";
+            }
+            else
+            {
+                DictQuestionModele.Add(idQuestion, questionModele);
+                return "Création de la question avec succès !";
+            }
+        }
+
+
+        public void AddReponseToQuestion(int idQuestion, int idReponse, ReponseModele reponse)
+        {
+            QuestionModele qm;
+            if (DictQuestionModele.TryGetValue(idQuestion, out qm))
+            {
+                qm.AddReponse(idReponse, reponse);
+            }
         }
 
         public void AddMotsCles(int idMotCle, string motCle)
         {
             if (!DictMotCle.ContainsKey(idMotCle))
                 DictMotCle.Add(idMotCle, motCle);
+
         }
     }
 }

@@ -52,22 +52,24 @@ namespace WF_TPI_QCM
         {
             if (e.Node.Level == 0) //https://msdn.microsoft.com/en-us/library/system.windows.forms.treenode.level%28v=vs.110%29.aspx
             {
-                e.Node.Nodes.Clear();
+                /*e.Node.Nodes.Clear();
                 e.Node.Nodes.AddRange(
                     new TreeNode[] {
                         new TreeNode(TEXT_QUESTION, new TreeNode[] {new TreeNode("")}),
                         new TreeNode(TEXT_MOT_CLE, new TreeNode[] { new TreeNode("") }),
                         new TreeNode(TEXT_NIVEAU + _qcmController.GetLevelByIdQCM(Convert.ToInt32(e.Node.Name)).ToString())
-                    });
+                    });*/
+
+
             }
             else if (e.Node.Level == 1)
             {
                 if (e.Node.Text == TEXT_QUESTION)
                 {
                     e.Node.Nodes.Clear();
-                    foreach (QuestionModele item in _qcmController.GetQuestionsByIdQCM(Convert.ToInt32(e.Node.Parent.Name)))
+                    foreach (KeyValuePair<int, QuestionModele> item in _qcmController.GetQuestionsByIdQCM(Convert.ToInt32(e.Node.Parent.Name)))
                     {
-                        e.Node.Nodes.Add(item.IdQuestion.ToString(), item.Question).Nodes.Add(TEXT_REPONSE).Nodes.Add("");
+                        e.Node.Nodes.Add(item.Key.ToString(), item.Value.Question).Nodes.Add(TEXT_REPONSE).Nodes.Add("");
                     }
                 }
                 else if (e.Node.Text == TEXT_MOT_CLE)
@@ -82,9 +84,9 @@ namespace WF_TPI_QCM
             else if (e.Node.Level == 3)
             {
                 e.Node.Nodes.Clear();
-                foreach (ReponseModele item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(e.Node.Parent.Name)))
+                foreach (KeyValuePair<int,ReponseModele> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(e.Node.Parent.Name)))
                 {
-                    e.Node.Nodes.Add(item.IdReponse.ToString()).ForeColor = ((item.BonneReponse) ? Color.Green : Color.Red);
+                    e.Node.Nodes.Add(item.Value.Reponse.ToString()).ForeColor = ((item.Value.BonneReponse) ? Color.Green : Color.Red);
                 }
             }
         }

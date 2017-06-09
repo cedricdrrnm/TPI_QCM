@@ -69,6 +69,12 @@
     <Compile Include="FrmCreateEditQCM.Designer.cs">
       <DependentUpon>FrmCreateEditQCM.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmCreateQuestionReponse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCreateQuestionReponse.Designer.cs">
+      <DependentUpon>FrmCreateQuestionReponse.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmCreateEditQuestionReponse.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCreateEditQCM.resx">
       <DependentUpon>FrmCreateEditQCM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCreateQuestionReponse.resx">
+      <DependentUpon>FrmCreateQuestionReponse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCreateEditQuestionReponse.resx">
       <DependentUpon>FrmCreateEditQuestionReponse.cs</DependentUpon>

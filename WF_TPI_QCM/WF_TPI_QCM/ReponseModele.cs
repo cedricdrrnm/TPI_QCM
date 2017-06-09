@@ -8,22 +8,8 @@ namespace WF_TPI_QCM
 {
     class ReponseModele
     {
-        private int _idReponse;
         private string _reponse;
         private bool _bonneReponse;
-
-        public int IdReponse
-        {
-            get
-            {
-                return _idReponse;
-            }
-
-            set
-            {
-                _idReponse = value;
-            }
-        }
 
         public string Reponse
         {
@@ -55,9 +41,8 @@ namespace WF_TPI_QCM
         { }
         */
 
-        public ReponseModele(int idReponse, string reponse, bool bonneReponse)
+        public ReponseModele(string reponse, bool bonneReponse)
         {
-            IdReponse = idReponse;
             Reponse = reponse;
             BonneReponse = bonneReponse;
         }

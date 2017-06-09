@@ -8,22 +8,9 @@ namespace WF_TPI_QCM
 {
     class QuestionModele
     {
-        private int _idQuestion;
         private string _question;
-        private List<ReponseModele> _listReponseModele;
-
-        public int IdQuestion
-        {
-            get
-            {
-                return _idQuestion;
-            }
-
-            set
-            {
-                _idQuestion = value;
-            }
-        }
+        private Dictionary<int, ReponseModele> _dictReponseModele;
+        private bool _addedInTheBase;
 
         public string Question
         {
@@ -38,29 +25,42 @@ namespace WF_TPI_QCM
             }
         }
 
-        public List<ReponseModele> ListReponseModele
+        public Dictionary<int, ReponseModele> DictReponseModele
         {
             get
             {
-                return _listReponseModele;
+                return _dictReponseModele;
             }
 
             set
             {
-                _listReponseModele = value;
+                _dictReponseModele = value;
             }
         }
 
-        public QuestionModele(int idQuestion, string question)
+        public bool AddedInTheBase
         {
-            IdQuestion = idQuestion;
-            Question = question;
-            ListReponseModele = new List<ReponseModele>();
+            get
+            {
+                return _addedInTheBase;
+            }
+
+            set
+            {
+                _addedInTheBase = value;
+            }
         }
 
-        public void AddReponse(ReponseModele reponseModele)
+        public QuestionModele(string question)
         {
-            ListReponseModele.Add(reponseModele);
+            Question = question;
+            DictReponseModele = new Dictionary<int, ReponseModele>();
+        }
+
+        public void AddReponse(int idReponse, ReponseModele reponse)
+        {
+            if (!DictReponseModele.Keys.Contains(idReponse))
+                DictReponseModele.Add(idReponse, reponse);
         }
     }
 }
