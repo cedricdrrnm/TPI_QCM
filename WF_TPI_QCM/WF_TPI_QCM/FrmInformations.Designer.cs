@@ -216,8 +216,6 @@
             this.dgvReponse.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvReponse.Size = new System.Drawing.Size(739, 265);
             this.dgvReponse.TabIndex = 2;
-            this.dgvReponse.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgvReponse_RowsAdded);
-            this.dgvReponse.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvReponse_RowsRemoved);
             this.dgvReponse.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReponse_RowValidated);
             this.dgvReponse.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvReponse_RowValidating);
             this.dgvReponse.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvReponse_UserAddedRow);
@@ -396,9 +394,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpReponse;
         private System.Windows.Forms.DataGridView dgvReponse;
         private System.Windows.Forms.TableLayoutPanel tlpQuestion;
-        private System.Windows.Forms.DataGridView dgvQuestion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idQuestion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NomQuestion;
         private System.Windows.Forms.TableLayoutPanel tlbMotsClés;
         private System.Windows.Forms.DataGridView dgvMotCle;
         private System.Windows.Forms.DataGridViewTextBoxColumn idMotCle;
@@ -406,5 +401,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn idReponse;
         private System.Windows.Forms.DataGridViewTextBoxColumn textReponse;
         private System.Windows.Forms.DataGridViewCheckBoxColumn chbBonneReponse;
+        private System.Windows.Forms.DataGridView dgvQuestion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idQuestion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NomQuestion;
     }
 }

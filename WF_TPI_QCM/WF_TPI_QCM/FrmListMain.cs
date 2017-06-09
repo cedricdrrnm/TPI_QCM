@@ -18,7 +18,6 @@ namespace WF_TPI_QCM
         const string TEXT_REPONSE = "Réponse";
 
         QCMController _qcmController;
-        FrmChooseOptions _frmChooseOption;
 
         /// <summary>
         /// Constructeur
@@ -98,8 +97,6 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            _frmChooseOption = new FrmChooseOptions(Modes.Create);
-            _frmChooseOption.ShowDialog();
         }
 
         /// <summary>
@@ -109,8 +106,6 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnModifier_Click(object sender, EventArgs e)
         {
-            _frmChooseOption = new FrmChooseOptions(Modes.Update);
-            _frmChooseOption.ShowDialog();
         }
 
         /// <summary>
@@ -120,8 +115,6 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnSupprimer_Click(object sender, EventArgs e)
         {
-            _frmChooseOption = new FrmChooseOptions(Modes.Delete);
-            _frmChooseOption.ShowDialog();
         }
 
         private void btnExporter_Click(object sender, EventArgs e)

@@ -16,7 +16,8 @@ namespace WF_TPI_QCM
         static QCMModele qcm;
         private Dictionary<QuestionModele, Modes> _listEditedQuestion;
         private Dictionary<ReponseModele, Modes> _listEditedReponse;
-        private FrmSelectDatas _frmSelectDatas;
+        private List<int> _listDeletedQuestion;
+        private Dictionary<ReponseModele, Modes> _listDeletedReponse;
 
         #region Select
 
@@ -104,8 +105,6 @@ namespace WF_TPI_QCM
             return qcm.NextIdMotCle;
         }
 
-
-
         public string InsertQCM(string titreQCM, int levelQCM)
         {
             return DAO.InsertQCM(titreQCM, levelQCM.ToString());
@@ -123,7 +122,11 @@ namespace WF_TPI_QCM
 
         public string DeleteQuestionByIdQuestion(int idQuestion)
         {
-            return DAO.DeleteQuestionByIdQuestion(idQuestion);
+            _listDeletedQuestion.Add(idQuestion);
+            if (qcm.DictQuestionModele.Remove(idQuestion))
+                return "Question supprimée !";
+            else
+                return "Echec lors de la suppression !";
         }
 
         public string InsertQuestion(string question, Dictionary<string, bool> reponses)
@@ -233,7 +236,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public string InsertMotCle(int idQCM, string[] motCle)
+        /*public string InsertMotCle(int idQCM, string[] motCle)
         {
             if (motCle.Length > 4)
                 return "Il a trop de mots-clés !";
@@ -246,9 +249,9 @@ namespace WF_TPI_QCM
                 }
                 return tempError;
             }
-        }
+        }*/
 
-        public string UpdateMotCle(int _idQCM, Dictionary<int, string> motCle)
+        /*public string UpdateMotCle(int _idQCM, Dictionary<int, string> motCle)
         {
             if (motCle.Count > 4)
                 return "Il a trop de mots-clés !";
@@ -262,12 +265,12 @@ namespace WF_TPI_QCM
                 tempError += InsertMotCle(_idQCM, motCle.Values.ToArray());
                 return tempError;
             }
-        }
+        }*/
 
-        public string DeleteMotCleByIdMotCle(int idMotCle)
+        /*public string DeleteMotCleByIdMotCle(int idMotCle)
         {
             return DAO.DeleteMotCleByIdMotCle(idMotCle);
-        }
+        }*/
 
         public List<string> GetListModeles()
         {
@@ -294,42 +297,6 @@ namespace WF_TPI_QCM
         {
             _frmExportSelect = new FrmExportSelect(GetListModeles());
             _frmExportSelect.ShowDialog();
-        }
-
-        public int AskQuestion()
-        {
-            Dictionary<int, string> dictQuestionModele = new Dictionary<int, string>();
-            foreach (KeyValuePair<int, QuestionModele> item in qcm.DictQuestionModele)
-            {
-                dictQuestionModele.Add(item.Key, item.Value.Question);
-            }
-            return Ask(dictQuestionModele);
-        }
-
-        /*public int AskReponse(int idQuestion)
-        {
-            Dictionary<int, string> dictReponseModele = new Dictionary<int, string>();
-            foreach (QuestionModele question in qcm.ListQuestionModele)
-            {
-                if(question.IdQuestion == idQuestion)
-                    foreach (var reponse in question.ListReponseModele)
-                    {
-                        dictReponseModele.Add(reponse.IdReponse, reponse.Reponse);
-                    }
-            }
-            return Ask(dictReponseModele);
-        }*/
-
-        /// <summary>
-        /// Fait s'ouvrir une form pour la sélection des données
-        /// </summary>
-        /// <param name="datas">Toutes les données</param>
-        /// <returns>Donnée sélectionnée</returns>
-        public int Ask(Dictionary<int, string> datas)
-        {
-            _frmSelectDatas = new FrmSelectDatas(datas);
-            _frmSelectDatas.ShowDialog();
-            return _frmSelectDatas.ReturnId;
         }
     }
 }

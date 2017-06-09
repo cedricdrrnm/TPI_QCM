@@ -13,12 +13,12 @@ namespace WF_TPI_QCM
     public partial class frmListQCMMain : Form
     {
         QCMController _qcmController;
-        FrmInformations _frmInfo;
+        Form _frmNext;
         public frmListQCMMain()
         {
             InitializeComponent();
             _qcmController = new QCMController();
-            foreach (KeyValuePair<int,string> item in _qcmController.GetListQCM())
+            foreach (KeyValuePair<int, string> item in _qcmController.GetListQCM())
             {
                 dgvQCM.Rows.Add(new string[] { item.Key.ToString(), item.Value });
             }
@@ -26,8 +26,33 @@ namespace WF_TPI_QCM
 
         private void btnAfficherQCM_Click(object sender, EventArgs e)
         {
-            _frmInfo = new FrmInformations(Convert.ToInt32(dgvQCM.SelectedRows[0].Cells[0].Value));
-            _frmInfo.ShowDialog();
+            if (dgvQCM.SelectedRows[0].Cells[0].Value != null)
+            {
+                _frmNext = new FrmInformations(Convert.ToInt32(dgvQCM.SelectedRows[0].Cells[0].Value));
+                _frmNext.ShowDialog();
+            }
+        }
+
+        private void dgvQCM_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            MessageBox.Show(_qcmController.InsertQCM(dgvQCM.SelectedRows[0].Cells[1].Value.ToString(), Convert.ToInt32(dgvQCM.SelectedRows[0].Cells[2].Value)));
+        }
+
+        private void btnCreerQCM_Click(object sender, EventArgs e)
+        {
+            _frmNext = new FrmCreateEditQCM();
+            _frmNext.ShowDialog();
+        }
+
+        private void btnModifierQCM_Click(object sender, EventArgs e)
+        {
+            _frmNext = new FrmCreateEditQCM(Convert.ToInt32(dgvQCM.SelectedRows[0].Cells[0].Value));
+            _frmNext.ShowDialog();
+        }
+
+        private void btnSupprimerQCM_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

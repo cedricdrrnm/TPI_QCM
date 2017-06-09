@@ -51,18 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO.cs" />
-    <Compile Include="FrmChooseOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmChooseOptions.Designer.cs">
-      <DependentUpon>FrmChooseOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmCreateEditMotCle.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmCreateEditMotCle.Designer.cs">
-      <DependentUpon>FrmCreateEditMotCle.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmCreateEditQCM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,12 +62,6 @@
     </Compile>
     <Compile Include="FrmCreateQuestionReponse.Designer.cs">
       <DependentUpon>FrmCreateQuestionReponse.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmCreateEditQuestionReponse.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmCreateEditQuestionReponse.Designer.cs">
-      <DependentUpon>FrmCreateEditQuestionReponse.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmExport.cs">
       <SubType>Form</SubType>
@@ -111,12 +93,6 @@
     <Compile Include="frmListQCMMain.Designer.cs">
       <DependentUpon>frmListQCMMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmSelectDatas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmSelectDatas.Designer.cs">
-      <DependentUpon>FrmSelectDatas.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -128,20 +104,11 @@
     <Compile Include="QCMModele.cs" />
     <Compile Include="QuestionModele.cs" />
     <Compile Include="ReponseModele.cs" />
-    <EmbeddedResource Include="FrmChooseOptions.resx">
-      <DependentUpon>FrmChooseOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmCreateEditMotCle.resx">
-      <DependentUpon>FrmCreateEditMotCle.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmCreateEditQCM.resx">
       <DependentUpon>FrmCreateEditQCM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCreateQuestionReponse.resx">
       <DependentUpon>FrmCreateQuestionReponse.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmCreateEditQuestionReponse.resx">
-      <DependentUpon>FrmCreateEditQuestionReponse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmExport.resx">
       <DependentUpon>FrmExport.cs</DependentUpon>
@@ -157,9 +124,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmListQCMMain.resx">
       <DependentUpon>frmListQCMMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmSelectDatas.resx">
-      <DependentUpon>FrmSelectDatas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

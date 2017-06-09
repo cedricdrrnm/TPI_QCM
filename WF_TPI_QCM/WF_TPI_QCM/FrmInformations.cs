@@ -47,7 +47,7 @@ namespace WF_TPI_QCM
             if (dgvQuestion.SelectedRows.Count > 0)
             {
                 dgvReponse.Rows.Clear();
-                foreach (KeyValuePair<int,ReponseModele> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value)))
+                foreach (KeyValuePair<int, ReponseModele> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value)))
                 {
                     dgvReponse.Rows.Add(new string[] { item.Key.ToString(), item.Value.Reponse, item.Value.BonneReponse.ToString() });
                 }
@@ -73,14 +73,6 @@ namespace WF_TPI_QCM
             RefreshQuestion();
         }
 
-        private void dgvReponse_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-        {
-        }
-
-        private void dgvReponse_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
-        {
-        }
-
         private void dgvReponse_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvReponse.Rows[e.RowIndex].Cells[1].Value != null)
@@ -93,10 +85,13 @@ namespace WF_TPI_QCM
                 }
                 else
                 {
-                    string textRetour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(dgvReponse.SelectedRows[0].Cells[0].Value), new ReponseModele(dgvReponse.SelectedRows[0].Cells[1].Value.ToString(), Convert.ToBoolean(dgvReponse.SelectedRows[0].Cells[2].Value)));
-                    if (textRetour != "")
+                    if (dgvReponse.SelectedRows.Count > 0)
                     {
-                        MessageBox.Show(textRetour);
+                        string textRetour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(dgvReponse.SelectedRows[0].Cells[0].Value), new ReponseModele(dgvReponse.SelectedRows[0].Cells[1].Value.ToString(), Convert.ToBoolean(dgvReponse.SelectedRows[0].Cells[2].Value)));
+                        if (textRetour != "")
+                        {
+                            MessageBox.Show(textRetour);
+                        }
                     }
                 }
             }
@@ -104,8 +99,8 @@ namespace WF_TPI_QCM
 
         private void CheckAllows()
         {
-            dgvReponse.AllowUserToDeleteRows = (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) > 4) ? true : false;
             dgvReponse.AllowUserToAddRows = (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) < 6) ? true : false;
+            dgvReponse.AllowUserToDeleteRows = (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) > 4) ? true : false;
         }
 
         private void dgvReponse_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
@@ -121,11 +116,12 @@ namespace WF_TPI_QCM
         {
             _qcmController.DeleteReponseByIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(e.Row.Cells[0].Value));
             dgvReponse.AllowUserToAddRows = true;
+            CheckAllows();
         }
 
         private void dgvReponse_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            dgvReponse.AllowUserToDeleteRows = false;
+            dgvReponse.AllowUserToDeleteRows = true;
         }
     }
 }

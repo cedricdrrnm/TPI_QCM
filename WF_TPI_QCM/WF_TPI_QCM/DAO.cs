@@ -11,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 
 namespace WF_TPI_QCM
 {
@@ -32,7 +31,7 @@ namespace WF_TPI_QCM
         /// Ouvre la connection
         /// </summary>
         /// <returns>Retourne vrai (true) s'il n'y a aucun problème sinon retourne faux (false)</returns>
-        static public bool OpenConnection()
+        static public void OpenConnection()
         {
             if (conn == null)
                 CreateConnection();
@@ -42,7 +41,6 @@ namespace WF_TPI_QCM
                 {
                     conn.Open();
                 }
-                return true;
             }
             catch (MySqlException ex)
             {
@@ -61,7 +59,7 @@ namespace WF_TPI_QCM
                         break;
                 }
                 conn = null;
-                return false;
+                throw new Exception("Connection échouée !");
             }
         }
 
@@ -69,38 +67,36 @@ namespace WF_TPI_QCM
         /// Ferme la connection
         /// </summary>
         /// <returns>Retourne vrai (true) s'il n'y a aucun problème sinon retourne faux (false)</returns>
-        static private bool CloseConnection()
+        static private void CloseConnection()
         {
             try
             {
                 conn.Close();
-                return true;
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
-                return false;
+                throw new Exception("La connection ne peut pas être fermée !");
             }
         }
 
-        /*
         #region Select
-        
+
         /// <summary>
         /// Retourne toutes les questions qui sont dans le QCM donné par l'id
         /// </summary>
         /// <param name="id">Id du QCM</param>
         /// <returns>Toutes les questions qui sont dans le QCM donné par l'id</returns>
-        static public Dictionary<int, string> SelectAllQuestionByIdQCM(int id)
+        static public Dictionary<int, QuestionModele> SelectAllQuestionByIdQCM(int id)
         {
             string query = "SELECT qu.`idQuestion`, qu.`question` FROM `question` as qu,`qcm_has_question` as qhq, `qcm` as q WHERE qu.`idQuestion` = qhq.`idQuestion` AND qhq.`idQCM` = q.`idQCM` AND q.`idQCM` = @id";
 
             //Create a list to store the result
-            Dictionary<int, string> listQuestion = new Dictionary<int, string>();
+            Dictionary<int, QuestionModele> dictQuestion = new Dictionary<int, QuestionModele>();
 
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection();
                 //Create Command
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -113,7 +109,7 @@ namespace WF_TPI_QCM
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    listQuestion.Add(dataReader.GetInt32("idQuestion"), dataReader.GetString("question"));
+                    dictQuestion.Add(dataReader.GetInt32("idQuestion"), new QuestionModele(dataReader.GetString("question")));
                 }
 
                 //close Data Reader
@@ -123,11 +119,11 @@ namespace WF_TPI_QCM
                 CloseConnection();
 
                 //return list to be displayed
-                return listQuestion;
+                return dictQuestion;
             }
-            else
+            catch
             {
-                return listQuestion;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -144,8 +140,9 @@ namespace WF_TPI_QCM
             Dictionary<string, bool> listReponse = new Dictionary<string, bool>();
 
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection();
                 //Create Command
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -170,9 +167,9 @@ namespace WF_TPI_QCM
                 //return list to be displayed
                 return listReponse;
             }
-            else
+            catch
             {
-                return listReponse;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -189,8 +186,9 @@ namespace WF_TPI_QCM
             Dictionary<int, string> listMotCle = new Dictionary<int, string>();
 
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection();
                 //Create Command
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -215,9 +213,9 @@ namespace WF_TPI_QCM
                 //return list to be displayed
                 return listMotCle;
             }
-            else
+            catch
             {
-                return listMotCle;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -232,8 +230,9 @@ namespace WF_TPI_QCM
             int level = 0;
 
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection()
                 //Create Command
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -258,9 +257,9 @@ namespace WF_TPI_QCM
                 //return list to be displayed
                 return level;
             }
-            else
+            catch
             {
-                return level;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -275,8 +274,9 @@ namespace WF_TPI_QCM
             string nomQCM = "";
 
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection();
                 //Create Command
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -301,9 +301,9 @@ namespace WF_TPI_QCM
                 //return list to be displayed
                 return nomQCM;
             }
-            else
+            catch
             {
-                return nomQCM;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -318,8 +318,9 @@ namespace WF_TPI_QCM
             string titre = "";
 
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection();
                 //Create Command
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -344,14 +345,13 @@ namespace WF_TPI_QCM
                 //return list to be displayed
                 return titre;
             }
-            else
+            catch
             {
-                return titre;
+                throw new Exception(ex.Message);
             }
         }
 
         #endregion
-        */
 
         #region Insert
 
@@ -368,8 +368,9 @@ namespace WF_TPI_QCM
             string query = "INSERT INTO `qcm_has_question`(`idQCM`, `idQuestion`) VALUES (@idQCM, @idQuestion);";
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -398,9 +399,9 @@ namespace WF_TPI_QCM
                     return ex.Message;
                 }
             }
-            else
+            catch
             {
-                return "Erreur avec la connection !";
+                throw new Exception(ex.Message);
             }
         }
 
@@ -416,8 +417,9 @@ namespace WF_TPI_QCM
             string query = "INSERT INTO `question_has_reponse`(`idQuestion`, `idReponse`, `bonneReponse`) VALUES (@idQuestion, @idReponse, @bonneReponse);";
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -447,9 +449,9 @@ namespace WF_TPI_QCM
                     return ex.Message;
                 }
             }
-            else
+            catch
             {
-                return "Erreur avec la connection !";
+                throw new Exception(ex.Message);
             }
         }
 
@@ -464,39 +466,33 @@ namespace WF_TPI_QCM
             string query = "INSERT INTO `qcm_has_motcle`(`idQCM`, `idMotCle`) VALUES (@idQCM, @idMotCle);";
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@idQCM", idQCM);
                 cmd.Parameters.AddWithValue("@idMotCle", idMotCle);
-                try
-                {
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                    //close connection
-                    CloseConnection();
-                    return "";
-                }
-                catch (MySqlException ex)
-                {
-                    //close connection
-                    CloseConnection();
-                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                    if (ex.Number == 1062)
-                        return "Ce lien existe déjà !";
-                    else
-                        return ex.Message;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+                return "";
             }
-            else
+            catch (MySqlException ex)
             {
-                return "Erreur avec la connection !";
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    return "Ce lien existe déjà !";
+                else
+                    return ex.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -515,39 +511,33 @@ namespace WF_TPI_QCM
             string query = "INSERT INTO `qcm`(`nomQCM`,`level`) VALUES (@nomSubject, @level);";
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@nomSubject", nomQCM);
                 cmd.Parameters.AddWithValue("@level", level);
-                try
-                {
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                    //close connection
-                    CloseConnection();
-                    return "";
-                }
-                catch (MySqlException ex)
-                {
-                    //close connection
-                    CloseConnection();
-                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                    if (ex.Number == 1062)
-                        return "Ce qcm existe déjà !";
-                    else
-                        return ex.Message;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+                return "Ce qcm a bien été créé !";
             }
-            else
+            catch (MySqlException ex)
             {
-                return "Erreur avec la connection !";
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    return "Ce qcm existe déjà !";
+                else
+                    return ex.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -565,57 +555,51 @@ namespace WF_TPI_QCM
             string tempError = "";
 
             //open connection
-            if (OpenConnection())
+            try
             {
-                try
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@question", question);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
                 {
-                    //create command and assign the query and connection from the constructor
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@question", question);
-                    //Create a data reader and Execute the command
-                    MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                    //Read the data and store them in the list
-                    while (dataReader.Read())
-                    {
-                        lastIdQuestion = dataReader.GetInt32("lastID");
-                    }
-
-                    //close Data Reader
-                    dataReader.Close();
-
-                    //close connection
-                    CloseConnection();
-
-                    tempError = InsertQCM_HAS_QUESTION(idQCM, lastIdQuestion);
-                    errorReturn = ((tempError != "") ? tempError + Environment.NewLine : "");
-
-                    foreach (KeyValuePair<string, bool> item in reponses)
-                    {
-                        tempError = InsertReponses(lastIdQuestion, item.Key, item.Value);
-                        errorReturn += ((tempError != "") ? tempError + Environment.NewLine : "");
-                    }
-                    return errorReturn;
+                    lastIdQuestion = dataReader.GetInt32("lastID");
                 }
-                catch (MySqlException ex)
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close connection
+                CloseConnection();
+
+                tempError = InsertQCM_HAS_QUESTION(idQCM, lastIdQuestion);
+                errorReturn = ((tempError != "") ? tempError + Environment.NewLine : "");
+
+                foreach (KeyValuePair<string, bool> item in reponses)
                 {
-                    //close connection
-                    CloseConnection();
-                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                    if (ex.Number == 1062)
-                        return "Cette question existe déjà !";
-                    else
-                        return ex.Message;
+                    tempError = InsertReponses(lastIdQuestion, item.Key, item.Value);
+                    errorReturn += ((tempError != "") ? tempError + Environment.NewLine : "");
                 }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                return errorReturn;
             }
-            else
+            catch (MySqlException ex)
             {
-                return "Erreur avec la connection !";
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    return "Cette question existe déjà !";
+                else
+                    return ex.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -632,8 +616,9 @@ namespace WF_TPI_QCM
             int lastId = 0;
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 try
                 {
                     //create command and assign the query and connection from the constructor
@@ -672,9 +657,19 @@ namespace WF_TPI_QCM
                     return ex.Message;
                 }
             }
-            else
+            catch (MySqlException ex)
             {
-                return "Erreur avec la connection !";
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    return "Cette réponse existe déjà !";
+                else
+                    return ex.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -690,49 +685,44 @@ namespace WF_TPI_QCM
             int lastId = 0;
 
             //open connection
-            if (OpenConnection())
+            try
             {
-                try
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@motCle", motCle);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
                 {
-                    //create command and assign the query and connection from the constructor
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-
-                    cmd.Parameters.AddWithValue("@motCle", motCle);
-                    //Create a data reader and Execute the command
-                    MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                    //Read the data and store them in the list
-                    while (dataReader.Read())
-                    {
-                        lastId = dataReader.GetInt32("lastID");
-                    }
-
-                    //close Data Reader
-                    dataReader.Close();
-
-                    //close connection
-                    CloseConnection();
-
-                    return InsertQCM_HAS_MotCle(idQCM, lastId);
+                    lastId = dataReader.GetInt32("lastID");
                 }
-                catch (MySqlException ex)
-                {
-                    //close connection
-                    CloseConnection();
-                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                    if (ex.Number == 1062)
-                        return "Cette réponse existe déjà !";
-                    else
-                        return ex.Message;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close connection
+                CloseConnection();
+
+                return InsertQCM_HAS_MotCle(idQCM, lastId);
+
             }
-            else
+            catch (MySqlException ex)
             {
-                return "Erreur avec la connection !";
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    return "Cette réponse existe déjà !";
+                else
+                    return ex.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -754,40 +744,35 @@ namespace WF_TPI_QCM
             string query = "UPDATE `qcm` SET `nomQCM`=@nomQCM,`level`=@level WHERE `idQCM`= @idQCM";
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@nomQCM", nomQCM);
                 cmd.Parameters.AddWithValue("@level", level);
                 cmd.Parameters.AddWithValue("@idQCM", idQCM);
-                try
-                {
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                    //close connection
-                    CloseConnection();
-                    return "";
-                }
-                catch (MySqlException ex)
-                {
-                    //close connection
-                    CloseConnection();
-                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                    if (ex.Number == 1062)
-                        return "Ce qcm existe déjà !";
-                    else
-                        return ex.Message;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+                return "";
+
             }
-            else
+            catch (MySqlException ex)
             {
-                return "Erreur avec la connection !";
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    return "Ce qcm existe déjà !";
+                else
+                    return ex.Message;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -805,32 +790,26 @@ namespace WF_TPI_QCM
             string query = "DELETE FROM `motcle` WHERE `idMotCle` = @id;";
 
             //open connection
-            if (OpenConnection())
+            try
             {
+                OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@id", idMotCle);
-                try
-                {
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                    //close connection
-                    CloseConnection();
-                    return "";
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+                return "";
             }
-            else
+            catch (Exception ex)
             {
-                return "Erreur avec la connection !";
+                throw ex;
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Retire la question donné par l'id
         /// </summary>
         /// <param name="idQuestion">Id de la question</param>
@@ -867,9 +846,9 @@ namespace WF_TPI_QCM
             {
                 return "Erreur avec la connection !";
             }
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Retire les réponses reliées à l'id de la question
         /// </summary>
         /// <param name="idQuestion">Id de la question</param>
@@ -902,7 +881,7 @@ namespace WF_TPI_QCM
             {
                 return "Erreur avec la connection !";
             }
-        }
+        }*/
 
         /*/// <summary>
         /// Retire le QCM donné par l'id
@@ -911,30 +890,6 @@ namespace WF_TPI_QCM
         /// <returns>Le message d'erreur</returns>
         static public string DeleteQCMByIdQCM(int idQCM)
         {
-            string tempError;
-            string errorReturn = "";
-            foreach (QuestionModele<int, string> item in SelectAllQuestionByIdQCM(idQCM))
-            {
-                tempError = DeleteQuestionByIdQuestion(item.Key);
-                errorReturn += ((errorReturn != "") ? errorReturn + Environment.NewLine + tempError : "");
-            }
-
-            if (errorReturn != "")
-            {
-                return errorReturn;
-            }
-
-            foreach (KeyValuePair<int, string> item in SelectAllMotCleByIdQCM(idQCM))
-            {
-                tempError = DeleteMotCleByIdMotCle(item.Key);
-                errorReturn += ((errorReturn != "") ? errorReturn + Environment.NewLine + tempError : "");
-            }
-
-            if (errorReturn != "")
-            {
-                return errorReturn;
-            }
-
             string query = "DELETE FROM `qcm` WHERE `idQCM` = @id;";
 
             //open connection
@@ -967,25 +922,26 @@ namespace WF_TPI_QCM
         public static QCMModele SelectQCMById(int idQCM)
         {
             //Open connection
-            if (OpenConnection() == true)
+            try
             {
+                OpenConnection();
                 string query = "SELECT qcm.`idQCM`, qcm.`nomQCM`, qcm.`level`, q.`idQuestion`, q.`question`, r.`idReponse`, r.`reponse`, qhr.`bonneReponse`, m.`idMotCle`, m.`motCle`" +
-    "FROM `qcm`, " +
-    "`qcm_has_question` as qhq, " +
-    "`question` as q, " +
-    "`question_has_reponse` as qhr, " +
-    "`reponse` as r, " +
-    "`qcm_has_motcle` as qhm, " +
-    "`motcle` as m " +
-    "WHERE " +
-    "qcm.`idQCM` = qhq.`idQCM` AND " +
-    "qhq.`idQuestion` = q.`idQuestion` AND " +
-    "q.`idQuestion` = qhr.`idQuestion` AND " +
-    "qhr.`idReponse` = r.`idReponse` AND " +
-    "qcm.`idQCM` = qhm.`idQCM` AND " +
-    "qhm.`idMotCle` = m.`idMotCle` AND " +
-    "qcm.`idQCM` = @idQCM " +
-    "ORDER BY `q`.`idQuestion` ASC";
+        "FROM `qcm`, " +
+        "`qcm_has_question` as qhq, " +
+        "`question` as q, " +
+        "`question_has_reponse` as qhr, " +
+        "`reponse` as r, " +
+        "`qcm_has_motcle` as qhm, " +
+        "`motcle` as m " +
+        "WHERE " +
+        "qcm.`idQCM` = qhq.`idQCM` AND " +
+        "qhq.`idQuestion` = q.`idQuestion` AND " +
+        "q.`idQuestion` = qhr.`idQuestion` AND " +
+        "qhr.`idReponse` = r.`idReponse` AND " +
+        "qcm.`idQCM` = qhm.`idQCM` AND " +
+        "qhm.`idMotCle` = m.`idMotCle` AND " +
+        "qcm.`idQCM` = @idQCM " +
+        "ORDER BY `q`.`idQuestion` ASC";
 
                 //Create a QCMModele to store the result
                 QCMModele qcmModele = null;
@@ -1031,20 +987,30 @@ namespace WF_TPI_QCM
 
                 Dictionary<string, int> auto_increment_value = SelectAutoIncrement();
 
-                int _nextID;
-                auto_increment_value.TryGetValue("motcle", out _nextID);
-                qcmModele.NextIdMotCle = _nextID;
-                auto_increment_value.TryGetValue("question", out _nextID);
-                qcmModele.NextIdQuestion = _nextID;
-                auto_increment_value.TryGetValue("reponse", out _nextID);
-                qcmModele.NextIdReponse = _nextID;
+                if (qcmModele != null)
+                {
+                    int _nextID;
+                    if (auto_increment_value.TryGetValue("motcle", out _nextID))
+                    {
+                        qcmModele.NextIdMotCle = _nextID;
+                        if (auto_increment_value.TryGetValue("question", out _nextID))
+                        {
+                            qcmModele.NextIdQuestion = _nextID;
+                            if (auto_increment_value.TryGetValue("reponse", out _nextID))
+                            {
+                                qcmModele.NextIdReponse = _nextID;
 
-                //return list to be displayed
-                return qcmModele;
-            }
-            else
-            {
+                                //return list to be displayed
+                                return qcmModele;
+                            }
+                        }
+                    }
+                }
                 return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -1121,3 +1087,5 @@ namespace WF_TPI_QCM
         }
     }
 }
+
+
