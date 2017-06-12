@@ -33,8 +33,6 @@
             this.textQCM = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAfficherQCM = new System.Windows.Forms.Button();
             this.btnCreerQCM = new System.Windows.Forms.Button();
-            this.btnModifierQCM = new System.Windows.Forms.Button();
-            this.btnSupprimerQCM = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQCM)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +49,6 @@
             this.dgvQCM.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvQCM.Size = new System.Drawing.Size(551, 418);
             this.dgvQCM.TabIndex = 0;
-            this.dgvQCM.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvQCM_UserAddedRow);
             // 
             // idQCM
             // 
@@ -87,33 +84,11 @@
             this.btnCreerQCM.UseVisualStyleBackColor = true;
             this.btnCreerQCM.Click += new System.EventHandler(this.btnCreerQCM_Click);
             // 
-            // btnModifierQCM
-            // 
-            this.btnModifierQCM.Location = new System.Drawing.Point(12, 494);
-            this.btnModifierQCM.Name = "btnModifierQCM";
-            this.btnModifierQCM.Size = new System.Drawing.Size(551, 23);
-            this.btnModifierQCM.TabIndex = 3;
-            this.btnModifierQCM.Text = "Modifier ce QCM";
-            this.btnModifierQCM.UseVisualStyleBackColor = true;
-            this.btnModifierQCM.Click += new System.EventHandler(this.btnModifierQCM_Click);
-            // 
-            // btnSupprimerQCM
-            // 
-            this.btnSupprimerQCM.Location = new System.Drawing.Point(13, 523);
-            this.btnSupprimerQCM.Name = "btnSupprimerQCM";
-            this.btnSupprimerQCM.Size = new System.Drawing.Size(551, 23);
-            this.btnSupprimerQCM.TabIndex = 4;
-            this.btnSupprimerQCM.Text = "Supprimer ce QCM";
-            this.btnSupprimerQCM.UseVisualStyleBackColor = true;
-            this.btnSupprimerQCM.Click += new System.EventHandler(this.btnSupprimerQCM_Click);
-            // 
             // frmListQCMMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(576, 555);
-            this.Controls.Add(this.btnSupprimerQCM);
-            this.Controls.Add(this.btnModifierQCM);
+            this.ClientSize = new System.Drawing.Size(576, 496);
             this.Controls.Add(this.btnCreerQCM);
             this.Controls.Add(this.btnAfficherQCM);
             this.Controls.Add(this.dgvQCM);
@@ -131,7 +106,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn idQCM;
         private System.Windows.Forms.DataGridViewTextBoxColumn textQCM;
         private System.Windows.Forms.Button btnCreerQCM;
-        private System.Windows.Forms.Button btnModifierQCM;
-        private System.Windows.Forms.Button btnSupprimerQCM;
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WF_TPI_QCM
 {
-    class ReponseModele
+    class ReponseDatas
     {
         private string _reponse;
         private bool _bonneReponse;
@@ -41,7 +41,7 @@ namespace WF_TPI_QCM
         { }
         */
 
-        public ReponseModele(string reponse, bool bonneReponse)
+        public ReponseDatas(string reponse, bool bonneReponse)
         {
             Reponse = reponse;
             BonneReponse = bonneReponse;

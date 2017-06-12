@@ -30,6 +30,17 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.msMain = new System.Windows.Forms.MenuStrip();
+            this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ajouterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.questionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.motCléToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sauvegarderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.supprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnModifier = new System.Windows.Forms.Button();
+            this.nudLevel = new System.Windows.Forms.NumericUpDown();
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.tlpQuestion = new System.Windows.Forms.TableLayoutPanel();
             this.dgvQuestion = new System.Windows.Forms.DataGridView();
@@ -40,21 +51,21 @@
             this.scQuestion = new System.Windows.Forms.SplitContainer();
             this.tlpReponse = new System.Windows.Forms.TableLayoutPanel();
             this.dgvReponse = new System.Windows.Forms.DataGridView();
-            this.idReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chbBonneReponse = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.lblReponse = new System.Windows.Forms.Label();
             this.tlbMotsClés = new System.Windows.Forms.TableLayoutPanel();
             this.dgvMotCle = new System.Windows.Forms.DataGridView();
             this.idMotCle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textMotCle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblMotsCles = new System.Windows.Forms.Label();
-            this.msMain = new System.Windows.Forms.MenuStrip();
-            this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ajouterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.questionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.motCléToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblQCM = new System.Windows.Forms.Label();
+            this.tbxNomQCM = new System.Windows.Forms.TextBox();
+            this.lblLevelQCM = new System.Windows.Forms.Label();
+            this.idReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chbBonneReponse = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.msMain.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
             this.scMain.Panel2.SuspendLayout();
@@ -70,13 +81,132 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvReponse)).BeginInit();
             this.tlbMotsClés.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMotCle)).BeginInit();
-            this.msMain.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // msMain
+            // 
+            this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fichierToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.msMain.Location = new System.Drawing.Point(0, 0);
+            this.msMain.Name = "msMain";
+            this.msMain.Size = new System.Drawing.Size(1123, 24);
+            this.msMain.TabIndex = 4;
+            this.msMain.Text = "menuStrip2";
+            // 
+            // fichierToolStripMenuItem
+            // 
+            this.fichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ajouterToolStripMenuItem,
+            this.sauvegarderToolStripMenuItem,
+            this.supprimerToolStripMenuItem});
+            this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
+            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.fichierToolStripMenuItem.Text = "Fichier";
+            // 
+            // ajouterToolStripMenuItem
+            // 
+            this.ajouterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.questionToolStripMenuItem,
+            this.motCléToolStripMenuItem});
+            this.ajouterToolStripMenuItem.Name = "ajouterToolStripMenuItem";
+            this.ajouterToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.ajouterToolStripMenuItem.Text = "Ajouter";
+            // 
+            // questionToolStripMenuItem
+            // 
+            this.questionToolStripMenuItem.Name = "questionToolStripMenuItem";
+            this.questionToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.questionToolStripMenuItem.Text = "Question";
+            this.questionToolStripMenuItem.Click += new System.EventHandler(this.questionToolStripMenuItem_Click);
+            // 
+            // motCléToolStripMenuItem
+            // 
+            this.motCléToolStripMenuItem.Name = "motCléToolStripMenuItem";
+            this.motCléToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.motCléToolStripMenuItem.Text = "Mot-Clé";
+            // 
+            // sauvegarderToolStripMenuItem
+            // 
+            this.sauvegarderToolStripMenuItem.Name = "sauvegarderToolStripMenuItem";
+            this.sauvegarderToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.sauvegarderToolStripMenuItem.Text = "Sauvegarder";
+            // 
+            // supprimerToolStripMenuItem
+            // 
+            this.supprimerToolStripMenuItem.Name = "supprimerToolStripMenuItem";
+            this.supprimerToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.supprimerToolStripMenuItem.Text = "Supprimer ce QCM";
+            this.supprimerToolStripMenuItem.Click += new System.EventHandler(this.supprimerToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 5;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 548F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149F));
+            this.tableLayoutPanel1.Controls.Add(this.btnModifier, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.nudLevel, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.scMain, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblQCM, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tbxNomQCM, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblLevelQCM, 2, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.872193F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.12781F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1123, 579);
+            this.tableLayoutPanel1.TabIndex = 5;
+            // 
+            // btnModifier
+            // 
+            this.btnModifier.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnModifier.Location = new System.Drawing.Point(977, 3);
+            this.btnModifier.Name = "btnModifier";
+            this.btnModifier.Size = new System.Drawing.Size(143, 23);
+            this.btnModifier.TabIndex = 12;
+            this.btnModifier.Text = "Modifier";
+            this.btnModifier.UseVisualStyleBackColor = true;
+            this.btnModifier.Click += new System.EventHandler(this.btnModifier_Click);
+            // 
+            // nudLevel
+            // 
+            this.nudLevel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.nudLevel.Location = new System.Drawing.Point(727, 3);
+            this.nudLevel.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nudLevel.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLevel.Name = "nudLevel";
+            this.nudLevel.Size = new System.Drawing.Size(244, 20);
+            this.nudLevel.TabIndex = 11;
+            this.nudLevel.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // scMain
             // 
+            this.tableLayoutPanel1.SetColumnSpan(this.scMain, 5);
             this.scMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scMain.Location = new System.Drawing.Point(0, 24);
+            this.scMain.Location = new System.Drawing.Point(3, 36);
             this.scMain.Name = "scMain";
             // 
             // scMain.Panel1
@@ -86,9 +216,9 @@
             // scMain.Panel2
             // 
             this.scMain.Panel2.Controls.Add(this.sReponse);
-            this.scMain.Size = new System.Drawing.Size(1123, 579);
-            this.scMain.SplitterDistance = 374;
-            this.scMain.TabIndex = 2;
+            this.scMain.Size = new System.Drawing.Size(1117, 540);
+            this.scMain.SplitterDistance = 371;
+            this.scMain.TabIndex = 4;
             // 
             // tlpQuestion
             // 
@@ -102,7 +232,7 @@
             this.tlpQuestion.RowCount = 2;
             this.tlpQuestion.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpQuestion.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpQuestion.Size = new System.Drawing.Size(374, 579);
+            this.tlpQuestion.Size = new System.Drawing.Size(371, 540);
             this.tlpQuestion.TabIndex = 3;
             // 
             // dgvQuestion
@@ -127,9 +257,11 @@
             this.dgvQuestion.Name = "dgvQuestion";
             this.dgvQuestion.RowHeadersVisible = false;
             this.dgvQuestion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvQuestion.Size = new System.Drawing.Size(368, 563);
+            this.dgvQuestion.Size = new System.Drawing.Size(365, 563);
             this.dgvQuestion.TabIndex = 3;
+            this.dgvQuestion.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvQuestion_CellValidating);
             this.dgvQuestion.SelectionChanged += new System.EventHandler(this.dgvQuestion_SelectionChanged);
+            this.dgvQuestion.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvQuestion_UserDeletingRow);
             // 
             // idQuestion
             // 
@@ -158,7 +290,7 @@
             this.sReponse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sReponse.Location = new System.Drawing.Point(0, 0);
             this.sReponse.Name = "sReponse";
-            this.sReponse.Size = new System.Drawing.Size(745, 579);
+            this.sReponse.Size = new System.Drawing.Size(742, 540);
             this.sReponse.TabIndex = 2;
             // 
             // scQuestion
@@ -175,8 +307,8 @@
             // scQuestion.Panel2
             // 
             this.scQuestion.Panel2.Controls.Add(this.tlbMotsClés);
-            this.scQuestion.Size = new System.Drawing.Size(745, 579);
-            this.scQuestion.SplitterDistance = 285;
+            this.scQuestion.Size = new System.Drawing.Size(742, 540);
+            this.scQuestion.SplitterDistance = 263;
             this.scQuestion.TabIndex = 0;
             // 
             // tlpReponse
@@ -191,7 +323,7 @@
             this.tlpReponse.RowCount = 2;
             this.tlpReponse.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpReponse.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpReponse.Size = new System.Drawing.Size(745, 285);
+            this.tlpReponse.Size = new System.Drawing.Size(742, 263);
             this.tlpReponse.TabIndex = 1;
             // 
             // dgvReponse
@@ -214,29 +346,10 @@
             this.dgvReponse.Location = new System.Drawing.Point(3, 23);
             this.dgvReponse.Name = "dgvReponse";
             this.dgvReponse.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvReponse.Size = new System.Drawing.Size(739, 265);
+            this.dgvReponse.Size = new System.Drawing.Size(736, 265);
             this.dgvReponse.TabIndex = 2;
-            this.dgvReponse.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReponse_RowValidated);
+            this.dgvReponse.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReponse_CellContentDoubleClick);
             this.dgvReponse.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvReponse_RowValidating);
-            this.dgvReponse.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvReponse_UserAddedRow);
-            this.dgvReponse.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvReponse_UserDeletingRow);
-            // 
-            // idReponse
-            // 
-            this.idReponse.HeaderText = "Id de la réponse";
-            this.idReponse.Name = "idReponse";
-            this.idReponse.ReadOnly = true;
-            // 
-            // textReponse
-            // 
-            this.textReponse.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.textReponse.HeaderText = "Texte de la réponse";
-            this.textReponse.Name = "textReponse";
-            // 
-            // chbBonneReponse
-            // 
-            this.chbBonneReponse.HeaderText = "Bonne réponse";
-            this.chbBonneReponse.Name = "chbBonneReponse";
             // 
             // lblReponse
             // 
@@ -259,7 +372,7 @@
             this.tlbMotsClés.RowCount = 2;
             this.tlbMotsClés.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlbMotsClés.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlbMotsClés.Size = new System.Drawing.Size(745, 290);
+            this.tlbMotsClés.Size = new System.Drawing.Size(742, 273);
             this.tlbMotsClés.TabIndex = 2;
             // 
             // dgvMotCle
@@ -273,7 +386,7 @@
             this.dgvMotCle.Location = new System.Drawing.Point(3, 23);
             this.dgvMotCle.Name = "dgvMotCle";
             this.dgvMotCle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMotCle.Size = new System.Drawing.Size(739, 274);
+            this.dgvMotCle.Size = new System.Drawing.Size(736, 274);
             this.dgvMotCle.TabIndex = 2;
             // 
             // idMotCle
@@ -297,62 +410,66 @@
             this.lblMotsCles.TabIndex = 1;
             this.lblMotsCles.Text = "Mots-Clés du QCM:";
             // 
-            // msMain
+            // lblQCM
             // 
-            this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fichierToolStripMenuItem,
-            this.helpToolStripMenuItem});
-            this.msMain.Location = new System.Drawing.Point(0, 0);
-            this.msMain.Name = "msMain";
-            this.msMain.Size = new System.Drawing.Size(1123, 24);
-            this.msMain.TabIndex = 4;
-            this.msMain.Text = "menuStrip2";
+            this.lblQCM.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblQCM.Location = new System.Drawing.Point(3, 0);
+            this.lblQCM.Name = "lblQCM";
+            this.lblQCM.Size = new System.Drawing.Size(75, 33);
+            this.lblQCM.TabIndex = 0;
+            this.lblQCM.Text = "Nom du QCM";
+            this.lblQCM.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // fichierToolStripMenuItem
+            // tbxNomQCM
             // 
-            this.fichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ajouterToolStripMenuItem});
-            this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
-            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.fichierToolStripMenuItem.Text = "Fichier";
+            this.tbxNomQCM.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tbxNomQCM.Location = new System.Drawing.Point(84, 3);
+            this.tbxNomQCM.Name = "tbxNomQCM";
+            this.tbxNomQCM.Size = new System.Drawing.Size(542, 20);
+            this.tbxNomQCM.TabIndex = 1;
             // 
-            // ajouterToolStripMenuItem
+            // lblLevelQCM
             // 
-            this.ajouterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.questionToolStripMenuItem,
-            this.motCléToolStripMenuItem});
-            this.ajouterToolStripMenuItem.Name = "ajouterToolStripMenuItem";
-            this.ajouterToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.ajouterToolStripMenuItem.Text = "Ajouter";
+            this.lblLevelQCM.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLevelQCM.Location = new System.Drawing.Point(632, 0);
+            this.lblLevelQCM.Name = "lblLevelQCM";
+            this.lblLevelQCM.Size = new System.Drawing.Size(89, 33);
+            this.lblLevelQCM.TabIndex = 8;
+            this.lblLevelQCM.Text = "Niveau du QCM:";
+            this.lblLevelQCM.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // questionToolStripMenuItem
+            // idReponse
             // 
-            this.questionToolStripMenuItem.Name = "questionToolStripMenuItem";
-            this.questionToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.questionToolStripMenuItem.Text = "Question";
-            this.questionToolStripMenuItem.Click += new System.EventHandler(this.questionToolStripMenuItem_Click);
+            this.idReponse.HeaderText = "Id de la réponse";
+            this.idReponse.Name = "idReponse";
+            this.idReponse.ReadOnly = true;
             // 
-            // motCléToolStripMenuItem
+            // textReponse
             // 
-            this.motCléToolStripMenuItem.Name = "motCléToolStripMenuItem";
-            this.motCléToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.motCléToolStripMenuItem.Text = "Mot-Clé";
+            this.textReponse.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.textReponse.HeaderText = "Texte de la réponse";
+            this.textReponse.Name = "textReponse";
             // 
-            // helpToolStripMenuItem
+            // chbBonneReponse
             // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
+            this.chbBonneReponse.HeaderText = "Bonne réponse";
+            this.chbBonneReponse.Name = "chbBonneReponse";
+            this.chbBonneReponse.ReadOnly = true;
             // 
             // FrmInformations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1123, 603);
-            this.Controls.Add(this.scMain);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.msMain);
             this.Name = "FrmInformations";
             this.Text = "FrmInformations";
+            this.msMain.ResumeLayout(false);
+            this.msMain.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevel)).EndInit();
             this.scMain.Panel1.ResumeLayout(false);
             this.scMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).EndInit();
@@ -371,38 +488,44 @@
             this.tlbMotsClés.ResumeLayout(false);
             this.tlbMotsClés.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMotCle)).EndInit();
-            this.msMain.ResumeLayout(false);
-            this.msMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.SplitContainer scMain;
-        private System.Windows.Forms.Panel sReponse;
-        private System.Windows.Forms.SplitContainer scQuestion;
-        private System.Windows.Forms.Label lblQuestion;
-        private System.Windows.Forms.Label lblReponse;
-        private System.Windows.Forms.Label lblMotsCles;
         private System.Windows.Forms.MenuStrip msMain;
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ajouterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem questionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem motCléToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.SplitContainer scMain;
+        private System.Windows.Forms.TableLayoutPanel tlpQuestion;
+        private System.Windows.Forms.DataGridView dgvQuestion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idQuestion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NomQuestion;
+        private System.Windows.Forms.Label lblQuestion;
+        private System.Windows.Forms.Panel sReponse;
+        private System.Windows.Forms.SplitContainer scQuestion;
         private System.Windows.Forms.TableLayoutPanel tlpReponse;
         private System.Windows.Forms.DataGridView dgvReponse;
-        private System.Windows.Forms.TableLayoutPanel tlpQuestion;
+        private System.Windows.Forms.Label lblReponse;
         private System.Windows.Forms.TableLayoutPanel tlbMotsClés;
         private System.Windows.Forms.DataGridView dgvMotCle;
         private System.Windows.Forms.DataGridViewTextBoxColumn idMotCle;
         private System.Windows.Forms.DataGridViewTextBoxColumn textMotCle;
+        private System.Windows.Forms.Label lblMotsCles;
+        private System.Windows.Forms.Label lblQCM;
+        private System.Windows.Forms.TextBox tbxNomQCM;
+        private System.Windows.Forms.Label lblLevelQCM;
+        private System.Windows.Forms.Button btnModifier;
+        private System.Windows.Forms.NumericUpDown nudLevel;
+        private System.Windows.Forms.ToolStripMenuItem supprimerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sauvegarderToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn idReponse;
         private System.Windows.Forms.DataGridViewTextBoxColumn textReponse;
         private System.Windows.Forms.DataGridViewCheckBoxColumn chbBonneReponse;
-        private System.Windows.Forms.DataGridView dgvQuestion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idQuestion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NomQuestion;
     }
 }

@@ -32,12 +32,13 @@ namespace WF_TPI_QCM
             InitializeComponent();
             _idQCM = idQCM;
             _qcmController = new QCMController();
+            _qcmController.GetQCMById(idQCM);
             Text = ((idQCM == 0) ? TEXT_CREATE : TEXT_UPDATE) + " un QCM";
             btnAction.Text = (idQCM == 0) ? TEXT_CREATE : TEXT_UPDATE;
             if (idQCM != 0)
             {
-                tbxTitreQCM.Text = _qcmController.GetTitreQCMByIdQCM(idQCM);
-                nudLevelQCM.Value = _qcmController.GetLevelByIdQCM(idQCM);
+                tbxTitreQCM.Text = _qcmController.GetTitreQCM();
+                nudLevelQCM.Value = _qcmController.GetLevelByIdQCM();
             }
         }
 
@@ -50,19 +51,20 @@ namespace WF_TPI_QCM
         {
             if (_idQCM == 0)
             {
-                string error = _qcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value));
+                MessageBox.Show(_qcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value)));
+                /*string error = _qcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value));
                 if (error == "")
                     MessageBox.Show("Création du QCM avec succès !");
                 else
-                    MessageBox.Show("[QCM] Erreur: " + error);
+                    MessageBox.Show("[QCM] Erreur: " + error);*/
             }
             else
             {
-                string error = _qcmController.UpdateQCMByIdQCM(_idQCM, tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value));
+                /*string error = _qcmController.UpdateQCMByIdQCM(_idQCM, tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value));
                 if (error == "")
                     MessageBox.Show("Modification du QCM avec succès !");
                 else
-                    MessageBox.Show("[QCM] Erreur: " + error);
+                    MessageBox.Show("[QCM] Erreur: " + error);*/
 
             }
         }

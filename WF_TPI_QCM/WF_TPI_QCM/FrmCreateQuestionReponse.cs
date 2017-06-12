@@ -15,7 +15,6 @@ namespace WF_TPI_QCM
         const string TEXT_CREATE = "Créer";
         const string TEXT_UPDATE = "Modifier";
         const string TEXT_QCM = "Titre du QCM: ";
-        int _idQCM;
         QCMController _qcmController;
         TextBox[] _tbxReponseTab;
         RadioButton[] _rbReponseTab;
@@ -30,7 +29,7 @@ namespace WF_TPI_QCM
             _qcmController = new QCMController();
             _tbxReponseTab = new TextBox[] { tbxReponse1, tbxReponse2, tbxReponse3, tbxReponse4, tbxReponse5, tbxReponse6 };
             _rbReponseTab = new RadioButton[] { rbBonneReponse1, rbBonneReponse2, rbBonneReponse3, rbBonneReponse4, rbBonneReponse5, rbBonneReponse6 };
-            lblQCM.Text = TEXT_QCM + _qcmController.GetTitreQCMByIdQCM(_qcmController.GetIdQCM());
+            lblQCM.Text = TEXT_QCM + _qcmController.GetTitreQCM();
         }
 
         /// <summary>

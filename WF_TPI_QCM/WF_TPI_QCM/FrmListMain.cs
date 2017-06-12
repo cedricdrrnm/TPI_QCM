@@ -66,7 +66,7 @@ namespace WF_TPI_QCM
                 if (e.Node.Text == TEXT_QUESTION)
                 {
                     e.Node.Nodes.Clear();
-                    foreach (KeyValuePair<int, QuestionModele> item in _qcmController.GetQuestionsByIdQCM(Convert.ToInt32(e.Node.Parent.Name)))
+                    foreach (KeyValuePair<int, QuestionDatas> item in _qcmController.GetQuestions())
                     {
                         e.Node.Nodes.Add(item.Key.ToString(), item.Value.Question).Nodes.Add(TEXT_REPONSE).Nodes.Add("");
                     }
@@ -74,7 +74,7 @@ namespace WF_TPI_QCM
                 else if (e.Node.Text == TEXT_MOT_CLE)
                 {
                     e.Node.Nodes.Clear();
-                    foreach (KeyValuePair<int, string> item in _qcmController.GetMotsClesByIdQCM(Convert.ToInt32(e.Node.Parent.Name)))
+                    foreach (KeyValuePair<int, string> item in _qcmController.GetMotsCles())
                     {
                         e.Node.Nodes.Add(item.Key.ToString(), item.Value);
                     }
@@ -83,7 +83,7 @@ namespace WF_TPI_QCM
             else if (e.Node.Level == 3)
             {
                 e.Node.Nodes.Clear();
-                foreach (KeyValuePair<int,ReponseModele> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(e.Node.Parent.Name)))
+                foreach (KeyValuePair<int,ReponseDatas> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(e.Node.Parent.Name)))
                 {
                     e.Node.Nodes.Add(item.Value.Reponse.ToString()).ForeColor = ((item.Value.BonneReponse) ? Color.Green : Color.Red);
                 }

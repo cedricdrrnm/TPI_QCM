@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace WF_TPI_QCM
 {
-    class QuestionModele
+    class QuestionDatas
     {
         private string _question;
-        private Dictionary<int, ReponseModele> _dictReponseModele;
+        private Dictionary<int, ReponseDatas> _dictReponseModele;
         private bool _addedInTheBase;
 
         public string Question
@@ -25,7 +25,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public Dictionary<int, ReponseModele> DictReponseModele
+        public Dictionary<int, ReponseDatas> DictReponseModele
         {
             get
             {
@@ -51,13 +51,13 @@ namespace WF_TPI_QCM
             }
         }
 
-        public QuestionModele(string question)
+        public QuestionDatas(string question)
         {
             Question = question;
-            DictReponseModele = new Dictionary<int, ReponseModele>();
+            DictReponseModele = new Dictionary<int, ReponseDatas>();
         }
 
-        public void AddReponse(int idReponse, ReponseModele reponse)
+        public void AddReponse(int idReponse, ReponseDatas reponse)
         {
             if (!DictReponseModele.Keys.Contains(idReponse))
                 DictReponseModele.Add(idReponse, reponse);
