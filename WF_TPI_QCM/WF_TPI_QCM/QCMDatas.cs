@@ -59,7 +59,8 @@ namespace WF_TPI_QCM
 
             set
             {
-                _level = value;
+                if (value > 0 && value <= 4)
+                    _level = value;
             }
         }
 
@@ -85,7 +86,8 @@ namespace WF_TPI_QCM
 
             set
             {
-                _dictMotCle = value;
+                if (value.Count <= 4)
+                    _dictMotCle = value;
             }
         }
 

@@ -35,11 +35,11 @@ namespace WF_TPI_QCM
             InitializeComponent();
 
             this._listSelectedIdQCMs = listSelectedIdQCMs;
-            _qcmController = new QCMController();
+            _qcmController = new QCMController(0);
             if (modelName != null)
                 LoadModel(modelName);
 
-            foreach (string item in _qcmController.GetListModeles())
+            foreach (string item in QCMController.GetListModeles())
             {
                 tsmiModel.DropDownItems.Add(item, null, ExportToolStripMenuItem_Click);
             }
@@ -52,7 +52,7 @@ namespace WF_TPI_QCM
             //https://msdn.microsoft.com/en-us/library/system.environment.specialfolder%28v=vs.110%29.aspx
             if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\" + modelName))
             {
-                if (!_qcmController.GetListModeles().Contains(modelName))
+                if (!QCMController.GetListModeles().Contains(modelName))
                 {
                     MessageBox.Show("Ce modèle n'existe pas !");
                     return;

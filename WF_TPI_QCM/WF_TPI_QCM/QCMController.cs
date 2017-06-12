@@ -9,102 +9,59 @@ namespace WF_TPI_QCM
 {
     public enum Modes { Create, Update, Delete }; //Permet de faire les types (https://docs.microsoft.com/fr-fr/dotnet/csharp/programming-guide/enumeration-types)
 
-    class QCMController
+    public class QCMController
     {
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
         FrmExportSelect _frmExportSelect;
-        static QCMDatas _qcm;
-        private Dictionary<QuestionDatas, Modes> _listEditedQuestion;
-        private Dictionary<ReponseDatas, Modes> _listEditedReponse;
+        QCMModele _qcmModele;
+        private FrmCreateQuestionReponse _frmCreateQuestionReponse;
 
         #region Select
 
-        public QCMController()
+        public QCMController(int idQCM)
         {
             DAO.CreateConnection();
-            _listEditedQuestion = new Dictionary<QuestionDatas, Modes>();
-            _listEditedReponse = new Dictionary<ReponseDatas, Modes>();
+            _qcmModele = new QCMModele(idQCM);
         }
 
-        public bool GetQCMById(int idQCM)
-        {
-            try
-            {
-                _qcm = DAO.SelectQCMById(idQCM);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public Dictionary<int, string> GetListQCM()
+        public static Dictionary<int, string> GetListQCM()
         {
             return QCMModele.GetListQCM();
         }
 
         public int GetLevelByIdQCM()
         {
-            return _qcm.Level;
+            return _qcmModele.GetLevelByIdQCM();
         }
 
         public Dictionary<int, QuestionDatas> GetQuestions()
         {
-            return _qcm.DictQuestionModele;
+            return _qcmModele.GetQuestions();
         }
 
         public Dictionary<int, string> GetMotsCles()
         {
-            return _qcm.DictMotCle;
+            return _qcmModele.GetMotsCles();
         }
 
         public Dictionary<int, ReponseDatas> GetReponsesByIdQuestion(int idQuestion)
         {
-            QuestionDatas qm;
-            _qcm.DictQuestionModele.TryGetValue(idQuestion, out qm);
-            return qm.DictReponseModele;
+            return _qcmModele.GetReponsesByIdQuestion(idQuestion);
         }
 
         public string InsertQuestion(string text, Dictionary<string, bool> dictReponses)
         {
-            QuestionDatas qm = new QuestionDatas(text);
-            int nbReponseJuste = 0;
-            foreach (KeyValuePair<string, bool> item in dictReponses)
-            {
-                if (item.Value)
-                    nbReponseJuste++;
-                qm.AddReponse(_qcm.NextIdReponse, new ReponseDatas(item.Key, item.Value));
-                _qcm.NextIdReponse++;
-            }
-
-            if (nbReponseJuste == 1)
-            {
-                if (qm.DictReponseModele.Count >= 4 && qm.DictReponseModele.Count <= 6)
-                {
-                    _qcm.AddQuestion(_qcm.NextIdQuestion, qm);
-                    _qcm.NextIdQuestion++;
-                    return "Question insérée avec succès !";
-                }
-                else
-                {
-                    return "Il n'y a pas le nombre adéquat de réponse !";
-                }
-            }
-            else
-            {
-                return "Nombre de réponses justes incorrecte !";
-            }
+            return _qcmModele.InsertQuestion(text, dictReponses);
         }
 
         public string GetTitreQCM()
         {
-            return _qcm.NomQCM;
+            return _qcmModele.GetTitreQCM();
         }
 
         public int GetIdQCM()
         {
-            return _qcm.IdQCM;
+            return _qcmModele.GetIdQCM();
         }
 
         /*public string GetTextQuestionByIdQuestion(int idQuestion)
@@ -123,30 +80,22 @@ namespace WF_TPI_QCM
 
         public int GetNextIdQuestion()
         {
-            return _qcm.NextIdQuestion;
+            return _qcmModele.GetNextIdQuestion();
         }
 
         public int GetNextIdReponse()
         {
-            return _qcm.NextIdReponse;
+            return _qcmModele.GetNextIdReponse();
         }
 
         public int GetNextIdMotCle()
         {
-            return _qcm.NextIdMotCle;
+            return _qcmModele.GetNextIdMotCle();
         }
 
         public string InsertQCM(string titreQCM, int levelQCM)
         {
-            try
-            {
-                DAO.InsertQCM(titreQCM, levelQCM);
-                return "Ce qcm a bien été créé !";
-            }
-            catch (Exception ex)
-            {
-                return "Erreur lors de l'insertion du QCM: " + ex.Message;
-            }
+            return _qcmModele.InsertQCM(titreQCM, levelQCM);
         }
 
         /*public string UpdateQCMByIdQCM(int idQCM, string nouveauTitreQCM, int nouveauLevelQCM)
@@ -161,25 +110,12 @@ namespace WF_TPI_QCM
 
         public bool DeleteQuestionByIdQuestion(int idQuestion)
         {
-            //_listDeletedQuestion.Add(idQuestion);
-            if (_qcm.DictQuestionModele.Remove(idQuestion))
-                return true;
-            else
-                return false;
+            return _qcmModele.DeleteQuestionByIdQuestion(idQuestion);
         }
 
         public bool UpdateQuestionByIdQuestion(int idQuestion, string nouveauTexte)
         {
-            QuestionDatas qm;
-            if (_qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
-            {
-                qm.Question = nouveauTexte;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _qcmModele.UpdateQuestionByIdQuestion(idQuestion, nouveauTexte);
         }
 
         /*public string InsertQuestion(string question, Dictionary<string, bool> reponses)
@@ -205,104 +141,29 @@ namespace WF_TPI_QCM
             }
         }*/
 
-        public string UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseDatas reponseModele)
+        public KeyValuePair<bool,string> UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseDatas reponseModele)
         {
-            QuestionDatas qm;
-            if (_qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
-            {
-                ReponseDatas rm;
-                if (qm.DictReponseModele.TryGetValue(idReponse, out rm))
-                {
-                    if (rm.Reponse != reponseModele.Reponse || rm.BonneReponse != reponseModele.BonneReponse)
-                    {
-                        rm.Reponse = reponseModele.Reponse;
-                        rm.BonneReponse = reponseModele.BonneReponse;
-                        return "Réponse modifiée !";
-                    }
-                    else
-                        return "";
-                }
-                else
-                {
-                    return "Réponse introuvable !";
-                }
-            }
-            else
-            {
-                return "Question introuvable !";
-            }
+            return _qcmModele.UpdateReponseByIdQuestionAndIdReponse(idQuestion, idReponse, reponseModele);
         }
 
         public string DeleteQCM()
         {
-            try
-            {
-                DAO.DeleteQCMByIdQCM(_qcm.IdQCM);
-                _qcm = null;
-                return "Supprimé avec succès !";
-            }
-            catch (Exception ex)
-            {
-                return "Erreur lors de la suppression: " + ex.Message;
-            }
-
+            return _qcmModele.DeleteQCM();
         }
 
         public string UpdateQCM(string nouveauText, int nouveauLevel)
         {
-            if (nouveauText.Trim() != "")
-            {
-                try
-                {
-                    DAO.UpdateQCMByIdQCM(_qcm.IdQCM, nouveauText, nouveauLevel);
-                    return "Modifié avec succès !";
-                }
-                catch (Exception ex)
-                {
-                    return "Erreur lors de la modification: " + ex.Message;
-                }
-            }
-            return "Nom vide !";
+            return _qcmModele.UpdateQCM(nouveauText, nouveauLevel);
         }
 
         public string InsertReponse(int idQuestion, string reponseText, bool bonneReponse)
         {
-            QuestionDatas qm = null;
-            foreach (KeyValuePair<int, QuestionDatas> item in _qcm.DictQuestionModele)
-            {
-                if (item.Key == idQuestion)
-                {
-                    qm = item.Value;
-                }
-            }
-            if (qm != null)
-            {
-                if (qm.DictReponseModele.Count >= 6)
-                    return "Il a trop de réponses !";
-                else
-                {
-                    ReponseDatas rm = new ReponseDatas(reponseText, bonneReponse);
-                    qm.AddReponse(_qcm.NextIdReponse, rm);
-                    _qcm.NextIdReponse++;
-                    _listEditedReponse.Add(rm, Modes.Create);
-                    return "Réponse créé avec succès !";
-                }
-            }
-            return "Cette question est introuvable !";
+            return _qcmModele.InsertReponse(idQuestion, reponseText, bonneReponse);
         }
 
         public bool DeleteReponseByIdReponse(int idQuestion, int idReponse)
         {
-            QuestionDatas qm;
-            if (_qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
-            {
-                qm.DictReponseModele.Remove(idReponse);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _qcmModele.DeleteReponseByIdReponse(idQuestion, idReponse);
         }
 
         /*public string UpdateQuestionByIdQuestion(int idQCM, int idQuestion, string question, Dictionary<string, bool> reponses)
@@ -368,7 +229,7 @@ namespace WF_TPI_QCM
             _frmCCA.ShowDialog();
             if (_frmCCA.ReturnId != 0)
             {
-                ChangeCorrectAnswer(idQuestion, _frmCCA.ReturnId);
+                _qcmModele.ChangeCorrectAnswer(idQuestion, _frmCCA.ReturnId);
                 return "Bonne réponse changée !";
             }
             else
@@ -377,39 +238,27 @@ namespace WF_TPI_QCM
             }
         }
 
-        private void ChangeCorrectAnswer(int idQuestion, int idNewReponse)
+        public static List<string> GetListModeles()
         {
-            foreach (KeyValuePair<int, ReponseDatas> item in GetReponsesByIdQuestion(idQuestion))
-            {
-                item.Value.BonneReponse = (item.Key == idQuestion) ? true : false;
-            }
+            return QCMModele.GetListModeles();
         }
 
-        public List<string> GetListModeles()
+        public void CreateQuestionReponse()
         {
-            List<string> listModeles = new List<string>();
-
-
-            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS))
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS);
-
-            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\latex.txt"))
-            {
-                File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\latex.txt", Properties.Resources.latex);
-            }
-
-            //http://www.csharp-examples.net/get-files-from-directory/
-            foreach (string item in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS))
-            {
-                listModeles.Add(item.Split('\\').Last());
-            }
-            return listModeles;
+            _frmCreateQuestionReponse = new FrmCreateQuestionReponse(this);
+            _frmCreateQuestionReponse.ShowDialog();
         }
 
         public void Export()
         {
             _frmExportSelect = new FrmExportSelect(GetListModeles());
             _frmExportSelect.ShowDialog();
+        }
+
+        public static void OpenFormContents(int idQCM)
+        {
+            FrmInformations _frm = new FrmInformations(idQCM);
+            _frm.Show();
         }
     }
 }

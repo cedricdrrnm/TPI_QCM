@@ -15,21 +15,37 @@ namespace WF_TPI_QCM
         const string TEXT_CREATE = "Créer";
         const string TEXT_UPDATE = "Modifier";
         const string TEXT_QCM = "Titre du QCM: ";
-        QCMController _qcmController;
+        int _idQCM;
         TextBox[] _tbxReponseTab;
         RadioButton[] _rbReponseTab;
+        private Dictionary<string,Dictionary<string,bool>> _returnDatas;
+
+        public Dictionary<string, Dictionary<string, bool>> ReturnDatas
+        {
+            get
+            {
+                return _returnDatas;
+            }
+
+            set
+            {
+                _returnDatas = value;
+            }
+        }
+        QCMController _qcmController;
 
         /// <summary>
         /// Constructeur
         /// </summary>
         /// <param name="idQCM">Id du QCM</param>
-        public FrmCreateQuestionReponse()
+        public FrmCreateQuestionReponse(QCMController qcmController)
         {
             InitializeComponent();
-            _qcmController = new QCMController();
+            _qcmController = qcmController;
             _tbxReponseTab = new TextBox[] { tbxReponse1, tbxReponse2, tbxReponse3, tbxReponse4, tbxReponse5, tbxReponse6 };
             _rbReponseTab = new RadioButton[] { rbBonneReponse1, rbBonneReponse2, rbBonneReponse3, rbBonneReponse4, rbBonneReponse5, rbBonneReponse6 };
             lblQCM.Text = TEXT_QCM + _qcmController.GetTitreQCM();
+            ReturnDatas = new Dictionary<string, Dictionary<string, bool>>();
         }
 
         /// <summary>

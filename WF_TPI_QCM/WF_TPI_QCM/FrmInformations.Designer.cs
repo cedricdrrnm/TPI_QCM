@@ -51,6 +51,9 @@
             this.scQuestion = new System.Windows.Forms.SplitContainer();
             this.tlpReponse = new System.Windows.Forms.TableLayoutPanel();
             this.dgvReponse = new System.Windows.Forms.DataGridView();
+            this.idReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chbBonneReponse = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.lblReponse = new System.Windows.Forms.Label();
             this.tlbMotsClés = new System.Windows.Forms.TableLayoutPanel();
             this.dgvMotCle = new System.Windows.Forms.DataGridView();
@@ -60,9 +63,6 @@
             this.lblQCM = new System.Windows.Forms.Label();
             this.tbxNomQCM = new System.Windows.Forms.TextBox();
             this.lblLevelQCM = new System.Windows.Forms.Label();
-            this.idReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textReponse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chbBonneReponse = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.msMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevel)).BeginInit();
@@ -344,12 +344,34 @@
             this.dgvReponse.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvReponse.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvReponse.Location = new System.Drawing.Point(3, 23);
+            this.dgvReponse.MultiSelect = false;
             this.dgvReponse.Name = "dgvReponse";
             this.dgvReponse.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvReponse.Size = new System.Drawing.Size(736, 265);
             this.dgvReponse.TabIndex = 2;
-            this.dgvReponse.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReponse_CellContentDoubleClick);
+            this.dgvReponse.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReponse_CellContentClick);
+            this.dgvReponse.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvReponse_CellValidating);
             this.dgvReponse.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvReponse_RowValidating);
+            this.dgvReponse.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvReponse_UserAddedRow);
+            this.dgvReponse.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvReponse_UserDeletingRow);
+            // 
+            // idReponse
+            // 
+            this.idReponse.HeaderText = "Id de la réponse";
+            this.idReponse.Name = "idReponse";
+            this.idReponse.ReadOnly = true;
+            // 
+            // textReponse
+            // 
+            this.textReponse.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.textReponse.HeaderText = "Texte de la réponse";
+            this.textReponse.Name = "textReponse";
+            // 
+            // chbBonneReponse
+            // 
+            this.chbBonneReponse.HeaderText = "Bonne réponse";
+            this.chbBonneReponse.Name = "chbBonneReponse";
+            this.chbBonneReponse.ReadOnly = true;
             // 
             // lblReponse
             // 
@@ -384,6 +406,7 @@
             this.textMotCle});
             this.dgvMotCle.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvMotCle.Location = new System.Drawing.Point(3, 23);
+            this.dgvMotCle.MultiSelect = false;
             this.dgvMotCle.Name = "dgvMotCle";
             this.dgvMotCle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMotCle.Size = new System.Drawing.Size(736, 274);
@@ -437,24 +460,6 @@
             this.lblLevelQCM.TabIndex = 8;
             this.lblLevelQCM.Text = "Niveau du QCM:";
             this.lblLevelQCM.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // idReponse
-            // 
-            this.idReponse.HeaderText = "Id de la réponse";
-            this.idReponse.Name = "idReponse";
-            this.idReponse.ReadOnly = true;
-            // 
-            // textReponse
-            // 
-            this.textReponse.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.textReponse.HeaderText = "Texte de la réponse";
-            this.textReponse.Name = "textReponse";
-            // 
-            // chbBonneReponse
-            // 
-            this.chbBonneReponse.HeaderText = "Bonne réponse";
-            this.chbBonneReponse.Name = "chbBonneReponse";
-            this.chbBonneReponse.ReadOnly = true;
             // 
             // FrmInformations
             // 

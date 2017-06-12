@@ -12,23 +12,23 @@ namespace WF_TPI_QCM
 {
     public partial class frmListQCMMain : Form
     {
-        QCMController _qcmController;
         Form _frmNext;
         public frmListQCMMain()
         {
             InitializeComponent();
-            _qcmController = new QCMController();
             RefreshDataGridView();
         }
 
         private void btnAfficherQCM_Click(object sender, EventArgs e)
         {
-            if (dgvQCM.SelectedRows[0].Cells[0].Value != null)
-            {
-                _frmNext = new FrmInformations(Convert.ToInt32(dgvQCM.SelectedRows[0].Cells[0].Value));
-                _frmNext.ShowDialog();
-                RefreshDataGridView();
-            }
+            if (dgvQCM.SelectedRows.Count > 0)
+                for (int i = 0; i < dgvQCM.SelectedRows.Count; i++)
+                {
+                    if (dgvQCM.SelectedRows[i].Cells[0].Value != null)
+                    {
+                        QCMController.OpenFormContents(Convert.ToInt32(dgvQCM.SelectedRows[i].Cells[0].Value)); 
+                    }
+                }
         }
 
         private void btnCreerQCM_Click(object sender, EventArgs e)
@@ -41,7 +41,7 @@ namespace WF_TPI_QCM
         private void RefreshDataGridView()
         {
             dgvQCM.Rows.Clear();
-            foreach (KeyValuePair<int, string> item in _qcmController.GetListQCM())
+            foreach (KeyValuePair<int, string> item in QCMController.GetListQCM())
             {
                 dgvQCM.Rows.Add(new string[] { item.Key.ToString(), item.Value });
             }

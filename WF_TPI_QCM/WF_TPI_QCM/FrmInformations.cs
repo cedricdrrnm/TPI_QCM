@@ -12,17 +12,11 @@ namespace WF_TPI_QCM
 {
     public partial class FrmInformations : Form
     {
-        private FrmCreateQuestionReponse _frmCreateQuestionReponse;
         private QCMController _qcmController;
         public FrmInformations(int idQCM)
         {
+            _qcmController = new QCMController(idQCM);
             InitializeComponent();
-            _qcmController = new QCMController();
-            if (!_qcmController.GetQCMById(idQCM))
-            {
-                MessageBox.Show("Ce QCM n'existe pas !");
-                this.Close();
-            }
             RefreshQuestion();
 
             this.Text = "QCM: " + _qcmController.GetTitreQCM();
@@ -58,56 +52,8 @@ namespace WF_TPI_QCM
 
         private void questionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _frmCreateQuestionReponse = new FrmCreateQuestionReponse();
-            _frmCreateQuestionReponse.ShowDialog();
+            _qcmController.CreateQuestionReponse();
             RefreshQuestion();
-        }
-
-        private void dgvReponse_RowValidated(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dgvReponse.Rows[e.RowIndex].Cells[1].Value != null)
-            {
-                if (dgvReponse.Rows[e.RowIndex].Cells[0].Value == null) //Insert
-                {
-                    MessageBox.Show(_qcmController.InsertReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), dgvReponse.SelectedRows[0].Cells[1].Value.ToString(), Convert.ToBoolean(dgvReponse.SelectedRows[0].Cells[2].Value)));
-                    dgvReponse.Rows[e.RowIndex].Cells[0].Value = _qcmController.GetNextIdReponse() - 1;
-                    CheckAllows();
-                }
-                else
-                {
-                    if (dgvReponse.SelectedRows.Count > 0)
-                    {
-                        string textRetour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(dgvReponse.SelectedRows[0].Cells[0].Value), new ReponseDatas(dgvReponse.SelectedRows[0].Cells[1].Value.ToString(), Convert.ToBoolean(dgvReponse.SelectedRows[0].Cells[2].Value)));
-                        if (textRetour != "")
-                        {
-                            MessageBox.Show(textRetour);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void CheckAllows()
-        {
-            dgvReponse.AllowUserToAddRows = (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) < 6) ? true : false;
-            dgvReponse.AllowUserToDeleteRows = (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) > 4) ? true : false;
-        }
-
-        private void dgvReponse_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
-        {
-            
-        }
-
-        private void dgvReponse_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
-        {
-            _qcmController.DeleteReponseByIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(e.Row.Cells[0].Value));
-            dgvReponse.AllowUserToAddRows = true;
-            CheckAllows();
-        }
-
-        private void dgvReponse_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            dgvReponse.AllowUserToDeleteRows = true;
         }
 
         private void btnModifier_Click(object sender, EventArgs e)
@@ -149,12 +95,79 @@ namespace WF_TPI_QCM
             }
         }
 
-        private void dgvReponse_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvReponse_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex  == 2)
+            if (e.ColumnIndex == 2)
             {
                 _qcmController.ChooseCorrectAnswer(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value));
             }
+        }
+
+        private void dgvReponse_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+
+            if (_qcmController.DeleteReponseByIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(dgvReponse.Rows[e.Row.Index].Cells[0].Value)))
+                MessageBox.Show("Réponse supprimée avec succès !");
+            else
+            {
+                MessageBox.Show("Impossible de supprimer la réponse !");
+                e.Cancel = true;
+            }
+
+            if (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) /*AddedRow*/ == 4 + 1 /*Ligne entrain de se faire supprimer*/)
+                dgvReponse.AllowUserToDeleteRows = false;
+            dgvReponse.AllowUserToAddRows = true;
+        }
+
+        private void dgvReponse_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            dgvReponse.AllowUserToDeleteRows = true;
+            if (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) == 6)
+                dgvReponse.AllowUserToAddRows = false;
+        }
+
+        private void dgvReponse_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+
+        }
+
+        private void dgvReponse_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (dgvReponse.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                if (dgvReponse.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim() != "")
+                    if (dgvReponse.Rows[e.RowIndex].Cells[1].Value != null)
+                    {
+                        int idQuestion = Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value);
+                        string reponseText = dgvReponse.Rows[e.RowIndex].Cells[1].Value.ToString();
+                        bool bonneReponse = Convert.ToBoolean(dgvReponse.Rows[e.RowIndex].Cells[2].Value);
+                        if (dgvReponse.Rows[e.RowIndex].Cells[0].Value == null) //Create
+                        {
+                            if (_qcmController.InsertReponse(idQuestion, reponseText, bonneReponse) != null)
+                            {
+                                MessageBox.Show("Réponse créée avec succès !");
+                                dgvReponse.Rows[e.RowIndex].Cells[0].Value = _qcmController.GetReponsesByIdQuestion(idQuestion).Last().Key;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Impossible de créer la réponse !");
+                                e.Cancel = true;
+                            }
+
+                        }
+                        else
+                        {
+                            if (reponseText.Trim() != "")
+                            {
+                                KeyValuePair<bool, string> retour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(idQuestion, Convert.ToInt32(dgvReponse.Rows[e.RowIndex].Cells[0].Value), new ReponseDatas(reponseText, bonneReponse));
+                                if (retour.Value != null)
+                                {
+                                    MessageBox.Show(retour.Value);
+                                    if (retour.Key)
+                                        e.Cancel = true;
+                                }
+                            }
+                        }
+                    }
         }
     }
 }

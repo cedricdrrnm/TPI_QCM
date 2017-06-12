@@ -31,8 +31,7 @@ namespace WF_TPI_QCM
         {
             InitializeComponent();
             _idQCM = idQCM;
-            _qcmController = new QCMController();
-            _qcmController.GetQCMById(idQCM);
+            _qcmController = new QCMController(11);
             Text = ((idQCM == 0) ? TEXT_CREATE : TEXT_UPDATE) + " un QCM";
             btnAction.Text = (idQCM == 0) ? TEXT_CREATE : TEXT_UPDATE;
             if (idQCM != 0)

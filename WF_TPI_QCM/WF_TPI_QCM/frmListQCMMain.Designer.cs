@@ -44,7 +44,6 @@
             this.idQCM,
             this.textQCM});
             this.dgvQCM.Location = new System.Drawing.Point(12, 12);
-            this.dgvQCM.MultiSelect = false;
             this.dgvQCM.Name = "dgvQCM";
             this.dgvQCM.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvQCM.Size = new System.Drawing.Size(551, 418);

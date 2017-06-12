@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WF_TPI_QCM
 {
-    class QuestionDatas
+    public class QuestionDatas
     {
         private string _question;
         private Dictionary<int, ReponseDatas> _dictReponseModele;
@@ -34,7 +34,8 @@ namespace WF_TPI_QCM
 
             set
             {
-                _dictReponseModele = value;
+                if (value.Count <= 6 && value.Count >= 4)
+                    _dictReponseModele = value;
             }
         }
 

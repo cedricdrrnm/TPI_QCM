@@ -144,7 +144,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public string UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseDatas reponseModele)
+        public KeyValuePair<bool, string> UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseDatas reponseModele)
         {
             QuestionDatas qm;
             if (Qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
@@ -156,20 +156,13 @@ namespace WF_TPI_QCM
                     {
                         rm.Reponse = reponseModele.Reponse;
                         rm.BonneReponse = reponseModele.BonneReponse;
-                        return "Réponse modifiée !";
+                        return new KeyValuePair<bool, string>(false, "Réponse modifiée avec succès !");
                     }
                     else
-                        return "";
-                }
-                else
-                {
-                    return "Réponse introuvable !";
+                        return new KeyValuePair<bool, string>(false, null);
                 }
             }
-            else
-            {
-                return "Question introuvable !";
-            }
+            return new KeyValuePair<bool, string>(true, "Echec lors de la modification de la réponse !");
         }
 
         public string DeleteQCM()
@@ -243,7 +236,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        private void ChangeCorrectAnswer(int idQuestion, int idNewReponse)
+        public void ChangeCorrectAnswer(int idQuestion, int idNewReponse)
         {
             foreach (KeyValuePair<int, ReponseDatas> item in GetReponsesByIdQuestion(idQuestion))
             {
@@ -251,7 +244,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public List<string> GetListModeles()
+        public static List<string> GetListModeles()
         {
             List<string> listModeles = new List<string>();
 

@@ -19,7 +19,6 @@ namespace WF_TPI_QCM
         public FrmExportSelect(List<string> listModels)
         {
             InitializeComponent();
-            _controller = new QCMController();
             _listModel = listModels;
 
             foreach (string item in listModels)
@@ -27,7 +26,7 @@ namespace WF_TPI_QCM
                 lsbModeles.Items.Add(item);
             }
 
-            foreach (KeyValuePair<int, string> item in _controller.GetListQCM())
+            foreach (KeyValuePair<int, string> item in QCMController.GetListQCM())
             {
                 tvQCM.Nodes.Add(item.Key.ToString(), item.Value);
             }

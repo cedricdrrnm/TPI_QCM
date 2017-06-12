@@ -42,7 +42,6 @@
             this.tvQCM.Name = "tvQCM";
             this.tvQCM.Size = new System.Drawing.Size(818, 373);
             this.tvQCM.TabIndex = 0;
-            this.tvQCM.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvQCM_BeforeExpand);
             // 
             // btnCreate
             // 
@@ -52,7 +51,6 @@
             this.btnCreate.TabIndex = 1;
             this.btnCreate.Text = "Créer";
             this.btnCreate.UseVisualStyleBackColor = true;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // btnModifier
             // 
@@ -62,7 +60,6 @@
             this.btnModifier.TabIndex = 2;
             this.btnModifier.Text = "Modifier";
             this.btnModifier.UseVisualStyleBackColor = true;
-            this.btnModifier.Click += new System.EventHandler(this.btnModifier_Click);
             // 
             // btnSupprimer
             // 
@@ -72,7 +69,6 @@
             this.btnSupprimer.TabIndex = 3;
             this.btnSupprimer.Text = "Supprimer";
             this.btnSupprimer.UseVisualStyleBackColor = true;
-            this.btnSupprimer.Click += new System.EventHandler(this.btnSupprimer_Click);
             // 
             // btnExporter
             // 
@@ -82,7 +78,6 @@
             this.btnExporter.TabIndex = 4;
             this.btnExporter.Text = "Exporter";
             this.btnExporter.UseVisualStyleBackColor = true;
-            this.btnExporter.Click += new System.EventHandler(this.btnExporter_Click);
             // 
             // btnRaffraichir
             // 
@@ -106,7 +101,6 @@
             this.Controls.Add(this.tvQCM);
             this.Name = "frmListMain";
             this.Text = "Liste des QCMs";
-            this.Load += new System.EventHandler(this.frmListMain_Load);
             this.ResumeLayout(false);
 
         }
