@@ -1,0 +1,183 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage[french]{babel}
+\usepackage[french]{datetime}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+	commentstyle=\color{codegreen},
+	rulesepcolor=\color{codegray},
+	keywordstyle=\color{blue},
+	numberstyle=\tiny\color{black},
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle,
+%
+inputencoding=utf8,
+extendedchars=true,
+literate=%
+{é}{{\'{e}}}1
+{è}{{\`{e}}}1
+{ê}{{\^{e}}}1
+{ë}{{\¨{e}}}1
+{û}{{\^{u}}}1
+{ù}{{\`{u}}}1
+{â}{{\^{a}}}1
+{à}{{\`{a}}}1
+{î}{{\^{i}}}1
+{ô}{{\^{o}}}1
+{ç}{{\c{c}}}1
+{Ç}{{\c{C}}}1
+{É}{{\'{E}}}1
+{Ê}{{\^{E}}}1
+{À}{{\`{A}}}1
+{Â}{{\^{A}}}1
+{Î}{{\^{I}}}1,
+language=[LaTeX]{TeX},
+frame=shadowbox,
+}
+
+\author{Dürrenmatt Cédric, I.FA.P3C}
+\title{TPI sur le sujet "QCM"}
+\setcounter{page}{0}
+
+\pagestyle{fancy}
+\rhead{Share\LaTeX}
+\lhead{\today}
+\rfoot{Page \thepage}
+
+\begin{document}
+	\clearpage\maketitle
+	\thispagestyle{empty}
+	\newpage
+	
+	\tableofcontents
+	\newpage
+	
+	\section{Introduction}
+	\subsection{Généralités sur le sujet}
+	« Un questionnaire à choix multiples », aussi nommé « QCM », est un outil permettant d’évaluer ou d’enquêter sur les choix d’un utilisateur.
+	Il est utilisé dans le domaine de l’enseignement, du marketing ou encore dans des enquêtes quantitatives en recherche sociale.
+	Dans le milieu de l’enseignement, c’est un procédé d’évaluation contenant plusieurs réponses pour chaque question. Une (ou plusieurs) de ces propositions de réponses sont correctes. Les autres sont des réponses erronées, également appelées « distracteurs ».
+	Le QCM permet à un enseignant de voir si son élève a bien compris et retenu la réponse juste, mais aussi de vérifier s’il est capable d’identifier les erreurs.
+	
+	\bigskip
+	\subsection{Conception d’un QCM}
+	
+	Un questionnaire à choix multiples se compose d’un ensemble cohérent et structuré de questions.
+	Chaque question contient :
+	\begin{itemize}
+		\item Un libellé
+		\item Il doit être formulé de manière claire et neutre.
+		\item Des propositions de réponses
+		\item Elles doivent être homogènes et les distracteurs pertinents et crédibles.
+		\item Le placement de la réponse juste parmi les propositions de réponse doit être aléatoire.
+		\item Une seule bonne réponse correcte
+		\item Des mots-clés
+		\item Un niveau
+	\end{itemize}
+
+\noindent
+	 Le principe directeur est de ne pas influencer le candidat dans son choix.
+	 Il est conseillé d’éviter :
+	 
+	\begin{itemize}
+		\item Les formulations trop longues et confuses.
+		\item Les termes ambigus de type « habituellement », « le plus souvent », « rarement », « certains », etc.
+		\item Un nombre de distracteurs trop élevé s’ils ne sont pas pertinents.
+	\end{itemize}
+	
+	\newpage
+	\section{Rappel du cahier des charges du projet}
+	\subsection{Objectifs du projet}
+	L’application permettra :
+	\begin{itemize}
+		\item de créer des QCM
+		\item de modifier des QCM existants
+		\item de supprimer des QCM existants
+		\item de sélectionner un ou plusieurs QCM pour exportation dans un format texte standard
+	\end{itemize}
+\noindent
+	Les QCM seront stockés dans une base de données.
+	\subsection{Caractéristiques d'un QCM}
+	Les caractéristiques d'un QCM sont les suivantes: 
+	\begin{itemize}
+		\item question sous forme de texte uniquement, sans mise en forme (police, italique, gras. . .)
+		\item 4 à 6 réponses sous forme de texte uniquement, sans mise en forme (police, italique, gras. . .)
+		\item une seule bonne réponse possible
+		\item possibilité d’associer un niveau (1 à 4)
+		\item possibilité d’associer 0, 1, 2, 3 ou 4 mots-clés
+	\end{itemize}
+\newpage
+	\subsection{Formats d'exportation}
+
+	L’application proposera un mécanisme d’exportation au format texte configurable.
+	
+	Pendant le TPI, un seul format sera implémenté :
+	\begin{itemize}
+		\item fichier texte au format LATEX, voir listing 1
+	\end{itemize}
+
+\begin{lstlisting}[caption=Source QCM \LaTeX{}]
+\begin{minipage}{\linewidth}
+\part{}
+Le nombre qui suit le nombre 9 en système hexadécimal est~:
+\bigskip
+
+\begin{checkboxes}
+\choice 0
+\choice impossible, hexa signifie que ce système ne va pas au-delà de 6 chiffres
+\choice 10
+\CorrectChoice A
+\end{checkboxes}
+\end{minipage}
+\bigskip
+
+\begin{minipage}{\linewidth}
+\part{}
+La conversion binaire (sur 4 bits) du nombre hexadécimal F est~:
+\bigskip
+
+\begin{checkboxes}
+\choice 1010
+\choice impossible, F est trop grand pour être codé sur 4 bits
+\CorrectChoice 1111
+\choice 0101
+\end{checkboxes}
+\end{minipage}
+\end{lstlisting}
+
+	\noindent
+	Le projet respectera les contraintes techniques suivantes :
+	
+	\begin{itemize}
+		\item diagrammes de classes UML (Unified Modeling Language)
+		\item design pattern MVC (Modèle-Vue-Contrôleur)
+		\item base de données MySQL pour le stockage des QCM
+	\end{itemize}	
+\end{document}

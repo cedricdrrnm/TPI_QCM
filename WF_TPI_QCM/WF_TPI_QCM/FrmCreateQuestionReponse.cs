@@ -15,7 +15,6 @@ namespace WF_TPI_QCM
         const string TEXT_CREATE = "Créer";
         const string TEXT_UPDATE = "Modifier";
         const string TEXT_QCM = "Titre du QCM: ";
-        int _idQCM;
         TextBox[] _tbxReponseTab;
         RadioButton[] _rbReponseTab;
         private Dictionary<string,Dictionary<string,bool>> _returnDatas;

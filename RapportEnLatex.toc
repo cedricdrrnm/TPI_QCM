@@ -1,0 +1,8 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {subsection}{\numberline {1.1}G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s sur le sujet}{2}
+\contentsline {subsection}{\numberline {1.2}Conception d\IeC {\textquoteright }un QCM}{2}
+\contentsline {section}{\numberline {2}Rappel du cahier des charges du projet}{3}
+\contentsline {subsection}{\numberline {2.1}Objectifs du projet}{3}
+\contentsline {subsection}{\numberline {2.2}Caract\IeC {\'e}ristiques d'un QCM}{3}
+\contentsline {subsection}{\numberline {2.3}Formats d'exportation}{4}
