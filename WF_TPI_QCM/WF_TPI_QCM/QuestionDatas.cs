@@ -34,8 +34,7 @@ namespace WF_TPI_QCM
 
             set
             {
-                if (value.Count <= 6 && value.Count >= 4)
-                    _dictReponseModele = value;
+                _dictReponseModele = value;
             }
         }
 

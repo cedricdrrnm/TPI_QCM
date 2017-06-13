@@ -44,8 +44,6 @@
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.tlpQuestion = new System.Windows.Forms.TableLayoutPanel();
             this.dgvQuestion = new System.Windows.Forms.DataGridView();
-            this.idQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NomQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblQuestion = new System.Windows.Forms.Label();
             this.sReponse = new System.Windows.Forms.Panel();
             this.scQuestion = new System.Windows.Forms.SplitContainer();
@@ -63,6 +61,8 @@
             this.lblQCM = new System.Windows.Forms.Label();
             this.tbxNomQCM = new System.Windows.Forms.TextBox();
             this.lblLevelQCM = new System.Windows.Forms.Label();
+            this.idQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TextQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.msMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevel)).BeginInit();
@@ -142,8 +142,8 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.helpToolStripMenuItem.Text = "Aide";
             // 
             // tableLayoutPanel1
             // 
@@ -242,7 +242,7 @@
             this.dgvQuestion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvQuestion.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idQuestion,
-            this.NomQuestion});
+            this.TextQuestion});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -251,7 +251,7 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvQuestion.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvQuestion.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgvQuestion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvQuestion.Location = new System.Drawing.Point(3, 23);
             this.dgvQuestion.MultiSelect = false;
             this.dgvQuestion.Name = "dgvQuestion";
@@ -262,18 +262,6 @@
             this.dgvQuestion.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvQuestion_CellValidating);
             this.dgvQuestion.SelectionChanged += new System.EventHandler(this.dgvQuestion_SelectionChanged);
             this.dgvQuestion.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvQuestion_UserDeletingRow);
-            // 
-            // idQuestion
-            // 
-            this.idQuestion.HeaderText = "Id de la question";
-            this.idQuestion.Name = "idQuestion";
-            this.idQuestion.ReadOnly = true;
-            // 
-            // NomQuestion
-            // 
-            this.NomQuestion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.NomQuestion.HeaderText = "Nom de la question";
-            this.NomQuestion.Name = "NomQuestion";
             // 
             // lblQuestion
             // 
@@ -308,7 +296,7 @@
             // 
             this.scQuestion.Panel2.Controls.Add(this.tlbMotsClés);
             this.scQuestion.Size = new System.Drawing.Size(742, 540);
-            this.scQuestion.SplitterDistance = 263;
+            this.scQuestion.SplitterDistance = 262;
             this.scQuestion.TabIndex = 0;
             // 
             // tlpReponse
@@ -323,7 +311,7 @@
             this.tlpReponse.RowCount = 2;
             this.tlpReponse.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpReponse.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpReponse.Size = new System.Drawing.Size(742, 263);
+            this.tlpReponse.Size = new System.Drawing.Size(742, 262);
             this.tlpReponse.TabIndex = 1;
             // 
             // dgvReponse
@@ -342,7 +330,7 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvReponse.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvReponse.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgvReponse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvReponse.Location = new System.Drawing.Point(3, 23);
             this.dgvReponse.MultiSelect = false;
             this.dgvReponse.Name = "dgvReponse";
@@ -350,7 +338,6 @@
             this.dgvReponse.Size = new System.Drawing.Size(736, 265);
             this.dgvReponse.TabIndex = 2;
             this.dgvReponse.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReponse_CellContentClick);
-            this.dgvReponse.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvReponse_CellValidating);
             this.dgvReponse.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvReponse_RowValidating);
             this.dgvReponse.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvReponse_UserAddedRow);
             this.dgvReponse.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvReponse_UserDeletingRow);
@@ -394,7 +381,7 @@
             this.tlbMotsClés.RowCount = 2;
             this.tlbMotsClés.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlbMotsClés.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlbMotsClés.Size = new System.Drawing.Size(742, 273);
+            this.tlbMotsClés.Size = new System.Drawing.Size(742, 274);
             this.tlbMotsClés.TabIndex = 2;
             // 
             // dgvMotCle
@@ -404,7 +391,7 @@
             this.dgvMotCle.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idMotCle,
             this.textMotCle});
-            this.dgvMotCle.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgvMotCle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMotCle.Location = new System.Drawing.Point(3, 23);
             this.dgvMotCle.MultiSelect = false;
             this.dgvMotCle.Name = "dgvMotCle";
@@ -461,6 +448,18 @@
             this.lblLevelQCM.Text = "Niveau du QCM:";
             this.lblLevelQCM.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // idQuestion
+            // 
+            this.idQuestion.HeaderText = "Id de la question";
+            this.idQuestion.Name = "idQuestion";
+            this.idQuestion.ReadOnly = true;
+            // 
+            // TextQuestion
+            // 
+            this.TextQuestion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.TextQuestion.HeaderText = "Texte de la question";
+            this.TextQuestion.Name = "TextQuestion";
+            // 
             // FrmInformations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -509,8 +508,6 @@
         private System.Windows.Forms.SplitContainer scMain;
         private System.Windows.Forms.TableLayoutPanel tlpQuestion;
         private System.Windows.Forms.DataGridView dgvQuestion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idQuestion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NomQuestion;
         private System.Windows.Forms.Label lblQuestion;
         private System.Windows.Forms.Panel sReponse;
         private System.Windows.Forms.SplitContainer scQuestion;
@@ -532,5 +529,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn idReponse;
         private System.Windows.Forms.DataGridViewTextBoxColumn textReponse;
         private System.Windows.Forms.DataGridViewCheckBoxColumn chbBonneReponse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idQuestion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TextQuestion;
     }
 }

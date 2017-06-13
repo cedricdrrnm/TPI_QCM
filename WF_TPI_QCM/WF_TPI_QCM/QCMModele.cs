@@ -161,8 +161,11 @@ namespace WF_TPI_QCM
                     else
                         return new KeyValuePair<bool, string>(false, null);
                 }
+                else
+                    return new KeyValuePair<bool, string>(true, "Echec lors de la récupération de la réponse pour la modification !");
             }
-            return new KeyValuePair<bool, string>(true, "Echec lors de la modification de la réponse !");
+            else
+                return new KeyValuePair<bool, string>(true, "Echec lors de la récupération de la question contenant la réponse pour la modification !");
         }
 
         public string DeleteQCM()
@@ -216,7 +219,7 @@ namespace WF_TPI_QCM
                     ReponseDatas rm = new ReponseDatas(reponseText, bonneReponse);
                     qm.AddReponse(Qcm.NextIdReponse, rm);
                     Qcm.NextIdReponse++;
-                    return "Réponse créé avec succès !";
+                    return "";
                 }
             }
             return "Cette question est introuvable !";

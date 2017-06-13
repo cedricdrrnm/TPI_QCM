@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO.cs" />
-    <Compile Include="DAO_V2.cs" />
     <Compile Include="frmChoixReponseJuste.cs">
       <SubType>Form</SubType>
     </Compile>

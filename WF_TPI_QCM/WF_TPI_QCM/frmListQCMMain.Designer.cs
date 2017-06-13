@@ -92,7 +92,7 @@
             this.Controls.Add(this.btnAfficherQCM);
             this.Controls.Add(this.dgvQCM);
             this.Name = "frmListQCMMain";
-            this.Text = "frmMain";
+            this.Text = "Liste QCM";
             ((System.ComponentModel.ISupportInitialize)(this.dgvQCM)).EndInit();
             this.ResumeLayout(false);
 
