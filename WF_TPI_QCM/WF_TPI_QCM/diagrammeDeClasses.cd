@@ -1,105 +1,98 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="WF_TPI_QCM.FrmListQCMMain" Collapsed="true">
-    <Position X="8" Y="1.5" Width="1.5" />
+    <Position X="6" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAgAAAEBCAAACAAAACAAAACACAgAAAAAAAAAAACEAA=</HashCode>
       <FileName>FrmListQCMMain.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.frmChoixReponseJuste" Collapsed="true">
-    <Position X="1" Y="1" Width="1.5" />
+    <Position X="0.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAYAAIAAACAEAgAAAACAAAACAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>frmChoixReponseJuste.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.FrmCreateQCM" Collapsed="true">
-    <Position X="3.25" Y="1.5" Width="1.5" />
+    <Position X="2.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAAAAEACAAQEAAAQCAAABCAAAAAIAABAAAEAAAAAA=</HashCode>
       <FileName>FrmCreateQCM.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.FrmCreateQuestionReponse" Collapsed="true">
-    <Position X="5.5" Y="1.5" Width="1.5" />
+    <Position X="4.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACAAgIAEAGBAAhAAASCwEgECAAAAEIAAFgIEFAADAAA=</HashCode>
       <FileName>FrmCreateQuestionReponse.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.FrmExport" Collapsed="true">
-    <Position X="8" Y="0.5" Width="1.5" />
+    <Position X="6" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgBAABEAECAEEAAAAQSYCQAiABAAAAABAGAAEABCAAA=</HashCode>
       <FileName>FrmExport.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.FrmExportSelect" Collapsed="true">
-    <Position X="1" Y="2.5" Width="1.5" />
+    <Position X="0.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAAAAEAACIAABAAAAGBAAACAAAAAAAAIAAAAEAAIAA=</HashCode>
       <FileName>FrmExportSelect.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.FrmInformations" Collapsed="true">
-    <Position X="3.25" Y="2.5" Width="1.5" />
+    <Position X="2.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AMEAQgAoGCQQDBAQAgCghAFCAEQwEBJEA1CAkAEA4DQ=</HashCode>
       <FileName>FrmInformations.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.frmListMain" Collapsed="true">
-    <Position X="5.5" Y="2.5" Width="1.5" />
+    <Position X="4.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAACAAAAABAEGAAAACAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>FrmListMain.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.Program" Collapsed="true">
-    <Position X="1" Y="3.75" Width="1.5" />
+    <Position X="0.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.QCMController" Collapsed="true">
-    <Position X="5.5" Y="3.5" Width="1.5" />
+    <Position X="2.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAoAAIUANhAEECElAAAABAAEAABgAAQAAgIEQBACECA=</HashCode>
       <FileName>QCMController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.QCMDatas" Collapsed="true">
-    <Position X="8" Y="3.5" Width="1.5" />
+    <Position X="4.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAhAAAAAAACEAAIAEDAQBQABEAAAQBAAAQIJCAoQA=</HashCode>
       <FileName>QCMDatas.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.QCMModele" Collapsed="true">
-    <Position X="8" Y="2.5" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="WF_TPI_QCM.QCMModele.Modes" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>QCMModele.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
+    <Position X="6" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAoAAIUANhQEECElAAAABAAEAABACAUAAgAEABBCACA=</HashCode>
       <FileName>QCMModele.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.QuestionDatas" Collapsed="true">
-    <Position X="1" Y="5" Width="1.5" />
+    <Position X="0.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAAAABAAAAAAAAAAAAAQAAEAAAAIAAAAEg=</HashCode>
       <FileName>QuestionDatas.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WF_TPI_QCM.ReponseDatas" Collapsed="true">
-    <Position X="5.5" Y="0.5" Width="1.5" />
+    <Position X="2.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAABAIAAAAAAAAAAAAABAQAAAAAA=</HashCode>
       <FileName>ReponseDatas.cs</FileName>
