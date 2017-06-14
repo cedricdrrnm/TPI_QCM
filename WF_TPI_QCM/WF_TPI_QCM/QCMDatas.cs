@@ -59,7 +59,7 @@ namespace WF_TPI_QCM
 
             set
             {
-                    _level = value;
+                _level = value;
             }
         }
 
@@ -85,7 +85,7 @@ namespace WF_TPI_QCM
 
             set
             {
-                    _dictMotCle = value;
+                _dictMotCle = value;
             }
         }
 
@@ -167,11 +167,17 @@ namespace WF_TPI_QCM
             }
         }
 
-        public void AddMotsCles(int idMotCle, string motCle)
+        public string AddMotsCles(int idMotCle, string motCle)
         {
             if (!DictMotCle.ContainsKey(idMotCle))
+            {
                 DictMotCle.Add(idMotCle, motCle);
-
+                return "Mot-clé ajouté !";
+            }
+            else
+            {
+                return "Mot-clé déjà existant !";
+            }
         }
     }
 }

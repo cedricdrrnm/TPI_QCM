@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace WF_TPI_QCM
 {
-    public enum Modes { Create, Update, Delete }; //Permet de faire les types (https://docs.microsoft.com/fr-fr/dotnet/csharp/programming-guide/enumeration-types)
-
     public class QCMController
     {
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
@@ -20,7 +18,6 @@ namespace WF_TPI_QCM
 
         public QCMController(int idQCM)
         {
-            DAO.CreateConnection();
             _qcmModele = new QCMModele(idQCM);
         }
 
@@ -218,6 +215,21 @@ namespace WF_TPI_QCM
             return DAO.DeleteMotCleByIdMotCle(idMotCle);
         }*/
 
+        public string InsertMotCle(string text)
+        {
+            return _qcmModele.InsertMotCle(text);
+        }
+
+        public string UpdateMotCle(int idMotCle, string textMotCle)
+        {
+            return _qcmModele.UpdateMotCle(idMotCle, textMotCle);
+        }
+
+        public bool DeleteMotCleByIdMotCle(int idMotCle)
+        {
+            return _qcmModele.DeleteMotCleByIdMotCle(idMotCle);
+        }
+
         public string ChooseCorrectAnswer(int idQuestion)
         {
             Dictionary<int, string> dictReponse = new Dictionary<int, string>();
@@ -259,6 +271,11 @@ namespace WF_TPI_QCM
         {
             FrmInformations _frm = new FrmInformations(idQCM);
             _frm.Show();
+        }
+
+        public void Save()
+        {
+            _qcmModele.Save();
         }
     }
 }

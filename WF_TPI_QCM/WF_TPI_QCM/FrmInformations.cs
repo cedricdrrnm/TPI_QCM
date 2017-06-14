@@ -13,6 +13,7 @@ namespace WF_TPI_QCM
     public partial class FrmInformations : Form
     {
         private QCMController _qcmController;
+        private bool clear;
 
         #region Reponse
 
@@ -115,18 +116,16 @@ namespace WF_TPI_QCM
                     dgvReponse.Rows.Add(new string[] { item.Key.ToString(), item.Value.Reponse, item.Value.BonneReponse.ToString() });
                 }
 
-                if (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) /*AddedRow*/ == 4 /*Ligne entrain de se faire supprimer*/)
+                if (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) /*AddedRow*/ == 4 /*Ligne qui se fait supprimer*/)
                     dgvReponse.AllowUserToDeleteRows = false;
 
-                if (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) /*AddedRow*/ == 6 /*Ligne entrain de se faire supprimer*/)
+                if (dgvReponse.Rows.Count - ((dgvReponse.AllowUserToAddRows) ? 1 : 0) /*AddedRow*/ == 6 /*Ligne qui se fait supprimer*/)
                     dgvReponse.AllowUserToAddRows = false;
             }
         }
 
         private void questionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _qcmController.CreateQuestionReponse();
-            RefreshQuestion();
         }
 
         private void dgvQuestion_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -158,8 +157,27 @@ namespace WF_TPI_QCM
 
         #region MotsCles
 
+        private void dgvMotCle_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (dgvMotCle.Rows[e.RowIndex].Cells[1].Value != null)
+                if (dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString().Trim() != "")
+                    if (dgvMotCle.Rows[e.RowIndex].Cells[0].Value == null)
+                    {
+                        MessageBox.Show(_qcmController.InsertMotCle(dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString()));
+                        dgvMotCle.Rows[e.RowIndex].Cells[0].Value = _qcmController.GetNextIdMotCle() - 1;
+                    }
+                    else
+                    {
+                        string returnString = _qcmController.UpdateMotCle(Convert.ToInt32(dgvMotCle.Rows[e.RowIndex].Cells[0].Value), dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString());
+                        if (returnString != "")
+                            MessageBox.Show(returnString);
+                    }
+
+            if (dgvMotCle.Rows.Count - ((dgvMotCle.AllowUserToAddRows) ? 1 : 0) == 4)
+                dgvMotCle.AllowUserToAddRows = false;
+        }
+
         #endregion
-        private bool clear;
         public FrmInformations(int idQCM)
         {
             _qcmController = new QCMController(idQCM);
@@ -189,6 +207,30 @@ namespace WF_TPI_QCM
                 MessageBox.Show(_qcmController.DeleteQCM());
                 this.Close();
             }
+        }
+
+        private void dgvMotCle_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (_qcmController.DeleteMotCleByIdMotCle(Convert.ToInt32(dgvMotCle.Rows[e.Row. Index].Cells[0].Value)))
+            {
+                MessageBox.Show("Mot-Clé supprimé avec succès !");
+                dgvMotCle.AllowUserToAddRows = true;
+            }
+            else
+            {
+                MessageBox.Show("Echec lors de la suppression du mot-clé !");
+            }
+        }
+
+        private void ajouterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _qcmController.CreateQuestionReponse();
+            RefreshQuestion();
+        }
+
+        private void sauvegarderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _qcmController.Save();
         }
     }
 }

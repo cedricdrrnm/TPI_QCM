@@ -57,11 +57,11 @@
     <Compile Include="frmChoixReponseJuste.Designer.cs">
       <DependentUpon>frmChoixReponseJuste.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmCreateEditQCM.cs">
+    <Compile Include="FrmCreateQCM.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmCreateEditQCM.Designer.cs">
-      <DependentUpon>FrmCreateEditQCM.cs</DependentUpon>
+    <Compile Include="FrmCreateQCM.Designer.cs">
+      <DependentUpon>FrmCreateQCM.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmCreateQuestionReponse.cs">
       <SubType>Form</SubType>
@@ -93,11 +93,11 @@
     <Compile Include="FrmListMain.Designer.cs">
       <DependentUpon>FrmListMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmListQCMMain.cs">
+    <Compile Include="FrmListQCMMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmListQCMMain.Designer.cs">
-      <DependentUpon>frmListQCMMain.cs</DependentUpon>
+    <Compile Include="FrmListQCMMain.Designer.cs">
+      <DependentUpon>FrmListQCMMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,8 +114,8 @@
     <EmbeddedResource Include="frmChoixReponseJuste.resx">
       <DependentUpon>frmChoixReponseJuste.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmCreateEditQCM.resx">
-      <DependentUpon>FrmCreateEditQCM.cs</DependentUpon>
+    <EmbeddedResource Include="FrmCreateQCM.resx">
+      <DependentUpon>FrmCreateQCM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCreateQuestionReponse.resx">
       <DependentUpon>FrmCreateQuestionReponse.cs</DependentUpon>
@@ -132,14 +132,15 @@
     <EmbeddedResource Include="FrmListMain.resx">
       <DependentUpon>FrmListMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmListQCMMain.resx">
-      <DependentUpon>frmListQCMMain.cs</DependentUpon>
+    <EmbeddedResource Include="FrmListQCMMain.resx">
+      <DependentUpon>FrmListQCMMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="diagrammeDeClasses.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>

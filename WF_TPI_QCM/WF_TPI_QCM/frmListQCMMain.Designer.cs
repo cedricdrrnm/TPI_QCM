@@ -1,6 +1,6 @@
 ﻿namespace WF_TPI_QCM
 {
-    partial class frmListQCMMain
+    partial class FrmListQCMMain
     {
         /// <summary>
         /// Required designer variable.

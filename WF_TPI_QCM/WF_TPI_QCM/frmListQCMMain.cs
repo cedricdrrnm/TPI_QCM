@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace WF_TPI_QCM
 {
-    public partial class frmListQCMMain : Form
+    public partial class FrmListQCMMain : Form
     {
         Form _frmNext;
-        public frmListQCMMain()
+        public FrmListQCMMain()
         {
             InitializeComponent();
             RefreshDataGridView();
@@ -33,7 +33,7 @@ namespace WF_TPI_QCM
 
         private void btnCreerQCM_Click(object sender, EventArgs e)
         {
-            _frmNext = new FrmCreateEditQCM();
+            _frmNext = new FrmCreateQCM();
             _frmNext.ShowDialog();
             RefreshDataGridView();
         }
@@ -45,19 +45,6 @@ namespace WF_TPI_QCM
             {
                 dgvQCM.Rows.Add(new string[] { item.Key.ToString(), item.Value });
             }
-        }
-
-        private void btnModifierQCM_Click(object sender, EventArgs e)
-        {
-            _frmNext = new FrmCreateEditQCM(Convert.ToInt32(dgvQCM.SelectedRows[0].Cells[0].Value));
-            _frmNext.ShowDialog();
-            RefreshDataGridView();
-        }
-
-        private void btnSupprimerQCM_Click(object sender, EventArgs e)
-        {
-
-            RefreshDataGridView();
         }
     }
 }

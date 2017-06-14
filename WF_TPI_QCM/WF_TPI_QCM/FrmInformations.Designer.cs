@@ -33,8 +33,6 @@
             this.msMain = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ajouterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.questionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.motCléToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sauvegarderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.supprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +42,8 @@
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.tlpQuestion = new System.Windows.Forms.TableLayoutPanel();
             this.dgvQuestion = new System.Windows.Forms.DataGridView();
+            this.idQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TextQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblQuestion = new System.Windows.Forms.Label();
             this.sReponse = new System.Windows.Forms.Panel();
             this.scQuestion = new System.Windows.Forms.SplitContainer();
@@ -61,8 +61,6 @@
             this.lblQCM = new System.Windows.Forms.Label();
             this.tbxNomQCM = new System.Windows.Forms.TextBox();
             this.lblLevelQCM = new System.Windows.Forms.Label();
-            this.idQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TextQuestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.msMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevel)).BeginInit();
@@ -106,36 +104,22 @@
             // 
             // ajouterToolStripMenuItem
             // 
-            this.ajouterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.questionToolStripMenuItem,
-            this.motCléToolStripMenuItem});
             this.ajouterToolStripMenuItem.Name = "ajouterToolStripMenuItem";
-            this.ajouterToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.ajouterToolStripMenuItem.Text = "Ajouter";
-            // 
-            // questionToolStripMenuItem
-            // 
-            this.questionToolStripMenuItem.Name = "questionToolStripMenuItem";
-            this.questionToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.questionToolStripMenuItem.Text = "Question";
-            this.questionToolStripMenuItem.Click += new System.EventHandler(this.questionToolStripMenuItem_Click);
-            // 
-            // motCléToolStripMenuItem
-            // 
-            this.motCléToolStripMenuItem.Name = "motCléToolStripMenuItem";
-            this.motCléToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.motCléToolStripMenuItem.Text = "Mot-Clé";
+            this.ajouterToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.ajouterToolStripMenuItem.Text = "Ajouter une question";
+            this.ajouterToolStripMenuItem.Click += new System.EventHandler(this.ajouterToolStripMenuItem_Click);
             // 
             // sauvegarderToolStripMenuItem
             // 
             this.sauvegarderToolStripMenuItem.Name = "sauvegarderToolStripMenuItem";
-            this.sauvegarderToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.sauvegarderToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.sauvegarderToolStripMenuItem.Text = "Sauvegarder";
+            this.sauvegarderToolStripMenuItem.Click += new System.EventHandler(this.sauvegarderToolStripMenuItem_Click);
             // 
             // supprimerToolStripMenuItem
             // 
             this.supprimerToolStripMenuItem.Name = "supprimerToolStripMenuItem";
-            this.supprimerToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.supprimerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.supprimerToolStripMenuItem.Text = "Supprimer ce QCM";
             this.supprimerToolStripMenuItem.Click += new System.EventHandler(this.supprimerToolStripMenuItem_Click);
             // 
@@ -263,6 +247,18 @@
             this.dgvQuestion.SelectionChanged += new System.EventHandler(this.dgvQuestion_SelectionChanged);
             this.dgvQuestion.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvQuestion_UserDeletingRow);
             // 
+            // idQuestion
+            // 
+            this.idQuestion.HeaderText = "Id de la question";
+            this.idQuestion.Name = "idQuestion";
+            this.idQuestion.ReadOnly = true;
+            // 
+            // TextQuestion
+            // 
+            this.TextQuestion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.TextQuestion.HeaderText = "Texte de la question";
+            this.TextQuestion.Name = "TextQuestion";
+            // 
             // lblQuestion
             // 
             this.lblQuestion.AutoSize = true;
@@ -386,7 +382,6 @@
             // 
             // dgvMotCle
             // 
-            this.dgvMotCle.AllowUserToAddRows = false;
             this.dgvMotCle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMotCle.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idMotCle,
@@ -398,6 +393,8 @@
             this.dgvMotCle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMotCle.Size = new System.Drawing.Size(736, 274);
             this.dgvMotCle.TabIndex = 2;
+            this.dgvMotCle.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvMotCle_RowValidating);
+            this.dgvMotCle.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvMotCle_UserDeletingRow);
             // 
             // idMotCle
             // 
@@ -448,18 +445,6 @@
             this.lblLevelQCM.Text = "Niveau du QCM:";
             this.lblLevelQCM.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // idQuestion
-            // 
-            this.idQuestion.HeaderText = "Id de la question";
-            this.idQuestion.Name = "idQuestion";
-            this.idQuestion.ReadOnly = true;
-            // 
-            // TextQuestion
-            // 
-            this.TextQuestion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.TextQuestion.HeaderText = "Texte de la question";
-            this.TextQuestion.Name = "TextQuestion";
-            // 
             // FrmInformations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -501,8 +486,6 @@
         private System.Windows.Forms.MenuStrip msMain;
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ajouterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem questionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem motCléToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.SplitContainer scMain;
