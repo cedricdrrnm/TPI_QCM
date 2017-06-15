@@ -41,9 +41,16 @@ namespace WF_TPI_QCM
             return _qcmModele.GetIdQCM();
         }
 
-        public string InsertQCM(string titreQCM, int levelQCM)
+        public bool InsertQCM(string titreQCM, int levelQCM)
         {
-            return _qcmModele.InsertQCM(titreQCM, levelQCM);
+            if (!_qcmModele.CheckExists(titreQCM))
+            {
+                _qcmModele.InsertQCM(titreQCM, levelQCM);
+                OpenFormContents();
+                return true;
+            }
+            else
+                return false;
         }
 
         public string DeleteQCM()
@@ -59,7 +66,7 @@ namespace WF_TPI_QCM
         #endregion
 
         #region Questions
-    
+
         public Dictionary<int, QuestionDatas> GetQuestions()
         {
             return _qcmModele.GetQuestions();
@@ -83,7 +90,7 @@ namespace WF_TPI_QCM
         #endregion
 
         #region Reponses
-        
+
         public Dictionary<int, ReponseDatas> GetReponsesByIdQuestion(int idQuestion)
         {
             return _qcmModele.GetReponsesByIdQuestion(idQuestion);
@@ -108,7 +115,7 @@ namespace WF_TPI_QCM
 
         #region Mots-Clés
 
-        public Dictionary<int, string> GetMotsCles()
+        public Dictionary<int, MotsClesDatas> GetMotsCles()
         {
             return _qcmModele.GetMotsCles();
         }
@@ -184,6 +191,13 @@ namespace WF_TPI_QCM
         {
             _frmExportSelect = new FrmExportSelect(GetListModeles());
             _frmExportSelect.ShowDialog();
+        }
+
+
+        public void OpenFormContents()
+        {
+            FrmInformations _frm = new FrmInformations(this);
+            _frm.Show();
         }
 
         public static void OpenFormContents(int idQCM)

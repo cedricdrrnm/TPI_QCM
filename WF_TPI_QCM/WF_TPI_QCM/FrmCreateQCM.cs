@@ -32,7 +32,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnAction_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(_qcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value)));
+            MessageBox.Show((_qcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value))) ? "Ce QCM a bien été créé !" : "Ce qcm existe déjà !");
         }
     }
 }

@@ -11,6 +11,8 @@ namespace WF_TPI_QCM
         private string _reponse;
         private bool _bonneReponse;
 
+        Modes _modeDatabase;
+
         public string Reponse
         {
             get
@@ -37,14 +39,28 @@ namespace WF_TPI_QCM
             }
         }
 
+        public Modes ModeDatabase
+        {
+            get
+            {
+                return _modeDatabase;
+            }
+
+            set
+            {
+                _modeDatabase = value;
+            }
+        }
+
         /*public ReponseModele(int idReponse, string reponse) : this(idReponse, reponse, false)
         { }
         */
 
-        public ReponseDatas(string reponse, bool bonneReponse)
+        public ReponseDatas(string reponse, bool bonneReponse, Modes modeDatabase)
         {
             Reponse = reponse;
             BonneReponse = bonneReponse;
+            ModeDatabase = modeDatabase;
         }
     }
 }

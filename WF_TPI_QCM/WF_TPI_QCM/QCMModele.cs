@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace WF_TPI_QCM
 {
-    class QCMModele
+    public enum Modes { AddedInBase, Create, Update }; //Permet de faire les types (https://docs.microsoft.com/fr-fr/dotnet/csharp/programming-guide/enumeration-types)
+    public class QCMModele
     {
-        public enum Modes { Create, Update, Delete }; //Permet de faire les types (https://docs.microsoft.com/fr-fr/dotnet/csharp/programming-guide/enumeration-types)
         private QCMDatas _qcm;
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
 
@@ -19,6 +19,7 @@ namespace WF_TPI_QCM
         //Value.Value = idObjetLiee (peut être 0 s'il n'y en a pas)
         private Dictionary<object, KeyValuePair<int, KeyValuePair<Modes, int>>> _dictEditionDataBase;
         private DAO _dao;
+        Dictionary<int, object> _dictObjetDelete;
 
         private QCMDatas Qcm
         {
@@ -33,11 +34,25 @@ namespace WF_TPI_QCM
             }
         }
 
+        public QCMModele(QCMModele qcm)
+        {
+            _dao = new DAO();
+            _qcm.NextIdMotCle = 1;
+            _qcm.NextIdQuestion = 1;
+            _qcm.NextIdReponse = 1;
+            _dictObjetDelete = new Dictionary<int, object>();
+        }
+
+        public bool CheckExists(string titreQCM)
+        {
+            return _dao.QCMExists(titreQCM);
+        }
+
         public QCMModele(int idQCM)
         {
             _dao = new DAO();
             Qcm = _dao.SelectQCMById(idQCM);
-            _dictEditionDataBase = new Dictionary<object, KeyValuePair<int, KeyValuePair<Modes, int>>>();
+            _dictObjetDelete = new Dictionary<int, object>();
         }
 
         public int GetLevelByIdQCM()
@@ -50,7 +65,7 @@ namespace WF_TPI_QCM
             return Qcm.DictQuestionModele;
         }
 
-        public Dictionary<int, string> GetMotsCles()
+        public Dictionary<int, MotsClesDatas> GetMotsCles()
         {
             return Qcm.DictMotCle;
         }
@@ -64,13 +79,13 @@ namespace WF_TPI_QCM
 
         public string InsertQuestion(string text, Dictionary<string, bool> dictReponses)
         {
-            QuestionDatas qm = new QuestionDatas(text);
+            QuestionDatas qm = new QuestionDatas(text, Modes.Create);
             int nbReponseJuste = 0;
             foreach (KeyValuePair<string, bool> item in dictReponses)
             {
                 if (item.Value)
                     nbReponseJuste++;
-                qm.AddReponse(Qcm.NextIdReponse, new ReponseDatas(item.Key, item.Value));
+                qm.AddReponse(Qcm.NextIdReponse, new ReponseDatas(item.Key, item.Value, Modes.Create));
                 Qcm.NextIdReponse++;
             }
 
@@ -79,7 +94,7 @@ namespace WF_TPI_QCM
                 if (qm.DictReponseModele.Count >= 4 && qm.DictReponseModele.Count <= 6)
                 {
                     Qcm.AddQuestion(Qcm.NextIdQuestion, qm);
-                    AddEditionDatabase(Qcm.NextIdQuestion, qm, Modes.Create, Qcm.IdQCM);
+                    //AddEditionDatabase(Qcm.NextIdQuestion, qm, Modes.Create, Qcm.IdQCM);
                     Qcm.NextIdQuestion++;
                     return "Question insérée avec succès !";
                 }
@@ -119,18 +134,14 @@ namespace WF_TPI_QCM
             return Qcm.NextIdMotCle;
         }
 
-        public string InsertQCM(string titreQCM, int levelQCM)
+        public int GetNextIdQCM()
         {
-            try
-            {
-                //_dao.InsertQCM(titreQCM, levelQCM);
-                AddEditionDatabase(Qcm.IdQCM, Qcm, Modes.Create, 0);
-                return "Ce qcm a bien été créé !";
-            }
-            catch (Exception ex)
-            {
-                return "Erreur lors de l'insertion du QCM: " + ex.Message;
-            }
+            return _dao.NextIdQCM;
+        }
+
+        public void InsertQCM(string titreQCM, int levelQCM)
+        {
+            Qcm = new QCMDatas(GetNextIdQCM(), titreQCM, levelQCM, Modes.Create);
         }
 
         public bool DeleteQuestionByIdQuestion(int idQuestion)
@@ -140,7 +151,8 @@ namespace WF_TPI_QCM
             if (Qcm.DictQuestionModele.TryGetValue(idQuestion, out question))
                 if (Qcm.DictQuestionModele.Remove(idQuestion))
                 {
-                    AddEditionDatabase(idQuestion, question, Modes.Delete, Qcm.IdQCM);
+                    if (question.ModeDatabase != Modes.Create)
+                        _dictObjetDelete.Add(idQuestion, question);
                     return true;
                 }
                 else
@@ -154,7 +166,8 @@ namespace WF_TPI_QCM
             if (Qcm.DictQuestionModele.TryGetValue(idQuestion, out qm))
             {
                 qm.Question = nouveauTexte;
-                AddEditionDatabase(idQuestion, qm, Modes.Update, Qcm.IdQCM);
+                if (qm.ModeDatabase == Modes.AddedInBase)
+                    qm.ModeDatabase = Modes.Update;
                 return true;
             }
             else
@@ -175,7 +188,8 @@ namespace WF_TPI_QCM
                     {
                         rm.Reponse = reponseModele.Reponse;
                         rm.BonneReponse = reponseModele.BonneReponse;
-                        AddEditionDatabase(idReponse, rm, Modes.Update, idQuestion);
+                        if (rm.ModeDatabase == Modes.AddedInBase)
+                            rm.ModeDatabase = Modes.Update;
                         return new KeyValuePair<bool, string>(false, "Réponse modifiée avec succès !");
                     }
                     else
@@ -188,13 +202,111 @@ namespace WF_TPI_QCM
                 return new KeyValuePair<bool, string>(true, "Echec lors de la récupération de la question contenant la réponse pour la modification !");
         }
 
+        public void Save()
+        {
+            string saved = "QCM: " + Qcm.IdQCM + ", " + Qcm.NomQCM + ", Mode: " + Qcm.ModeDatabase + Environment.NewLine;
+            string error = "";
+            int idQCM = 0;
+            try
+            {
+                if (Qcm.ModeDatabase == Modes.Create)
+                {
+                    idQCM = _dao.InsertQCM(Qcm.NomQCM, Qcm.Level);
+                }
+                else if (Qcm.ModeDatabase == Modes.Update)
+                {
+                    _dao.UpdateQCMByIdQCM(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);
+                }
+                if (idQCM == 0)
+                    idQCM = Qcm.IdQCM;
+                Qcm.ModeDatabase = Modes.AddedInBase;
+
+                foreach (var item in Qcm.DictMotCle)
+                {
+                    try
+                    {
+
+                        if (item.Value.ModeDatabase == Modes.Create)
+                            _dao.InsertMotCle(idQCM, item.Value.TextMotCle);
+                        /*else if (Qcm.ModeDatabase == Modes.Update)
+                            _dao.Update(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);*/
+                        saved += "IdMotCle: " + item.Key + ", motcle: " + item.Value.TextMotCle + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;
+                        item.Value.ModeDatabase = Modes.AddedInBase;
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex.Message;
+                    }
+                }
+                foreach (var item in Qcm.DictQuestionModele)
+                {
+                    try
+                    {
+                        saved += "idQuestion: " + item.Key + ", question: " + item.Value.Question + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;
+                        if (item.Value.ModeDatabase == Modes.Create)
+                            _dao.InsertQuestion(idQCM, item.Value.Question);
+                        /*else if (Qcm.ModeDatabase == Modes.Update)
+                            _dao.Update(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);*/
+                        item.Value.ModeDatabase = Modes.AddedInBase;
+                        foreach (var item2 in item.Value.DictReponseModele)
+                        {
+                            try
+                            {
+                                if (item2.Value.ModeDatabase == Modes.Create)
+                                    _dao.InsertReponses(item.Key, item2.Value.Reponse, item2.Value.BonneReponse);
+                                /*else if (Qcm.ModeDatabase == Modes.Update)
+                                    _dao.Update(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);*/
+                                saved += "idReponse: " + item2.Key + ", reponse: " + item2.Value.Reponse + ", Mode: " + item2.Value.ModeDatabase + Environment.NewLine;
+                                item2.Value.ModeDatabase = Modes.AddedInBase;
+                            }
+                            catch (Exception ex)
+                            {
+                                error = ex.Message;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex.Message;
+                    }
+
+                }
+
+                foreach (var item in _dictObjetDelete)
+                {
+                    try
+                    {
+                        if (item.Value is QCMDatas)
+                            DeleteQCM();
+                        else if (item.Value is QuestionDatas)
+                            _dao.DeleteQuestionByIdQuestion(item.Key);
+                        else if (item.Value is ReponseDatas)
+                            _dao.DeleteReponsesByIdReponse(item.Key);
+                        else if (item.Value is MotsClesDatas)
+                            _dao.DeleteMotCleByIdMotCle(item.Key);
+                        saved += "idObjetDelete: " + item.Key + ", reponse: " + item.Value + Environment.NewLine;
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex.Message;
+                    }
+                }
+                _dictObjetDelete.Clear();
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+            Console.WriteLine(saved);
+        }
+
         public string DeleteQCM()
         {
             try
             {
-                _dao.DeleteQCMByIdQCM(Qcm.IdQCM);
-                AddEditionDatabase(Qcm.IdQCM, Qcm, Modes.Delete, 0);
-                Qcm = null;
+                if (Qcm.ModeDatabase != Modes.Create)
+                    _dao.DeleteQCMByIdQCM(Qcm.IdQCM);
+                //Qcm = null;
                 return "Supprimé avec succès !";
             }
             catch (Exception ex)
@@ -211,7 +323,8 @@ namespace WF_TPI_QCM
                 try
                 {
                     _dao.UpdateQCMByIdQCM(Qcm.IdQCM, nouveauText, nouveauLevel);
-                    AddEditionDatabase(Qcm.IdQCM, Qcm, Modes.Update, 0);
+                    if (Qcm.ModeDatabase == Modes.AddedInBase)
+                        Qcm.ModeDatabase = Modes.Update;
                     return "Modifié avec succès !";
                 }
                 catch (Exception ex)
@@ -238,9 +351,8 @@ namespace WF_TPI_QCM
                     return "Il a trop de réponses !";
                 else
                 {
-                    ReponseDatas rm = new ReponseDatas(reponseText, bonneReponse);
+                    ReponseDatas rm = new ReponseDatas(reponseText, bonneReponse, Modes.Create);
                     qm.AddReponse(Qcm.NextIdReponse, rm);
-                    AddEditionDatabase(Qcm.NextIdReponse, rm, Modes.Create, Qcm.IdQCM);
                     Qcm.NextIdReponse++;
                     return "";
                 }
@@ -255,7 +367,8 @@ namespace WF_TPI_QCM
             {
                 ReponseDatas rm;
                 qm.DictReponseModele.TryGetValue(idReponse, out rm);
-                AddEditionDatabase(Qcm.NextIdReponse, rm, Modes.Delete, Qcm.IdQCM);
+                if (rm.ModeDatabase != Modes.Create)
+                    _dictObjetDelete.Add(idReponse, rm);
                 qm.DictReponseModele.Remove(idReponse);
                 return true;
             }
@@ -269,8 +382,19 @@ namespace WF_TPI_QCM
         {
             foreach (KeyValuePair<int, ReponseDatas> item in GetReponsesByIdQuestion(idQuestion))
             {
-                item.Value.BonneReponse = (item.Key == idQuestion) ? true : false;
-                AddEditionDatabase(item.Key, item.Value, Modes.Update, idQuestion);
+                if (item.Key == idNewReponse)
+                {
+                    if (!item.Value.BonneReponse)
+                        item.Value.ModeDatabase = Modes.Update;
+                    item.Value.BonneReponse = true;
+                }
+                else
+                {
+                    if (item.Value.BonneReponse)
+                        item.Value.ModeDatabase = Modes.Update;
+                    item.Value.BonneReponse = false;
+                }
+
             }
         }
 
@@ -304,8 +428,7 @@ namespace WF_TPI_QCM
         {
             if (Qcm.DictMotCle.Count < 4)
             {
-                string returnString = Qcm.AddMotsCles(this.GetNextIdMotCle(), textMotCle);
-                AddEditionDatabase(GetNextIdMotCle(), textMotCle, Modes.Create, Qcm.IdQCM);
+                string returnString = Qcm.AddMotsCles(this.GetNextIdMotCle(), new MotsClesDatas(textMotCle, Modes.Create));
                 Qcm.NextIdMotCle++;
                 return returnString;
             }
@@ -321,14 +444,13 @@ namespace WF_TPI_QCM
             {
                 try
                 {
-                    string motCle;
+                    MotsClesDatas motCle;
                     if (Qcm.DictMotCle.TryGetValue(idMotCle, out motCle))
                     {
-                        if (motCle != textMotCle)
+                        if (motCle.TextMotCle != textMotCle)
                         {
                             Qcm.DictMotCle.Remove(idMotCle);
-                            Qcm.DictMotCle.Add(idMotCle, textMotCle);
-                            AddEditionDatabase(idMotCle, textMotCle, Modes.Update, Qcm.IdQCM);
+                            Qcm.DictMotCle.Add(idMotCle, new MotsClesDatas(textMotCle, (motCle.ModeDatabase == Modes.AddedInBase) ? Modes.Update : motCle.ModeDatabase));
                             return "Mot-Clé modifié !";
                         }
                         else
@@ -352,16 +474,17 @@ namespace WF_TPI_QCM
 
         public bool DeleteMotCleByIdMotCle(int idMotCle)
         {
-            string textMotCle;
-            if (Qcm.DictMotCle.TryGetValue(idMotCle, out textMotCle))
+            MotsClesDatas motsCd;
+            if (Qcm.DictMotCle.TryGetValue(idMotCle, out motsCd))
             {
-                AddEditionDatabase(idMotCle, textMotCle, Modes.Delete, Qcm.IdQCM);
+                if (motsCd.ModeDatabase != Modes.Create)
+                    _dictObjetDelete.Add(idMotCle, motsCd);
                 return Qcm.DictMotCle.Remove(idMotCle);
             }
             return false;
         }
 
-        public void Save()
+        /*public void Save()
         {
             string query = "";
             foreach (KeyValuePair<object, KeyValuePair<int, KeyValuePair<Modes, int>>> item in _dictEditionDataBase)
@@ -441,9 +564,9 @@ namespace WF_TPI_QCM
                 query += Environment.NewLine;
             }
             Console.WriteLine(query);
-        }
+        }*/
 
-        private void AddEditionDatabase(int idObjet, object objet, Modes mode, int idLinkedObject)
+        /*private void AddEditionDatabase(int idObjet, object objet, Modes mode, int idLinkedObject)
         {
             KeyValuePair<int, KeyValuePair<Modes, int>> getMode;
             if (_dictEditionDataBase.TryGetValue(objet, out getMode))
@@ -473,6 +596,6 @@ namespace WF_TPI_QCM
             {
                 _dictEditionDataBase.Add(objet, new KeyValuePair<int, KeyValuePair<Modes, int>>(idObjet, new KeyValuePair<Modes, int>(mode, idLinkedObject)));
             }
-        }
+        }*/
     }
 }

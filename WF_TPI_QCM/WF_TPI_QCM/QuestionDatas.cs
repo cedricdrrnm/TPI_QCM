@@ -10,7 +10,8 @@ namespace WF_TPI_QCM
     {
         private string _question;
         private Dictionary<int, ReponseDatas> _dictReponseModele;
-        private bool _addedInTheBase;
+
+        Modes _modeDatabase;
 
         public string Question
         {
@@ -38,23 +39,24 @@ namespace WF_TPI_QCM
             }
         }
 
-        public bool AddedInTheBase
+        public Modes ModeDatabase
         {
             get
             {
-                return _addedInTheBase;
+                return _modeDatabase;
             }
 
             set
             {
-                _addedInTheBase = value;
+                _modeDatabase = value;
             }
         }
 
-        public QuestionDatas(string question)
+        public QuestionDatas(string question, Modes modeDatabase)
         {
             Question = question;
             DictReponseModele = new Dictionary<int, ReponseDatas>();
+            ModeDatabase = modeDatabase;
         }
 
         public void AddReponse(int idReponse, ReponseDatas reponse)

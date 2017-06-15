@@ -10,6 +10,20 @@ namespace WF_TPI_QCM
     class DAO
     {
         static MySqlConnection conn;
+        private int _nextIdQCM;
+
+        public int NextIdQCM
+        {
+            get
+            {
+                return _nextIdQCM;
+            }
+
+            set
+            {
+                _nextIdQCM = value;
+            }
+        }
 
         /// <summary>
         /// Initialise la connection
@@ -68,6 +82,8 @@ namespace WF_TPI_QCM
                 throw new Exception("La connection ne peut pas être fermée :" + ex.Message);
             }
         }
+
+        #region Select
 
         Dictionary<string, int> SelectAutoIncrement()
         {
@@ -129,7 +145,7 @@ namespace WF_TPI_QCM
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    dictQuestion.Add(dataReader.GetInt32("idQuestion"), new QuestionDatas(dataReader.GetString("question")));
+                    dictQuestion.Add(dataReader.GetInt32("idQuestion"), new QuestionDatas(dataReader.GetString("question"), Modes.AddedInBase));
                 }
 
                 //close Data Reader
@@ -170,7 +186,7 @@ namespace WF_TPI_QCM
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    dictReponse.Add(dataReader.GetInt32("idReponse"), new ReponseDatas(dataReader.GetString("reponse"), dataReader.GetBoolean("bonneReponse")));
+                    dictReponse.Add(dataReader.GetInt32("idReponse"), new ReponseDatas(dataReader.GetString("reponse"), dataReader.GetBoolean("bonneReponse"), Modes.AddedInBase));
                 }
 
                 //close Data Reader
@@ -188,12 +204,12 @@ namespace WF_TPI_QCM
             }
         }
 
-        public Dictionary<int, string> SelectAllMotCleByIdQCM(int id)
+        public Dictionary<int, MotsClesDatas> SelectAllMotCleByIdQCM(int id)
         {
             string query = "SELECT m.`idMotCle`, m.`motCle` FROM `motcle` as m,`qcm_has_motcle` as qhm, `qcm` as q WHERE m.`idMotCle` = qhm.`idMotCle` AND qhm.`idQCM` = q.`idQCM` AND q.`idQCM` = @id;";
 
             //Create a list to store the result
-            Dictionary<int, string> listMotCle = new Dictionary<int, string>();
+            Dictionary<int, MotsClesDatas> listMotCle = new Dictionary<int, MotsClesDatas>();
 
             //Open connection
             try
@@ -211,7 +227,7 @@ namespace WF_TPI_QCM
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    listMotCle.Add(dataReader.GetInt32("idMotCle"), dataReader.GetString("motCle"));
+                    listMotCle.Add(dataReader.GetInt32("idMotCle"), new MotsClesDatas(dataReader.GetString("motCle"), Modes.AddedInBase));
                 }
 
                 //close Data Reader
@@ -290,7 +306,7 @@ namespace WF_TPI_QCM
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    qcmModele = new QCMDatas(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"), dataReader.GetInt32("level"));
+                    qcmModele = new QCMDatas(dataReader.GetInt32("idQCM"), dataReader.GetString("nomQCM"), dataReader.GetInt32("level"), Modes.AddedInBase);
                 }
                 dataReader.Close();
                 CloseConnection();
@@ -319,6 +335,10 @@ namespace WF_TPI_QCM
                     {
                         qcmModele.NextIdReponse = _nextID;
                     }
+                    if (auto_increment_value.TryGetValue("qcm", out _nextID))
+                    {
+                        NextIdQCM = _nextID;
+                    }
                     //return list to be displayed
                     return qcmModele;
 
@@ -331,23 +351,69 @@ namespace WF_TPI_QCM
             }
         }
 
-        public void InsertQCM(string nomQCM, int level)
+        public bool QCMExists(string nomQCM)
         {
-            string query = "INSERT INTO `qcm`(`nomQCM`,`level`) VALUES (@nomSubject, @level);";
+            string query = "SELECT * FROM qcm WHERE `nomQCM` = @nomQCM";
+
+            //Open connection
+            try
+            {
+                bool qcmExists = false;
+                OpenConnection();
+                //Create Command
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@nomQCM", nomQCM);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                {
+                    qcmExists = true;
+                }
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close Connection
+                CloseConnection();
+
+                //return list to be displayed
+                return qcmExists;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region Insert
+        public int InsertQCM(string nomQCM, int level)
+        {
+            string query = "INSERT INTO `qcm`(`nomQCM`,`level`) VALUES (@nomSubject, @level); SELECT LAST_INSERT_ID();";
 
             //open connection
             try
             {
+                int idQCM = 0;
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@nomSubject", nomQCM);
                 cmd.Parameters.AddWithValue("@level", level);
-                //Execute command
-                cmd.ExecuteNonQuery();
-                //close connection
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                {
+                    idQCM = dataReader.GetInt32(0);
+                }
+                dataReader.Close();
                 CloseConnection();
+                return idQCM;
             }
             catch (MySqlException ex)
             {
@@ -364,6 +430,386 @@ namespace WF_TPI_QCM
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Créer le lien entre le QCM et sa question
+        /// </summary>
+        /// <param name="idQCM">L'id du QCM</param>
+        /// <param name="idQuestion">L'id de la question</param>
+        /// <returns>Le message d'erreur</returns>
+        private string InsertQCM_HAS_QUESTION(int idQCM, int idQuestion)
+        {
+            string query = "INSERT INTO `qcm_has_question`(`idQCM`, `idQuestion`) VALUES (@idQCM, @idQuestion);";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idQCM", idQCM);
+                cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Ce lien existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Créer le lien entre la question et sa réponse
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <param name="bonneReponse">Bonne réponse ou non ?</param>
+        /// <returns>Message d'erreur</returns>
+        private string InsertQuestions_HAS_Reponses(int idQuestion, int idReponse, bool bonneReponse)
+        {
+            string query = "INSERT INTO `question_has_reponse`(`idQuestion`, `idReponse`, `bonneReponse`) VALUES (@idQuestion, @idReponse, @bonneReponse);";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
+                cmd.Parameters.AddWithValue("@idReponse", idReponse);
+                cmd.Parameters.AddWithValue("@bonneReponse", bonneReponse);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Ce lien existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Créer le lien entre le QCM et son mot-clé
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <param name="idMotCle">Id du mot-clé</param>
+        /// <returns>Message d'erreur</returns>
+        private string InsertQCM_HAS_MotCle(int idQCM, int idMotCle)
+        {
+            string query = "INSERT INTO `qcm_has_motcle`(`idQCM`, `idMotCle`) VALUES (@idQCM, @idMotCle);";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idQCM", idQCM);
+                cmd.Parameters.AddWithValue("@idMotCle", idMotCle);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Ce lien existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Créer un QCM avec les informations données
+        /// </summary>
+        /// <param name="nomQCM">Le titre (nom) du QCM</param>
+        /// <param name="level">Le level (niveau) du QCM</param>
+        /// <returns>Le message d'erreur</returns>
+        public string InsertQCM(string nomQCM, string level)
+        {
+            string query = "INSERT INTO `qcm`(`nomQCM`,`level`) VALUES (@nomSubject, @level);";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@nomSubject", nomQCM);
+                cmd.Parameters.AddWithValue("@level", level);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Ce qcm existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Créer une question avec les informations données
+        /// </summary>
+        /// <param name="id">Le titre (nom) du QCM</param>
+        /// <param name="question">Le niveau du QCM</param>
+        /// <returns>Le message d'erreur</returns>
+        public string InsertQuestion(int idQCM, string question)
+        {
+            string query = "INSERT INTO `question`(`question`) VALUES (@question); SELECT LAST_INSERT_ID() as lastID;";
+            int lastIdQuestion = 0;
+            string errorReturn = "";
+            string tempError = "";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                try
+                {
+                    //create command and assign the query and connection from the constructor
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                    cmd.Parameters.AddWithValue("@question", question);
+                    //Create a data reader and Execute the command
+                    MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                    //Read the data and store them in the list
+                    while (dataReader.Read())
+                    {
+                        lastIdQuestion = dataReader.GetInt32("lastID");
+                    }
+
+                    //close Data Reader
+                    dataReader.Close();
+
+                    //close connection
+                    CloseConnection();
+
+                    tempError = InsertQCM_HAS_QUESTION(idQCM, lastIdQuestion);
+                    errorReturn = ((tempError != "") ? tempError + Environment.NewLine : "");
+                    return errorReturn;
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Cette question existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Créer une réponse relié à la question avec l'id donnée et la défini comme vrai ou fausse
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="reponse">Texte de la réponse</param>
+        /// <param name="bonneReponse">Bonne réponse ou non ?</param>
+        /// <returns>Message d'erreur</returns>
+        public string InsertReponses(int idQuestion, string reponse, bool bonneReponse)
+        {
+            string query = "INSERT INTO `reponse`(`reponse`) VALUES (@reponse); SELECT LAST_INSERT_ID() as lastID;";
+            int lastId = 0;
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                try
+                {
+                    //create command and assign the query and connection from the constructor
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                    cmd.Parameters.AddWithValue("@reponse", reponse);
+                    //Create a data reader and Execute the command
+                    MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                    //Read the data and store them in the list
+                    while (dataReader.Read())
+                    {
+                        lastId = dataReader.GetInt32("lastID");
+                    }
+
+                    //close Data Reader
+                    dataReader.Close();
+
+                    //close connection
+                    CloseConnection();
+
+                    return InsertQuestions_HAS_Reponses(idQuestion, lastId, bonneReponse);
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Cette réponse existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Créer un nouveau mot-clé avec les informations données
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <param name="motCle">Texte du mot-clé</param>
+        /// <returns></returns>
+        public string InsertMotCle(int idQCM, string motCle)
+        {
+            string query = "INSERT INTO `motcle`(`motCle`) VALUES (@motCle); SELECT LAST_INSERT_ID() as lastID;";
+            int lastId = 0;
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                try
+                {
+                    //create command and assign the query and connection from the constructor
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                    cmd.Parameters.AddWithValue("@motCle", motCle);
+                    //Create a data reader and Execute the command
+                    MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                    //Read the data and store them in the list
+                    while (dataReader.Read())
+                    {
+                        lastId = dataReader.GetInt32("lastID");
+                    }
+
+                    //close Data Reader
+                    dataReader.Close();
+
+                    //close connection
+                    CloseConnection();
+
+                    return InsertQCM_HAS_MotCle(idQCM, lastId);
+                }
+                catch (MySqlException ex)
+                {
+                    //close connection
+                    CloseConnection();
+                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                    if (ex.Number == 1062)
+                        return "Cette réponse existe déjà !";
+                    else
+                        return ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        #endregion
+
+        #region Update
 
         public void UpdateQCMByIdQCM(int idQCM, string nomQCM, int level)
         {
@@ -400,9 +846,18 @@ namespace WF_TPI_QCM
             }
         }
 
-        public void DeleteQCMByIdQCM(int idQCM)
+        #endregion
+
+        #region Delete
+
+        /// <summary>
+        /// Retire le mot-clé donné par l'id
+        /// </summary>
+        /// <param name="idMotCle">Id du mot-clé à retirer</param>
+        /// <returns>Le message d'erreur</returns>
+        public string DeleteMotCleByIdMotCle(int idMotCle)
         {
-            string query = "DELETE FROM `qcm` WHERE `idQCM` = @idQCM";
+            string query = "DELETE FROM `motcle` WHERE `idMotCle` = @id;";
 
             //open connection
             try
@@ -411,27 +866,202 @@ namespace WF_TPI_QCM
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                cmd.Parameters.AddWithValue("@idQCM", idQCM);
-                //Execute command
-                cmd.ExecuteNonQuery();
-                //close connection
-                CloseConnection();
+                cmd.Parameters.AddWithValue("@id", idMotCle);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
-                //close connection
-                CloseConnection();
-                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                if (ex.Number == 1062)
-                    throw new Exception("Ce qcm existe déjà !");
-                else
-                    throw ex;
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Retire la question donné par l'id
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <returns>Le message d'erreur</returns>
+        public string DeleteQuestionByIdQuestion(int idQuestion)
+        {
+            string query = "DELETE FROM `question` WHERE `idQuestion` = @id;";
+
+            //open connection
+            try
+            {
+                DeleteReponsesByIdQuestion(idQuestion);
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@id", idQuestion);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public string DeleteReponsesByIdReponse(int idReponse)
+        {
+            string query = "DELETE FROM `reponse` WHERE `idReponse` = @idReponse;";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idReponse", idReponse);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Retire les réponses reliées à l'id de la question
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <returns>Le message d'erreur</returns>
+        public string DeleteReponsesByIdQuestion(int idQuestion)
+        {
+            string query = "DELETE FROM `reponse` WHERE `idReponse` IN (SELECT `idReponse` FROM `question_has_reponse` WHERE `idQuestion` = @idQuestion);";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Retire le QCM donné par l'id
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <returns>Le message d'erreur</returns>
+        public string DeleteQCMByIdQCM(int idQCM)
+        {
+            string errorReturn = "";
+            foreach (KeyValuePair<int, QuestionDatas> item in SelectAllQuestionByIdQCM(idQCM))
+            {
+                try
+                {
+                    DeleteQuestionByIdQuestion(item.Key);
+                }
+                catch (Exception ex)
+                {
+                    errorReturn += ((errorReturn != "") ? errorReturn + Environment.NewLine + ex.Message : "");
+                }
+            }
+
+            if (errorReturn != "")
+            {
+                return errorReturn;
+            }
+
+            foreach (KeyValuePair<int, MotsClesDatas> item in SelectAllMotCleByIdQCM(idQCM))
+            {
+                try
+                {
+                    DeleteMotCleByIdMotCle(item.Key);
+                }
+                catch (Exception ex)
+                {
+                    errorReturn += ((errorReturn != "") ? errorReturn + Environment.NewLine + ex.Message : "");
+                }
+            }
+
+            if (errorReturn != "")
+            {
+                return errorReturn;
+            }
+
+            string query = "DELETE FROM `qcm` WHERE `idQCM` = @id;";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@id", idQCM);
+                try
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    //close connection
+                    CloseConnection();
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        #endregion
     }
 }
 

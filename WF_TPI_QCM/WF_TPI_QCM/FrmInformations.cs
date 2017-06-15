@@ -77,7 +77,7 @@ namespace WF_TPI_QCM
                                 }
                                 else
                                 {
-                                    KeyValuePair<bool, string> retour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(idQuestion, Convert.ToInt32(dgvReponse.Rows[e.RowIndex].Cells[0].Value), new ReponseDatas(reponseText, bonneReponse));
+                                    KeyValuePair<bool, string> retour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(idQuestion, Convert.ToInt32(dgvReponse.Rows[e.RowIndex].Cells[0].Value), new ReponseDatas(reponseText, bonneReponse, Modes.Update));
                                     if (retour.Value != null)
                                     {
                                         MessageBox.Show(retour.Value);
@@ -178,9 +178,22 @@ namespace WF_TPI_QCM
         }
 
         #endregion
+
+
+        public FrmInformations(QCMController controller)
+        {
+            _qcmController = controller;
+            LoadInformations();
+        }
+
         public FrmInformations(int idQCM)
         {
             _qcmController = new QCMController(idQCM);
+            LoadInformations();
+        }
+
+        public void LoadInformations()
+        {
             InitializeComponent();
             RefreshQuestion();
 
@@ -189,9 +202,9 @@ namespace WF_TPI_QCM
             nudLevel.Value = _qcmController.GetLevelByIdQCM();
             clear = false;
 
-            foreach (KeyValuePair<int, string> item in _qcmController.GetMotsCles())
+            foreach (KeyValuePair<int, MotsClesDatas> item in _qcmController.GetMotsCles())
             {
-                dgvMotCle.Rows.Add(new string[] { item.Key.ToString(), item.Value });
+                dgvMotCle.Rows.Add(new string[] { item.Key.ToString(), item.Value.TextMotCle });
             }
         }
 

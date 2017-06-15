@@ -17,12 +17,15 @@ namespace WF_TPI_QCM
         private int _idQCM;
         private string _nomQCM;
         private int _level;
-        private Dictionary<int, string> _dictMotCle;
+        private Dictionary<int, MotsClesDatas> _dictMotCle;
         private Dictionary<int, QuestionDatas> _dictQuestionModele;
 
         private int _nextIdQuestion;
         private int _nextIdReponse;
         private int _nextIdMotCle;
+        private int _nextIdQCM;
+
+        Modes _modeDatabase;
 
         public int IdQCM
         {
@@ -76,7 +79,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public Dictionary<int, string> DictMotCle
+        public Dictionary<int, MotsClesDatas> DictMotCle
         {
             get
             {
@@ -128,19 +131,33 @@ namespace WF_TPI_QCM
             }
         }
 
+        public Modes ModeDatabase
+        {
+            get
+            {
+                return _modeDatabase;
+            }
+
+            set
+            {
+                _modeDatabase = value;
+            }
+        }
+
         /*public QCMModele(int idQCM, string nomQCM) : this(idQCM, nomQCM, 1, new Dictionary<QuestionModele, List<ReponseModele>>())
         { }
 
         public QCMModele(int idQCM, string nomQCM, int level) : this(idQCM, nomQCM, level, new Dictionary<QuestionModele, List<ReponseModele>>())
         { }*/
 
-        public QCMDatas(int idQCM, string nomQCM, int level)
+        public QCMDatas(int idQCM, string nomQCM, int level, Modes mode)
         {
             IdQCM = idQCM;
             NomQCM = nomQCM;
             Level = level;
+            ModeDatabase = mode;
 
-            DictMotCle = new Dictionary<int, string>();
+            DictMotCle = new Dictionary<int, MotsClesDatas>();
             DictQuestionModele = new Dictionary<int, QuestionDatas>();
         }
 
@@ -167,7 +184,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public string AddMotsCles(int idMotCle, string motCle)
+        public string AddMotsCles(int idMotCle, MotsClesDatas motCle)
         {
             if (!DictMotCle.ContainsKey(idMotCle))
             {
