@@ -17,7 +17,6 @@ namespace WF_TPI_QCM
         //Key.Value = objet
         //Value.Key = Modes
         //Value.Value = idObjetLiee (peut être 0 s'il n'y en a pas)
-        private Dictionary<object, KeyValuePair<int, KeyValuePair<Modes, int>>> _dictEditionDataBase;
         private DAO _dao;
         Dictionary<int, object> _dictObjetDelete;
 
@@ -225,11 +224,10 @@ namespace WF_TPI_QCM
                 {
                     try
                     {
-
                         if (item.Value.ModeDatabase == Modes.Create)
                             _dao.InsertMotCle(idQCM, item.Value.TextMotCle);
-                        /*else if (Qcm.ModeDatabase == Modes.Update)
-                            _dao.Update(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);*/
+                        else if (item.Value.ModeDatabase == Modes.Update)
+                            _dao.UpdateMotCleByIdMotCle(item.Key, item.Value.TextMotCle);
                         saved += "IdMotCle: " + item.Key + ", motcle: " + item.Value.TextMotCle + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;
                         item.Value.ModeDatabase = Modes.AddedInBase;
                     }
@@ -243,19 +241,24 @@ namespace WF_TPI_QCM
                     try
                     {
                         saved += "idQuestion: " + item.Key + ", question: " + item.Value.Question + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;
+                        int idQuestion = 0;
                         if (item.Value.ModeDatabase == Modes.Create)
-                            _dao.InsertQuestion(idQCM, item.Value.Question);
-                        /*else if (Qcm.ModeDatabase == Modes.Update)
-                            _dao.Update(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);*/
+                            idQuestion = _dao.InsertQuestion(idQCM, item.Value.Question);
+                        else if (item.Value.ModeDatabase == Modes.Update)
+                            _dao.UpdateQuestionByIdQuestion(item.Key, item.Value.Question);
                         item.Value.ModeDatabase = Modes.AddedInBase;
+                        if (idQuestion == 0)
+                        {
+                            idQuestion = item.Key;
+                        }
                         foreach (var item2 in item.Value.DictReponseModele)
                         {
                             try
                             {
                                 if (item2.Value.ModeDatabase == Modes.Create)
-                                    _dao.InsertReponses(item.Key, item2.Value.Reponse, item2.Value.BonneReponse);
-                                /*else if (Qcm.ModeDatabase == Modes.Update)
-                                    _dao.Update(Qcm.IdQCM, Qcm.NomQCM, Qcm.Level);*/
+                                    _dao.InsertReponses(idQuestion, item2.Value.Reponse, item2.Value.BonneReponse);
+                                else if (item2.Value.ModeDatabase == Modes.Update)
+                                    _dao.UpdateReponseByIdReponse(idQuestion, item2.Key, item2.Value.Reponse, item2.Value.BonneReponse);
                                 saved += "idReponse: " + item2.Key + ", reponse: " + item2.Value.Reponse + ", Mode: " + item2.Value.ModeDatabase + Environment.NewLine;
                                 item2.Value.ModeDatabase = Modes.AddedInBase;
                             }
@@ -322,10 +325,15 @@ namespace WF_TPI_QCM
             {
                 try
                 {
-                    _dao.UpdateQCMByIdQCM(Qcm.IdQCM, nouveauText, nouveauLevel);
-                    if (Qcm.ModeDatabase == Modes.AddedInBase)
-                        Qcm.ModeDatabase = Modes.Update;
-                    return "Modifié avec succès !";
+                    if (!_dao.QCMExists(nouveauText))
+                    {
+                        Qcm.NomQCM = nouveauText;
+                        Qcm.Level = nouveauLevel;
+                        if (Qcm.ModeDatabase == Modes.AddedInBase)
+                            Qcm.ModeDatabase = Modes.Update;
+                        return "Modifié avec succès !";
+                    }
+                    else return "Ce nom de QCM est déjà pris !";
                 }
                 catch (Exception ex)
                 {
@@ -385,13 +393,15 @@ namespace WF_TPI_QCM
                 if (item.Key == idNewReponse)
                 {
                     if (!item.Value.BonneReponse)
-                        item.Value.ModeDatabase = Modes.Update;
+                        if (item.Value.ModeDatabase == Modes.AddedInBase)
+                            item.Value.ModeDatabase = Modes.Update;
                     item.Value.BonneReponse = true;
                 }
                 else
                 {
                     if (item.Value.BonneReponse)
-                        item.Value.ModeDatabase = Modes.Update;
+                        if (item.Value.ModeDatabase == Modes.AddedInBase)
+                            item.Value.ModeDatabase = Modes.Update;
                     item.Value.BonneReponse = false;
                 }
 

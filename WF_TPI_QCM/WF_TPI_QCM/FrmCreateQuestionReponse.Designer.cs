@@ -249,7 +249,7 @@
             this.lblReponse6.TabIndex = 9;
             this.lblReponse6.Text = "Reponse 6:";
             // 
-            // FrmCreateEditQuestionReponse
+            // FrmCreateQuestionReponse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -276,7 +276,9 @@
             this.Controls.Add(this.tbxQuestion);
             this.Controls.Add(this.lblQuestion);
             this.Controls.Add(this.lblQCM);
-            this.Name = "FrmCreateEditQuestionReponse";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.Name = "FrmCreateQuestionReponse";
             this.Text = "Créer une question ou des réponses";
             this.ResumeLayout(false);
             this.PerformLayout();

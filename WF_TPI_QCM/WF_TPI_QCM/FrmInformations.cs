@@ -13,7 +13,21 @@ namespace WF_TPI_QCM
     public partial class FrmInformations : Form
     {
         private QCMController _qcmController;
+        private int _idQCM;
         private bool clear;
+
+        public int IdQCM
+        {
+            get
+            {
+                return _idQCM;
+            }
+
+            set
+            {
+                _idQCM = value;
+            }
+        }
 
         #region Reponse
 
@@ -22,6 +36,7 @@ namespace WF_TPI_QCM
             if (e.ColumnIndex == 2)
             {
                 _qcmController.ChooseCorrectAnswer(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value));
+                RefreshQuestion();
             }
         }
 
@@ -183,12 +198,14 @@ namespace WF_TPI_QCM
         public FrmInformations(QCMController controller)
         {
             _qcmController = controller;
+            IdQCM = _qcmController.GetIdQCM();
             LoadInformations();
         }
 
         public FrmInformations(int idQCM)
         {
             _qcmController = new QCMController(idQCM);
+            IdQCM = idQCM;
             LoadInformations();
         }
 
@@ -244,6 +261,14 @@ namespace WF_TPI_QCM
         private void sauvegarderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _qcmController.Save();
+        }
+
+        private void FrmInformations_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(MessageBox.Show("Voulez-vous sauvegarder avant de quitter ?", "Sauvegarder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                sauvegarderToolStripMenuItem.PerformClick();
+            }
         }
     }
 }

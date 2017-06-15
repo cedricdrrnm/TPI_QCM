@@ -631,12 +631,10 @@ namespace WF_TPI_QCM
         /// <param name="id">Le titre (nom) du QCM</param>
         /// <param name="question">Le niveau du QCM</param>
         /// <returns>Le message d'erreur</returns>
-        public string InsertQuestion(int idQCM, string question)
+        public int InsertQuestion(int idQCM, string question)
         {
             string query = "INSERT INTO `question`(`question`) VALUES (@question); SELECT LAST_INSERT_ID() as lastID;";
             int lastIdQuestion = 0;
-            string errorReturn = "";
-            string tempError = "";
 
             //open connection
             try
@@ -663,9 +661,8 @@ namespace WF_TPI_QCM
                     //close connection
                     CloseConnection();
 
-                    tempError = InsertQCM_HAS_QUESTION(idQCM, lastIdQuestion);
-                    errorReturn = ((tempError != "") ? tempError + Environment.NewLine : "");
-                    return errorReturn;
+                    InsertQCM_HAS_QUESTION(idQCM, lastIdQuestion);
+                    return lastIdQuestion;
                 }
                 catch (MySqlException ex)
                 {
@@ -673,18 +670,18 @@ namespace WF_TPI_QCM
                     CloseConnection();
                     //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
                     if (ex.Number == 1062)
-                        return "Cette question existe déjà !";
+                        throw new Exception("Cette question existe déjà !");
                     else
-                        return ex.Message;
+                        throw ex;
                 }
                 catch (Exception ex)
                 {
-                    return ex.Message;
+                    throw ex;
                 }
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                throw ex;
             }
         }
 
@@ -837,6 +834,144 @@ namespace WF_TPI_QCM
                 //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
                 if (ex.Number == 1062)
                     throw new Exception("Ce qcm existe déjà !");
+                else
+                    throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void UpdateCorrectAnswerByIdReponseAndIdQuestion(int idQuestion, int idReponse, bool bonneReponse)
+        {
+            string query = "UPDATE `question_has_reponse` SET `bonneReponse`=@bonneReponse WHERE `idQuestion`=@idQuestion AND `idReponse`=@idReponse";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idReponse", idReponse);
+                cmd.Parameters.AddWithValue("@bonneReponse", bonneReponse);
+                cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+            }
+            catch (MySqlException ex)
+            {
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    throw new Exception("Ce lien existe déjà !");
+                else
+                    throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void UpdateMotCleByIdMotCle(int idMotCle, string motCle)
+        {
+            string query = "UPDATE `motcle` SET `motCle`=@motCle WHERE `idMotCle`=@idMotCle";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idMotCle", idMotCle);
+                cmd.Parameters.AddWithValue("@motCle", motCle);
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+            }
+            catch (MySqlException ex)
+            {
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    throw new Exception("Ce mot-clé existe déjà !");
+                else
+                    throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void UpdateQuestionByIdQuestion(int idQuestion, string question)
+        {
+            string query = "UPDATE `question` SET `question`=@question WHERE `idQuestion`=@idQuestion";
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
+                cmd.Parameters.AddWithValue("@question", question);
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+            }
+            catch (MySqlException ex)
+            {
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    throw new Exception("Cette question existe déjà !");
+                else
+                    throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void UpdateReponseByIdReponse(int idQuestion, int idReponse, string reponse, bool bonneReponse)
+        {
+            string query = "UPDATE `reponse` SET `reponse`=@reponse WHERE `idReponse`=@idReponse;";
+            UpdateCorrectAnswerByIdReponseAndIdQuestion(idQuestion, idReponse, bonneReponse);
+
+            //open connection
+            try
+            {
+                OpenConnection();
+                //create command and assign the query and connection from the constructor
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                
+                cmd.Parameters.AddWithValue("@idReponse", idReponse);
+                cmd.Parameters.AddWithValue("@reponse", reponse);
+                //Execute command
+                cmd.ExecuteNonQuery();
+                //close connection
+                CloseConnection();
+            }
+            catch (MySqlException ex)
+            {
+                //close connection
+                CloseConnection();
+                //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
+                if (ex.Number == 1062)
+                    throw new Exception("Cette réponse existe déjà !");
                 else
                     throw ex;
             }

@@ -93,7 +93,7 @@
             this.lblLevelQCM.TabIndex = 4;
             this.lblLevelQCM.Text = "Niveau du QCM:";
             // 
-            // FrmCreateEditQCM
+            // FrmCreateQCM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -103,7 +103,9 @@
             this.Controls.Add(this.btnAction);
             this.Controls.Add(this.lblTitreQCM);
             this.Controls.Add(this.tbxTitreQCM);
-            this.Name = "FrmCreateEditQCM";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.Name = "FrmCreateQCM";
             this.Text = "FrmCreateEditQCM";
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelQCM)).EndInit();
             this.ResumeLayout(false);

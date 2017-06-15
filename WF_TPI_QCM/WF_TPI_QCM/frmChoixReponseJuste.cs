@@ -39,8 +39,8 @@ namespace WF_TPI_QCM
 
         private void btnValider_Click(object sender, EventArgs e)
         {
-            if (cmbReponseJuste.SelectedValue != null)
-                ReturnId = Convert.ToInt32(cmbReponseJuste.SelectedValue.ToString().Split(':').First());
+            if (cmbReponseJuste.SelectedItem != null)
+                ReturnId = Convert.ToInt32(cmbReponseJuste.SelectedItem.ToString().Split(':').First());
             this.Close();
         }
     }

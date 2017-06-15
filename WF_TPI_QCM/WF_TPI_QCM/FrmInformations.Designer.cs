@@ -454,6 +454,7 @@
             this.Controls.Add(this.msMain);
             this.Name = "FrmInformations";
             this.Text = "FrmInformations";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmInformations_FormClosing);
             this.msMain.ResumeLayout(false);
             this.msMain.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);

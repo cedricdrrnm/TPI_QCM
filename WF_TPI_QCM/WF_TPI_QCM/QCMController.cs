@@ -13,6 +13,7 @@ namespace WF_TPI_QCM
         FrmExportSelect _frmExportSelect;
         QCMModele _qcmModele;
         private FrmCreateQuestionReponse _frmCreateQuestionReponse;
+        private static Dictionary<int, FrmInformations> _dictQCMOpened;
 
         public QCMController(int idQCM)
         {
@@ -193,7 +194,6 @@ namespace WF_TPI_QCM
             _frmExportSelect.ShowDialog();
         }
 
-
         public void OpenFormContents()
         {
             FrmInformations _frm = new FrmInformations(this);
@@ -202,8 +202,31 @@ namespace WF_TPI_QCM
 
         public static void OpenFormContents(int idQCM)
         {
-            FrmInformations _frm = new FrmInformations(idQCM);
-            _frm.Show();
+            if (_dictQCMOpened == null)
+                _dictQCMOpened = new Dictionary<int, FrmInformations>();
+
+            if (!_dictQCMOpened.ContainsKey(idQCM))
+            {
+                FrmInformations frmInformations = new FrmInformations(idQCM);
+                frmInformations.FormClosing += FrmInformations_FormClosing;
+                frmInformations.Show();
+                _dictQCMOpened.Add(idQCM, frmInformations);
+            }
+            else
+            {
+                FrmInformations frmInformations;
+                _dictQCMOpened.TryGetValue(idQCM, out frmInformations);
+                frmInformations.BringToFront();
+            }
+        }
+
+        private static void FrmInformations_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            if (sender is FrmInformations)
+                if (_dictQCMOpened.ContainsKey((sender as FrmInformations).IdQCM))
+                {
+                    _dictQCMOpened.Remove((sender as FrmInformations).IdQCM);
+                }
         }
 
         public void Save()

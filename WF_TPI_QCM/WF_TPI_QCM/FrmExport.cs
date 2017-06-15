@@ -24,7 +24,6 @@ namespace WF_TPI_QCM
 
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
         private List<int> _listSelectedIdQCMs;
-        QCMController _qcmController;
         SaveFileDialog _sfd;
 
         public FrmExport(List<int> listSelectedIdQCMs) : this(listSelectedIdQCMs, null)
@@ -35,7 +34,6 @@ namespace WF_TPI_QCM
             InitializeComponent();
 
             this._listSelectedIdQCMs = listSelectedIdQCMs;
-            _qcmController = new QCMController(0);
             if (modelName != null)
                 LoadModel(modelName);
 
@@ -72,10 +70,11 @@ namespace WF_TPI_QCM
                 string returnString = str[0].Replace(MARQUE_AUTHOR, Environment.UserName).Replace(MARQUE_TITLE, tbxNameOfDocument.Text);
                 foreach (int idQCM in _listSelectedIdQCMs)
                 {
-                    foreach (KeyValuePair<int,QuestionDatas> question in _qcmController.GetQuestions())
+                    QCMController _controller = new QCMController(idQCM);
+                    foreach (KeyValuePair<int,QuestionDatas> question in _controller.GetQuestions())
                     {
                         returnString += str[1].Replace(MARQUE_TEXT_QUESTION, question.Value.Question);
-                        foreach (KeyValuePair<int, ReponseDatas> reponse in _qcmController.GetReponsesByIdQuestion(question.Key))
+                        foreach (KeyValuePair<int, ReponseDatas> reponse in question.Value.DictReponseModele)
                         {
                             if (!reponse.Value.BonneReponse)
                                 returnString += str[2].Replace(MARQUE_TEXT_BAD_ANSWER, reponse.Value.Reponse);

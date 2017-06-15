@@ -19,6 +19,11 @@ namespace WF_TPI_QCM
             RefreshDataGridView();
         }
 
+        private void FrmListQCMMain_Activated(object sender, EventArgs e)
+        {
+            RefreshDataGridView();
+        }
+
         private void btnAfficherQCM_Click(object sender, EventArgs e)
         {
             if (dgvQCM.SelectedRows.Count > 0)
@@ -35,16 +40,21 @@ namespace WF_TPI_QCM
         {
             _frmNext = new FrmCreateQCM();
             _frmNext.ShowDialog();
-            RefreshDataGridView();
         }
 
-        private void RefreshDataGridView()
+        public void RefreshDataGridView()
         {
             dgvQCM.Rows.Clear();
             foreach (KeyValuePair<int, string> item in QCMController.GetListQCM())
             {
                 dgvQCM.Rows.Add(new string[] { item.Key.ToString(), item.Value });
             }
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            _frmNext = new FrmExportSelect(QCMController.GetListModeles());
+            _frmNext.ShowDialog();
         }
     }
 }

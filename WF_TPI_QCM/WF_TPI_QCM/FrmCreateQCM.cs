@@ -16,13 +16,26 @@ namespace WF_TPI_QCM
         const string TEXT_CREATE = "Créer";
         const string TEXT_UPDATE = "Modifier";
 
+        private QCMController QcmController
+        {
+            get
+            {
+                return _qcmController;
+            }
+
+            set
+            {
+                _qcmController = value;
+            }
+        }
+
         /// <summary>
         /// Constructeur (Create)
         /// </summary>
         public FrmCreateQCM()
         {
             InitializeComponent();
-            _qcmController = new QCMController(0);
+            QcmController = new QCMController(0);
         }
 
         /// <summary>
@@ -32,7 +45,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnAction_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((_qcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value))) ? "Ce QCM a bien été créé !" : "Ce qcm existe déjà !");
+            MessageBox.Show((QcmController.InsertQCM(tbxTitreQCM.Text, Convert.ToInt32(nudLevelQCM.Value))) ? "Ce QCM a bien été créé !" : "Ce qcm existe déjà !");
         }
     }
 }

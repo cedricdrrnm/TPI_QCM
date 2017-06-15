@@ -87,12 +87,6 @@
     <Compile Include="FrmInformations.Designer.cs">
       <DependentUpon>FrmInformations.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmListMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmListMain.Designer.cs">
-      <DependentUpon>FrmListMain.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmListQCMMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,9 +124,6 @@
     <EmbeddedResource Include="FrmInformations.resx">
       <DependentUpon>FrmInformations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmListMain.resx">
-      <DependentUpon>FrmListMain.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmListQCMMain.resx">
       <DependentUpon>FrmListQCMMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,7 +132,6 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="DiagrammeDeClasses.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>

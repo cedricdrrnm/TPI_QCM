@@ -88,9 +88,9 @@
             this.lblNameOfDocument.AutoSize = true;
             this.lblNameOfDocument.Location = new System.Drawing.Point(667, 372);
             this.lblNameOfDocument.Name = "lblNameOfDocument";
-            this.lblNameOfDocument.Size = new System.Drawing.Size(93, 13);
+            this.lblNameOfDocument.Size = new System.Drawing.Size(115, 13);
             this.lblNameOfDocument.TabIndex = 4;
-            this.lblNameOfDocument.Text = "Titre du document";
+            this.lblNameOfDocument.Text = "Titre dans le document";
             // 
             // tbxNameOfDocument
             // 
