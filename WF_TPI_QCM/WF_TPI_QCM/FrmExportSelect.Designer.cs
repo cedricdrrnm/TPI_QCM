@@ -59,9 +59,9 @@
             this.lblModel.AutoSize = true;
             this.lblModel.Location = new System.Drawing.Point(240, 18);
             this.lblModel.Name = "lblModel";
-            this.lblModel.Size = new System.Drawing.Size(91, 13);
+            this.lblModel.Size = new System.Drawing.Size(97, 13);
             this.lblModel.TabIndex = 4;
-            this.lblModel.Text = "Liste des models: ";
+            this.lblModel.Text = "Liste des modèles: ";
             // 
             // tvQCM
             // 
@@ -90,7 +90,7 @@
             this.Controls.Add(this.lblQCM);
             this.Controls.Add(this.btnSuivant);
             this.Name = "FrmExportSelect";
-            this.Text = "FrmExportSelect";
+            this.Text = "Exportation";
             this.ResumeLayout(false);
             this.PerformLayout();
 

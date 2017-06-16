@@ -1,6 +1,6 @@
 ﻿namespace WF_TPI_QCM
 {
-    partial class frmChoixReponseJuste
+    partial class FrmChoixReponseJuste
     {
         /// <summary>
         /// Required designer variable.

@@ -51,11 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO.cs" />
-    <Compile Include="frmChoixReponseJuste.cs">
+    <Compile Include="FrmChoixReponseJuste.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmChoixReponseJuste.Designer.cs">
-      <DependentUpon>frmChoixReponseJuste.cs</DependentUpon>
+    <Compile Include="FrmChoixReponseJuste.Designer.cs">
+      <DependentUpon>FrmChoixReponseJuste.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmCreateQCM.cs">
       <SubType>Form</SubType>
@@ -106,8 +106,8 @@
     <Compile Include="QCMModele.cs" />
     <Compile Include="QuestionDatas.cs" />
     <Compile Include="ReponseDatas.cs" />
-    <EmbeddedResource Include="frmChoixReponseJuste.resx">
-      <DependentUpon>frmChoixReponseJuste.cs</DependentUpon>
+    <EmbeddedResource Include="FrmChoixReponseJuste.resx">
+      <DependentUpon>FrmChoixReponseJuste.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCreateQCM.resx">
       <DependentUpon>FrmCreateQCM.cs</DependentUpon>

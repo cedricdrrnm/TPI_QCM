@@ -13,8 +13,6 @@ namespace WF_TPI_QCM
     public partial class FrmCreateQCM : Form
     {
         QCMController _qcmController;
-        const string TEXT_CREATE = "Créer";
-        const string TEXT_UPDATE = "Modifier";
 
         private QCMController QcmController
         {

@@ -164,7 +164,7 @@ namespace WF_TPI_QCM
             {
                 dictReponse.Add(item.Key, item.Value.Reponse);
             }
-            frmChoixReponseJuste _frmCCA = new frmChoixReponseJuste(dictReponse);
+            FrmChoixReponseJuste _frmCCA = new FrmChoixReponseJuste(dictReponse);
             _frmCCA.ShowDialog();
             if (_frmCCA.ReturnId != 0)
             {

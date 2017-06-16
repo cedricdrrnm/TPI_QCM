@@ -112,7 +112,7 @@
             this.Controls.Add(this.msExport);
             this.MainMenuStrip = this.msExport;
             this.Name = "FrmExport";
-            this.Text = "FrmExport";
+            this.Text = "Exportation";
             this.msExport.ResumeLayout(false);
             this.msExport.PerformLayout();
             this.ResumeLayout(false);

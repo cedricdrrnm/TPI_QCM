@@ -67,25 +67,26 @@ namespace WF_TPI_QCM
             if (str.Length == 7)
             {
                 //https://msdn.microsoft.com/en-us/library/system.environment.username%28v=vs.110%29.aspx
-                string returnString = str[0].Replace(MARQUE_AUTHOR, Environment.UserName).Replace(MARQUE_TITLE, tbxNameOfDocument.Text);
+                string returnString = str[0].Replace(MARQUE_AUTHOR, ValidateLatexString(Environment.UserName)).Replace(MARQUE_TITLE, ValidateLatexString(tbxNameOfDocument.Text));
                 foreach (int idQCM in _listSelectedIdQCMs)
                 {
                     QCMController _controller = new QCMController(idQCM);
                     foreach (KeyValuePair<int,QuestionDatas> question in _controller.GetQuestions())
                     {
-                        returnString += str[1].Replace(MARQUE_TEXT_QUESTION, question.Value.Question);
+                        returnString += str[1].Replace(MARQUE_TEXT_QUESTION, ValidateLatexString(question.Value.Question));
                         foreach (KeyValuePair<int, ReponseDatas> reponse in question.Value.DictReponseModele)
                         {
                             if (!reponse.Value.BonneReponse)
-                                returnString += str[2].Replace(MARQUE_TEXT_BAD_ANSWER, reponse.Value.Reponse);
+                                returnString += str[2].Replace(MARQUE_TEXT_BAD_ANSWER, ValidateLatexString(reponse.Value.Reponse));
                             else
-                                returnString += str[4].Replace(MARQUE_TEXT_GOOD_ANSWER, reponse.Value.Reponse);
+                                returnString += str[4].Replace(MARQUE_TEXT_GOOD_ANSWER, ValidateLatexString(reponse.Value.Reponse));
                         }
                         returnString += str[5];
                     }
                 }
 
                 returnString += str[6];
+                tbxContent.Text = returnString;
                 _sfd = new SaveFileDialog();
                 _sfd.Filter = "Format texte (*.txt) | *.txt";
                 if (_sfd.ShowDialog() == DialogResult.OK)
@@ -95,6 +96,21 @@ namespace WF_TPI_QCM
                     File.WriteAllText(_sfd.FileName, returnString);
                 }
             }
+        }
+
+        private string ValidateLatexString(string text)
+        {
+            return text
+                .Replace("\\", "\\textbackslash")
+                .Replace("#", "\\#")
+                .Replace("$", "\\$")
+                .Replace("%", "\\%")
+                .Replace("^", "\\^{}")
+                .Replace("&", "\\&")
+                .Replace("_", "\\_")
+                .Replace("{", "\\{")
+                .Replace("}", "\\}")
+                .Replace("~", "\\~{}");
         }
 
         private void ExportToolStripMenuItem_Click(object sender, EventArgs e)

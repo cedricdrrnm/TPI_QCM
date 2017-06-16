@@ -106,7 +106,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FrmCreateQCM";
-            this.Text = "FrmCreateEditQCM";
+            this.Text = "Créer un QCM";
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelQCM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

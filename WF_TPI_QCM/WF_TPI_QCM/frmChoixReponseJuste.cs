@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace WF_TPI_QCM
 {
-    public partial class frmChoixReponseJuste : Form
+    public partial class FrmChoixReponseJuste : Form
     {
         private int _returnId;
 
@@ -27,7 +27,7 @@ namespace WF_TPI_QCM
             }
         }
 
-        public frmChoixReponseJuste(Dictionary<int, string> reponses)
+        public FrmChoixReponseJuste(Dictionary<int, string> reponses)
         {
             InitializeComponent();
             foreach (KeyValuePair<int, string> item in reponses)
