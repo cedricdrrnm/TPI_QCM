@@ -430,6 +430,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        public static void Help()
+        {
+            FrmAboutBox _frmAbout = new FrmAboutBox();
+            _frmAbout.ShowDialog();
+        }
+
         /// <summary>
         /// S'effectue lors de la fermeture de la Form "FrmInformations"
         /// </summary>

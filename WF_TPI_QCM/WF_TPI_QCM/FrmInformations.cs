@@ -354,5 +354,15 @@ namespace WF_TPI_QCM
                 sauvegarderToolStripMenuItem.PerformClick();
             }
         }
+
+        /// <summary>
+        /// S'effectue lors d'un clic sur le ToolStripMenuItem "helpToolStripMenuItem"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
+        public void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            QCMController.Help();
+        }
     }
 }

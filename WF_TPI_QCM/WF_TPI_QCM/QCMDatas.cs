@@ -149,12 +149,6 @@ namespace WF_TPI_QCM
             }
         }
 
-        /*public QCMModele(int idQCM, string nomQCM) : this(idQCM, nomQCM, 1, new Dictionary<QuestionModele, List<ReponseModele>>())
-        { }
-
-        public QCMModele(int idQCM, string nomQCM, int level) : this(idQCM, nomQCM, level, new Dictionary<QuestionModele, List<ReponseModele>>())
-        { }*/
-
             /// <summary>
             /// Constructeur
             /// </summary>

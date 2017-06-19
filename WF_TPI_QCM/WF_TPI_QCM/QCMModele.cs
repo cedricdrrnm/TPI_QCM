@@ -293,7 +293,7 @@ namespace WF_TPI_QCM
         /// </summary>
         public void Save()
         {
-            string saved = "QCM: " + Qcm.IdQCM + ", " + Qcm.NomQCM + ", Mode: " + Qcm.ModeDatabase + Environment.NewLine;
+            /* Pour voir la progression dans la sortie: string saved = "QCM: " + Qcm.IdQCM + ", " + Qcm.NomQCM + ", Mode: " + Qcm.ModeDatabase + Environment.NewLine;*/
             string error = "";
             int idQCM = 0;
             try
@@ -318,8 +318,8 @@ namespace WF_TPI_QCM
                             _dao.InsertMotCle(idQCM, item.Value.TextMotCle);
                         else if (item.Value.ModeDatabase == Modes.Update)
                             _dao.UpdateMotCleByIdMotCle(item.Key, item.Value.TextMotCle);
-                        saved += "IdMotCle: " + item.Key + ", motcle: " + item.Value.TextMotCle + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;
-                        item.Value.ModeDatabase = Modes.AddedInBase;
+                        /* Pour voir la progression dans la sortie: saved += "IdMotCle: " + item.Key + ", motcle: " + item.Value.TextMotCle + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;*/
+            item.Value.ModeDatabase = Modes.AddedInBase;
                     }
                     catch (Exception ex)
                     {
@@ -330,7 +330,7 @@ namespace WF_TPI_QCM
                 {
                     try
                     {
-                        saved += "idQuestion: " + item.Key + ", question: " + item.Value.Question + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;
+                        /* Pour voir la progression dans la sortie: saved += "idQuestion: " + item.Key + ", question: " + item.Value.Question + ", Mode: " + item.Value.ModeDatabase + Environment.NewLine;*/
                         int idQuestion = 0;
                         if (item.Value.ModeDatabase == Modes.Create)
                             idQuestion = _dao.InsertQuestion(idQCM, item.Value.Question);
@@ -349,8 +349,8 @@ namespace WF_TPI_QCM
                                     _dao.InsertReponses(idQuestion, item2.Value.Reponse, item2.Value.BonneReponse);
                                 else if (item2.Value.ModeDatabase == Modes.Update)
                                     _dao.UpdateReponseByIdReponse(idQuestion, item2.Key, item2.Value.Reponse, item2.Value.BonneReponse);
-                                saved += "idReponse: " + item2.Key + ", reponse: " + item2.Value.Reponse + ", Mode: " + item2.Value.ModeDatabase + Environment.NewLine;
-                                item2.Value.ModeDatabase = Modes.AddedInBase;
+                                /* Pour voir la progression dans la sortie: saved += "idReponse: " + item2.Key + ", reponse: " + item2.Value.Reponse + ", Mode: " + item2.Value.ModeDatabase + Environment.NewLine; */
+                        item2.Value.ModeDatabase = Modes.AddedInBase;
                             }
                             catch (Exception ex)
                             {
@@ -365,7 +365,7 @@ namespace WF_TPI_QCM
 
                 }
 
-                foreach (var item in _dictObjetDelete)
+                foreach (KeyValuePair<int,object> item in _dictObjetDelete)
                 {
                     try
                     {
@@ -377,9 +377,9 @@ namespace WF_TPI_QCM
                             _dao.DeleteReponsesByIdReponse(item.Key);
                         else if (item.Value is MotsClesDatas)
                             _dao.DeleteMotCleByIdMotCle(item.Key);
-                        saved += "idObjetDelete: " + item.Key + ", reponse: " + item.Value + Environment.NewLine;
-                    }
-                    catch (Exception ex)
+                        /* Pour voir la progression dans la sortie: saved += "idObjetDelete: " + item.Key + ", reponse: " + item.Value + Environment.NewLine; */
+                            }
+                            catch (Exception ex)
                     {
                         error = ex.Message;
                     }
@@ -390,7 +390,7 @@ namespace WF_TPI_QCM
             {
                 error = ex.Message;
             }
-            Console.WriteLine(saved);
+            /* Pour voir la progression dans la sortie: Console.WriteLine(saved); */
         }
 
         /// <summary>
@@ -635,119 +635,5 @@ namespace WF_TPI_QCM
             }
             return false;
         }
-
-        /*public void Save()
-        {
-            string query = "";
-            foreach (KeyValuePair<object, KeyValuePair<int, KeyValuePair<Modes, int>>> item in _dictEditionDataBase)
-            {
-                int idObjet = item.Value.Key;
-                if (item.Key is QCMDatas)
-                {
-                    QCMDatas qcmd = item.Key as QCMDatas;
-                    if (item.Value.Value.Key == Modes.Create)
-                    {
-                        query += "INSERT INTO `qcm`(`nomQCM`, `level`) VALUES(\"" + qcmd.NomQCM + "\"," + qcmd.Level + ");";
-                    }
-                    else if (item.Value.Value.Key == Modes.Update)
-                    {
-                        query += "UPDATE `qcm` SET `nomQCM`=\"" + qcmd.NomQCM + "\",`level`=" + qcmd.Level + " WHERE `idQCM`=" + idObjet + ";";
-                    }
-                    else if (item.Value.Value.Key == Modes.Delete)
-                    {
-                        query += "DELETE FROM `qcm` WHERE `idQCM` = " + idObjet + ";";
-                    }
-                }
-                else if (item.Key is QuestionDatas)
-                {
-                    QuestionDatas qd = item.Key as QuestionDatas;
-                    if (item.Value.Value.Key == Modes.Create)
-                    {
-                        query += "INSERT INTO `question`(`question`) VALUES (\"" + qd.Question + "\");" + Environment.NewLine;
-                        query += "INSERT INTO `qcm_has_question`(`idQCM`, `idQuestion`) VALUES (" + item.Value.Value.Value + ",(SELECT LAST_INSERT_ID()));";
-                    }
-                    else if (item.Value.Value.Key == Modes.Update)
-                    {
-                        query += "UPDATE `question` SET `question`=\"" + qd.Question + "\" WHERE `idQuestion`=" + idObjet + ";";
-                    }
-                    else if (item.Value.Value.Key == Modes.Delete)
-                    {
-                        query += "DELETE FROM `question` WHERE `idQuestion` = " + idObjet + ";";
-                        //La liaison est supprimé par le cascade dans le concepteur
-                    }
-                }
-                else if (item.Key is ReponseDatas)
-                {
-                    ReponseDatas rd = item.Key as ReponseDatas;
-                    if (item.Value.Value.Key == Modes.Create)
-                    {
-                        query += "INSERT INTO `reponse`(`reponse`) VALUES (" + rd.Reponse + ");" + Environment.NewLine;
-                        query += "INSERT INTO `question_has_reponse`(`idQuestion`, `idReponse`, `bonneReponse`) VALUES (" + item.Value.Value.Value + ",(SELECT LAST_INSERT_ID()), " + rd.BonneReponse + ");";
-                    }
-                    else if (item.Value.Value.Key == Modes.Update)
-                    {
-                        query += "UPDATE `reponse` SET `reponse`=" + rd.Reponse + " WHERE `idReponse`=" + idObjet + ";" + Environment.NewLine;
-                        query += "UPDATE `question_has_reponse` SET `bonneReponse`=" + rd.BonneReponse + " WHERE `idReponse`=" + idObjet + " AND `idQuestion`=" + item.Value.Value.Value + ";";
-                    }
-                    else if (item.Value.Value.Key == Modes.Delete)
-                    {
-                        query += "DELETE FROM `question` WHERE `idQuestion` = " + idObjet + ";";
-                        //La liaison est supprimé par le cascade dans le concepteur
-                    }
-                }
-                else if (item.Key is string)
-                {
-                    string motcle = item.Key.ToString();
-                    if (item.Value.Value.Key == Modes.Create)
-                    {
-                        query += "INSERT INTO `motcle`(`motCle`) VALUES (\"" + motcle + "\");" + Environment.NewLine;
-                        query += "INSERT INTO `qcm_has_motcle`(`idQCM`, `idMotCle`) VALUES (" + item.Value.Value + ",(SELECT LAST_INSERT_ID()));";
-                    }
-                    else if (item.Value.Value.Key == Modes.Update)
-                    {
-                        query += "UPDATE `motcle` SET `motCle`=\"" + motcle + "\" WHERE `idMotCle`=" + idObjet + ";" + Environment.NewLine;
-                    }
-                    else if (item.Value.Value.Key == Modes.Delete)
-                    {
-                        query += "DELETE FROM `motcle` WHERE `idMotCle` = " + idObjet + ";";
-                        //La liaison est supprimé par le cascade dans le concepteur
-                    }
-                }
-                query += Environment.NewLine;
-            }
-            Console.WriteLine(query);
-        }*/
-
-        /*private void AddEditionDatabase(int idObjet, object objet, Modes mode, int idLinkedObject)
-        {
-            KeyValuePair<int, KeyValuePair<Modes, int>> getMode;
-            if (_dictEditionDataBase.TryGetValue(objet, out getMode))
-            {
-                if (getMode.Value.Key == Modes.Create)
-                {
-                    if (mode == Modes.Update)
-                    {
-                        _dictEditionDataBase.Remove(objet);
-                        _dictEditionDataBase.Add(objet, new KeyValuePair<int, KeyValuePair<Modes,int>>(idObjet, new KeyValuePair<Modes, int>(Modes.Create, idLinkedObject)));
-                    }
-                    else if (mode == Modes.Delete)
-                    {
-                        _dictEditionDataBase.Remove(objet);
-                    }
-                }
-                else if (getMode.Value.Key == Modes.Update)
-                {
-                    if (mode == Modes.Update || mode == Modes.Delete)
-                    {
-                        _dictEditionDataBase.Remove(new KeyValuePair<int, object>(idObjet, objet));
-                        _dictEditionDataBase.Add(objet, new KeyValuePair<int, KeyValuePair<Modes, int>>(idObjet, new KeyValuePair<Modes, int>(mode, idLinkedObject)));
-                    }
-                }
-            }
-            else
-            {
-                _dictEditionDataBase.Add(objet, new KeyValuePair<int, KeyValuePair<Modes, int>>(idObjet, new KeyValuePair<Modes, int>(mode, idLinkedObject)));
-            }
-        }*/
     }
 }

@@ -52,10 +52,6 @@ namespace WF_TPI_QCM
             }
         }
 
-        /*public ReponseModele(int idReponse, string reponse) : this(idReponse, reponse, false)
-        { }
-        */
-
         public ReponseDatas(string reponse, bool bonneReponse, Modes modeDatabase)
         {
             Reponse = reponse;
