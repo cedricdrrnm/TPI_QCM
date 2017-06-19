@@ -101,10 +101,5 @@ namespace WF_TPI_QCM
             }
             MessageBox.Show(QcmController.InsertQuestion(tbxQuestion.Text, dictReponses));
         }
-
-        private void FrmCreateQuestionReponse_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

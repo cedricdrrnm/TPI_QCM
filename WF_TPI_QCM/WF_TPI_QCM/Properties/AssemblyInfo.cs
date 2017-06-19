@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
 [assembly: AssemblyTitle("QCMCreator")]
-[assembly: AssemblyDescription("Permet de créer, modifier, supprimer des QCMs et de les exporter en format Latex.")]
+[assembly: AssemblyDescription("Permet de créer, modifier, supprimer des QCMs et de les exporter en format Latex. Une documentation est fournie pour vous aider.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CEPTA")]
 [assembly: AssemblyProduct("WF_TPI_QCM")]

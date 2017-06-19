@@ -28,7 +28,7 @@ namespace WF_TPI_QCM
         }
 
         /// <summary>
-        /// Constructeur (Create)
+        /// Constructeur
         /// </summary>
         public FrmCreateQCM()
         {

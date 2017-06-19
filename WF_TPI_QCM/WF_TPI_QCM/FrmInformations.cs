@@ -262,6 +262,24 @@ namespace WF_TPI_QCM
                 dgvMotCle.AllowUserToAddRows = false;
         }
 
+        /// <summary>
+        /// S'effectue lors de la suppression d'une ligne de la DataGridView "dgvMotCle" par l'utilisateur.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
+        private void dgvMotCle_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (QcmController.DeleteMotCleByIdMotCle(Convert.ToInt32(dgvMotCle.Rows[e.Row.Index].Cells[0].Value)))
+            {
+                MessageBox.Show("Mot-Clé supprimé avec succès !");
+                dgvMotCle.AllowUserToAddRows = true;
+            }
+            else
+            {
+                MessageBox.Show("Echec lors de la suppression du mot-clé !");
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -326,24 +344,6 @@ namespace WF_TPI_QCM
             {
                 MessageBox.Show(QcmController.DeleteQCM());
                 this.Close();
-            }
-        }
-
-        /// <summary>
-        /// S'effectue lors de la suppression d'une ligne de la DataGridView "dgvMotCle" par l'utilisateur.
-        /// </summary>
-        /// <param name="sender">Objet</param>
-        /// <param name="e">Evenement</param>
-        private void dgvMotCle_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
-        {
-            if (QcmController.DeleteMotCleByIdMotCle(Convert.ToInt32(dgvMotCle.Rows[e.Row. Index].Cells[0].Value)))
-            {
-                MessageBox.Show("Mot-Clé supprimé avec succès !");
-                dgvMotCle.AllowUserToAddRows = true;
-            }
-            else
-            {
-                MessageBox.Show("Echec lors de la suppression du mot-clé !");
             }
         }
 

@@ -254,12 +254,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(504, 361);
+            this.Controls.Add(this.tbxReponse4);
             this.Controls.Add(this.rbBonneReponse6);
             this.Controls.Add(this.rbBonneReponse5);
             this.Controls.Add(this.tbxReponse6);
             this.Controls.Add(this.rbBonneReponse4);
             this.Controls.Add(this.tbxReponse5);
-            this.Controls.Add(this.tbxReponse4);
             this.Controls.Add(this.rbBonneReponse3);
             this.Controls.Add(this.tbxReponse3);
             this.Controls.Add(this.lblReponse6);
@@ -280,7 +280,6 @@
             this.MaximizeBox = false;
             this.Name = "FrmCreateQuestionReponse";
             this.Text = "Créer une question ou des réponses";
-            this.Load += new System.EventHandler(this.FrmCreateQuestionReponse_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -186,7 +186,7 @@ namespace WF_TPI_QCM
         }
 
         /// <summary>
-        /// Retourne les réponse par l'id de la question
+        /// Retourne les réponses par l'id de la question
         /// </summary>
         /// <param name="id">Id de la question</param>
         /// <returns>Réponses à la question</returns>
@@ -629,55 +629,7 @@ namespace WF_TPI_QCM
                 throw ex;
             }
         }
-
-        /// <summary>
-        /// Créer un QCM avec les informations données
-        /// </summary>
-        /// <param name="nomQCM">Le titre (nom) du QCM</param>
-        /// <param name="level">Le level (niveau) du QCM</param>
-        /// <returns>Le message d'erreur</returns>
-        public string InsertQCM(string nomQCM, string level)
-        {
-            string query = "INSERT INTO `qcm`(`nomQCM`,`level`) VALUES (@nomSubject, @level);";
-
-            //open connection
-            try
-            {
-                OpenConnection();
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, Conn);
-
-                cmd.Parameters.AddWithValue("@nomSubject", nomQCM);
-                cmd.Parameters.AddWithValue("@level", level);
-                try
-                {
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                    //close connection
-                    CloseConnection();
-                    return "";
-                }
-                catch (MySqlException ex)
-                {
-                    //close connection
-                    CloseConnection();
-                    //https://dev.mysql.com/doc/refman/5.7/en/error-messages-server.html
-                    if (ex.Number == 1062)
-                        return "Ce qcm existe déjà !";
-                    else
-                        return ex.Message;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
-
+        
         /// <summary>
         /// Créer une question avec les informations données
         /// </summary>
@@ -903,7 +855,7 @@ namespace WF_TPI_QCM
         }
 
         /// <summary>
-        /// Mets à jour les réponse avec les informations fournies
+        /// Mets à jour les réponses avec les informations fournies
         /// </summary>
         /// <param name="idQuestion">Id de la question</param>
         /// <param name="idReponse">Id de la réponse</param>

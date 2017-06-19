@@ -66,6 +66,10 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="idQCM"></param>
         public QCMController(int idQCM)
         {
             QcmModele = new QCMModele(idQCM);
@@ -137,7 +141,7 @@ namespace WF_TPI_QCM
         }
 
         /// <summary>
-        /// Mets à jour un QCM avec les novuelles informations
+        /// Mets à jour un QCM avec les nouvelles informations
         /// </summary>
         /// <param name="nouveauText">Nouveau texte</param>
         /// <param name="nouveauLevel">Nouveau niveau</param>
@@ -469,6 +473,9 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Ouvre l'AboutBox (l'aide)
+        /// </summary>
         public static void Help()
         {
             FrmAboutBox _frmAbout = new FrmAboutBox();
