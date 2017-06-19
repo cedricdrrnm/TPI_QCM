@@ -184,7 +184,7 @@
             this.lblReponse1.Name = "lblReponse1";
             this.lblReponse1.Size = new System.Drawing.Size(62, 13);
             this.lblReponse1.TabIndex = 9;
-            this.lblReponse1.Text = "Reponse 1:";
+            this.lblReponse1.Text = "Réponse 1:";
             // 
             // lblReponse2
             // 
@@ -193,7 +193,7 @@
             this.lblReponse2.Name = "lblReponse2";
             this.lblReponse2.Size = new System.Drawing.Size(62, 13);
             this.lblReponse2.TabIndex = 9;
-            this.lblReponse2.Text = "Reponse 2:";
+            this.lblReponse2.Text = "Réponse 2:";
             // 
             // tbxReponse3
             // 
@@ -220,7 +220,7 @@
             this.lblReponse3.Name = "lblReponse3";
             this.lblReponse3.Size = new System.Drawing.Size(62, 13);
             this.lblReponse3.TabIndex = 9;
-            this.lblReponse3.Text = "Reponse 3:";
+            this.lblReponse3.Text = "Réponse 3:";
             // 
             // lblReponse4
             // 
@@ -229,7 +229,7 @@
             this.lblReponse4.Name = "lblReponse4";
             this.lblReponse4.Size = new System.Drawing.Size(62, 13);
             this.lblReponse4.TabIndex = 9;
-            this.lblReponse4.Text = "Reponse 4:";
+            this.lblReponse4.Text = "Réponse 4:";
             // 
             // lblReponse5
             // 
@@ -238,7 +238,7 @@
             this.lblReponse5.Name = "lblReponse5";
             this.lblReponse5.Size = new System.Drawing.Size(62, 13);
             this.lblReponse5.TabIndex = 9;
-            this.lblReponse5.Text = "Reponse 5:";
+            this.lblReponse5.Text = "Réponse 5:";
             // 
             // lblReponse6
             // 
@@ -247,7 +247,7 @@
             this.lblReponse6.Name = "lblReponse6";
             this.lblReponse6.Size = new System.Drawing.Size(62, 13);
             this.lblReponse6.TabIndex = 9;
-            this.lblReponse6.Text = "Reponse 6:";
+            this.lblReponse6.Text = "Réponse 6:";
             // 
             // FrmCreateQuestionReponse
             // 
@@ -280,6 +280,7 @@
             this.MaximizeBox = false;
             this.Name = "FrmCreateQuestionReponse";
             this.Text = "Créer une question ou des réponses";
+            this.Load += new System.EventHandler(this.FrmCreateQuestionReponse_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

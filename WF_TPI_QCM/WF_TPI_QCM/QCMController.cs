@@ -23,13 +23,52 @@ namespace WF_TPI_QCM
         private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
         #endregion
 
-        QCMModele _qcmModele;
+        private QCMModele _qcmModele;
         private FrmCreateQuestionReponse _frmCreateQuestionReponse;
         private static Dictionary<int, FrmInformations> _dictQCMOpened;
-        
+
+        private QCMModele QcmModele
+        {
+            get
+            {
+                return _qcmModele;
+            }
+
+            set
+            {
+                _qcmModele = value;
+            }
+        }
+
+        private FrmCreateQuestionReponse FrmCreateQuestionReponse
+        {
+            get
+            {
+                return _frmCreateQuestionReponse;
+            }
+
+            set
+            {
+                _frmCreateQuestionReponse = value;
+            }
+        }
+
+        private static Dictionary<int, FrmInformations> DictQCMOpened
+        {
+            get
+            {
+                return _dictQCMOpened;
+            }
+
+            set
+            {
+                _dictQCMOpened = value;
+            }
+        }
+
         public QCMController(int idQCM)
         {
-            _qcmModele = new QCMModele(idQCM);
+            QcmModele = new QCMModele(idQCM);
         }
 
         #region QCM
@@ -49,7 +88,7 @@ namespace WF_TPI_QCM
         /// <returns>Niveau du QCM</returns>
         public int GetLevelByIdQCM()
         {
-            return _qcmModele.GetLevel();
+            return QcmModele.GetLevel();
         }
 
         /// <summary>
@@ -58,7 +97,7 @@ namespace WF_TPI_QCM
         /// <returns>Titre du QCM</returns>
         public string GetTitreQCM()
         {
-            return _qcmModele.GetTitreQCM();
+            return QcmModele.GetTitreQCM();
         }
 
         /// <summary>
@@ -67,7 +106,7 @@ namespace WF_TPI_QCM
         /// <returns>Id du QCM</returns>
         public int GetIdQCM()
         {
-            return _qcmModele.GetIdQCM();
+            return QcmModele.GetIdQCM();
         }
 
         /// <summary>
@@ -78,9 +117,9 @@ namespace WF_TPI_QCM
         /// <returns>Vrai si réussi ,false sinon</returns>
         public bool InsertQCM(string titreQCM, int levelQCM)
         {
-            if (!_qcmModele.CheckExists(titreQCM))
+            if (!QcmModele.CheckExists(titreQCM))
             {
-                _qcmModele.InsertQCM(titreQCM, levelQCM);
+                QcmModele.InsertQCM(titreQCM, levelQCM);
                 OpenFormContents();
                 return true;
             }
@@ -94,7 +133,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public string DeleteQCM()
         {
-            return _qcmModele.DeleteQCM();
+            return QcmModele.DeleteQCM();
         }
 
         /// <summary>
@@ -105,7 +144,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public string UpdateQCM(string nouveauText, int nouveauLevel)
         {
-            return _qcmModele.UpdateQCM(nouveauText, nouveauLevel);
+            return QcmModele.UpdateQCM(nouveauText, nouveauLevel);
         }
 
         #endregion
@@ -118,7 +157,7 @@ namespace WF_TPI_QCM
         /// <returns>Question du QCM</returns>
         public Dictionary<int, QuestionDatas> GetQuestions()
         {
-            return _qcmModele.GetQuestions();
+            return QcmModele.GetQuestions();
         }
 
         /// <summary>
@@ -129,7 +168,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public string InsertQuestion(string text, Dictionary<string, bool> dictReponses)
         {
-            return _qcmModele.InsertQuestion(text, dictReponses);
+            return QcmModele.InsertQuestion(text, dictReponses);
         }
 
         /// <summary>
@@ -139,7 +178,7 @@ namespace WF_TPI_QCM
         /// <returns>Vrai si réussi, false sinon</returns>
         public bool DeleteQuestionByIdQuestion(int idQuestion)
         {
-            return _qcmModele.DeleteQuestionByIdQuestion(idQuestion);
+            return QcmModele.DeleteQuestionByIdQuestion(idQuestion);
         }
 
         /// <summary>
@@ -150,7 +189,7 @@ namespace WF_TPI_QCM
         /// <returns>Vrai si réussi, false sinon</returns>
         public bool UpdateQuestionByIdQuestion(int idQuestion, string nouveauTexte)
         {
-            return _qcmModele.UpdateQuestionByIdQuestion(idQuestion, nouveauTexte);
+            return QcmModele.UpdateQuestionByIdQuestion(idQuestion, nouveauTexte);
         }
 
         #endregion
@@ -164,7 +203,7 @@ namespace WF_TPI_QCM
         /// <returns>Réponses à la question</returns>
         public Dictionary<int, ReponseDatas> GetReponsesByIdQuestion(int idQuestion)
         {
-            return _qcmModele.GetReponsesByIdQuestion(idQuestion);
+            return QcmModele.GetReponsesByIdQuestion(idQuestion);
         }
 
         /// <summary>
@@ -176,7 +215,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public KeyValuePair<bool, string> UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseDatas reponseModele)
         {
-            return _qcmModele.UpdateReponseByIdQuestionAndIdReponse(idQuestion, idReponse, reponseModele);
+            return QcmModele.UpdateReponseByIdQuestionAndIdReponse(idQuestion, idReponse, reponseModele);
         }
 
         /// <summary>
@@ -188,7 +227,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public string InsertReponse(int idQuestion, string reponseText, bool bonneReponse)
         {
-            return _qcmModele.InsertReponse(idQuestion, reponseText, bonneReponse);
+            return QcmModele.InsertReponse(idQuestion, reponseText, bonneReponse);
         }
 
         /// <summary>
@@ -199,7 +238,7 @@ namespace WF_TPI_QCM
         /// <returns>True si réussi, false sinon</returns>
         public bool DeleteReponseByIdReponse(int idQuestion, int idReponse)
         {
-            return _qcmModele.DeleteReponseByIdReponse(idQuestion, idReponse);
+            return QcmModele.DeleteReponseByIdReponse(idQuestion, idReponse);
         }
 
         #endregion
@@ -212,7 +251,7 @@ namespace WF_TPI_QCM
         /// <returns>Mots-clés</returns>
         public Dictionary<int, MotsClesDatas> GetMotsCles()
         {
-            return _qcmModele.GetMotsCles();
+            return QcmModele.GetMotsCles();
         }
 
         /// <summary>
@@ -222,7 +261,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public string InsertMotCle(string text)
         {
-            return _qcmModele.InsertMotCle(text);
+            return QcmModele.InsertMotCle(text);
         }
 
         /// <summary>
@@ -233,7 +272,7 @@ namespace WF_TPI_QCM
         /// <returns>Message</returns>
         public string UpdateMotCle(int idMotCle, string textMotCle)
         {
-            return _qcmModele.UpdateMotCle(idMotCle, textMotCle);
+            return QcmModele.UpdateMotCle(idMotCle, textMotCle);
         }
 
         /// <summary>
@@ -243,7 +282,7 @@ namespace WF_TPI_QCM
         /// <returns>True si réussi, sinon false</returns>
         public bool DeleteMotCleByIdMotCle(int idMotCle)
         {
-            return _qcmModele.DeleteMotCleByIdMotCle(idMotCle);
+            return QcmModele.DeleteMotCleByIdMotCle(idMotCle);
         }
 
         #endregion
@@ -256,7 +295,7 @@ namespace WF_TPI_QCM
         /// <returns>Prochaine id de réponses</returns>
         public int GetNextIdReponse()
         {
-            return _qcmModele.GetNextIdReponse();
+            return QcmModele.GetNextIdReponse();
         }
 
         /// <summary>
@@ -265,7 +304,7 @@ namespace WF_TPI_QCM
         /// <returns>Prochaine id de questions</returns>
         public int GetNextIdQuestion()
         {
-            return _qcmModele.GetNextIdQuestion();
+            return QcmModele.GetNextIdQuestion();
         }
 
         /// <summary>
@@ -274,7 +313,7 @@ namespace WF_TPI_QCM
         /// <returns>Prochaine id de mots-clés</returns>
         public int GetNextIdMotCle()
         {
-            return _qcmModele.GetNextIdMotCle();
+            return QcmModele.GetNextIdMotCle();
         }
 
         #endregion
@@ -295,7 +334,7 @@ namespace WF_TPI_QCM
             _frmCCA.ShowDialog();
             if (_frmCCA.ReturnId != 0)
             {
-                _qcmModele.ChangeCorrectAnswer(idQuestion, _frmCCA.ReturnId);
+                QcmModele.ChangeCorrectAnswer(idQuestion, _frmCCA.ReturnId);
                 return "Bonne réponse changée !";
             }
             else
@@ -318,8 +357,8 @@ namespace WF_TPI_QCM
         /// </summary>
         public void CreateQuestionReponse()
         {
-            _frmCreateQuestionReponse = new FrmCreateQuestionReponse(this);
-            _frmCreateQuestionReponse.ShowDialog();
+            FrmCreateQuestionReponse = new FrmCreateQuestionReponse(this);
+            FrmCreateQuestionReponse.ShowDialog();
         }
 
         /// <summary>
@@ -412,20 +451,20 @@ namespace WF_TPI_QCM
         /// <param name="idQCM">Id du QCM</param>
         public static void OpenFormContents(int idQCM)
         {
-            if (_dictQCMOpened == null)
-                _dictQCMOpened = new Dictionary<int, FrmInformations>();
+            if (DictQCMOpened == null)
+                DictQCMOpened = new Dictionary<int, FrmInformations>();
 
-            if (!_dictQCMOpened.ContainsKey(idQCM))
+            if (!DictQCMOpened.ContainsKey(idQCM))
             {
                 FrmInformations frmInformations = new FrmInformations(idQCM);
                 frmInformations.FormClosing += FrmInformations_FormClosing;
                 frmInformations.Show();
-                _dictQCMOpened.Add(idQCM, frmInformations);
+                DictQCMOpened.Add(idQCM, frmInformations);
             }
             else
             {
                 FrmInformations frmInformations;
-                _dictQCMOpened.TryGetValue(idQCM, out frmInformations);
+                DictQCMOpened.TryGetValue(idQCM, out frmInformations);
                 frmInformations.BringToFront();
             }
         }
@@ -444,9 +483,9 @@ namespace WF_TPI_QCM
         private static void FrmInformations_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
         {
             if (sender is FrmInformations)
-                if (_dictQCMOpened.ContainsKey((sender as FrmInformations).IdQCM))
+                if (DictQCMOpened.ContainsKey((sender as FrmInformations).IdQCM))
                 {
-                    _dictQCMOpened.Remove((sender as FrmInformations).IdQCM);
+                    DictQCMOpened.Remove((sender as FrmInformations).IdQCM);
                 }
         }
 
@@ -455,7 +494,7 @@ namespace WF_TPI_QCM
         /// </summary>
         public void Save()
         {
-            _qcmModele.Save();
+            QcmModele.Save();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace WF_TPI_QCM
         private string _reponse;
         private bool _bonneReponse;
 
-        Modes _modeDatabase;
+        private Modes _modeDatabase;
 
         public string Reponse
         {

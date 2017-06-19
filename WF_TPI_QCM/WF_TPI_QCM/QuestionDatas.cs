@@ -11,7 +11,7 @@ namespace WF_TPI_QCM
         private string _question;
         private Dictionary<int, ReponseDatas> _dictReponseModele;
 
-        Modes _modeDatabase; // Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
+        private Modes _modeDatabase; // Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
 
         public string Question
         {

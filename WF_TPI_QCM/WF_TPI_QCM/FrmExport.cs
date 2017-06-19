@@ -15,7 +15,46 @@ namespace WF_TPI_QCM
     {
         private string _filenameModel;
         private List<int> _listSelectedIdQCMs;
-        SaveFileDialog _sfd;
+        private SaveFileDialog _sfd;
+
+        private string FilenameModel
+        {
+            get
+            {
+                return _filenameModel;
+            }
+
+            set
+            {
+                _filenameModel = value;
+            }
+        }
+
+        private List<int> ListSelectedIdQCMs
+        {
+            get
+            {
+                return _listSelectedIdQCMs;
+            }
+
+            set
+            {
+                _listSelectedIdQCMs = value;
+            }
+        }
+
+        private SaveFileDialog Sfd
+        {
+            get
+            {
+                return _sfd;
+            }
+
+            set
+            {
+                _sfd = value;
+            }
+        }
 
         /// <summary>
         /// Constructeur
@@ -36,9 +75,9 @@ namespace WF_TPI_QCM
         public FrmExport(List<int> listSelectedIdQCMs, string[] marques, string filenameModel, string modelName)
         {
             InitializeComponent();
-            _filenameModel = filenameModel;
+            FilenameModel = filenameModel;
 
-            this._listSelectedIdQCMs = listSelectedIdQCMs;
+            this.ListSelectedIdQCMs = listSelectedIdQCMs;
             if (modelName != null)
                 LoadModel(modelName);
 
@@ -57,7 +96,7 @@ namespace WF_TPI_QCM
         private void LoadModel(string modelName)
         {
             //https://msdn.microsoft.com/en-us/library/system.environment.specialfolder%28v=vs.110%29.aspx
-            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + _filenameModel + "\\" + modelName))
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FilenameModel + "\\" + modelName))
             {
                 if (!QCMController.GetListModeles().Contains(modelName))
                 {
@@ -65,7 +104,7 @@ namespace WF_TPI_QCM
                     return;
                 }
             }
-            tbxContent.Text = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + _filenameModel + "\\" + modelName);
+            tbxContent.Text = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FilenameModel + "\\" + modelName);
         }
 
         /// <summary>
@@ -75,16 +114,16 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnExport_Click(object sender, EventArgs e)
         {
-            string stringLatex = QCMController.ExportLatex(tbxNameOfDocument.Text, tbxContent.Text, _listSelectedIdQCMs);
+            string stringLatex = QCMController.ExportLatex(tbxNameOfDocument.Text, tbxContent.Text, ListSelectedIdQCMs);
             if (stringLatex != null)
             {
-                _sfd = new SaveFileDialog();
-                _sfd.Filter = "Format texte (*.txt) | *.txt";
-                if (_sfd.ShowDialog() == DialogResult.OK)
+                Sfd = new SaveFileDialog();
+                Sfd.Filter = "Format texte (*.txt) | *.txt";
+                if (Sfd.ShowDialog() == DialogResult.OK)
                 {
-                    if (_sfd.FileName.Split('.').Last() != "txt")
-                        _sfd.FileName += ".txt";
-                    File.WriteAllText(_sfd.FileName, stringLatex);
+                    if (Sfd.FileName.Split('.').Last() != "txt")
+                        Sfd.FileName += ".txt";
+                    File.WriteAllText(Sfd.FileName, stringLatex);
                 }
             }
             else

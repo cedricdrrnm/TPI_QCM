@@ -23,10 +23,9 @@ namespace WF_TPI_QCM
         private int _nextIdQuestion;
         private int _nextIdReponse;
         private int _nextIdMotCle;
-        private int _nextIdQCM;
 
         // Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
-        Modes _modeDatabase;
+        private Modes _modeDatabase;
 
         public int IdQCM
         {

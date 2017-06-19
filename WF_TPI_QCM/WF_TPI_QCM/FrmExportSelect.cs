@@ -28,6 +28,19 @@ namespace WF_TPI_QCM
             }
         }
 
+        private List<string> ListModel
+        {
+            get
+            {
+                return _listModel;
+            }
+
+            set
+            {
+                _listModel = value;
+            }
+        }
+
         /// <summary>
         /// Constructeur
         /// </summary>
@@ -35,7 +48,7 @@ namespace WF_TPI_QCM
         public FrmExportSelect(List<string> listModels)
         {
             InitializeComponent();
-            _listModel = listModels;
+            ListModel = listModels;
 
             foreach (string item in listModels)
             {

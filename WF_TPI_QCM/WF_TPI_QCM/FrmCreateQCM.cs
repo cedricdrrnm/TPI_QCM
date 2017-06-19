@@ -12,7 +12,7 @@ namespace WF_TPI_QCM
 {
     public partial class FrmCreateQCM : Form
     {
-        QCMController _qcmController;
+        private QCMController _qcmController;
 
         private QCMController QcmController
         {

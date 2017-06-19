@@ -9,7 +9,7 @@ namespace WF_TPI_QCM
 {
     class DAO
     {
-        static MySqlConnection conn;
+        private static MySqlConnection _conn;
         private int _nextIdQCM;
 
         public int NextIdQCM
@@ -25,12 +25,25 @@ namespace WF_TPI_QCM
             }
         }
 
+        private static MySqlConnection Conn
+        {
+            get
+            {
+                return _conn;
+            }
+
+            set
+            {
+                _conn = value;
+            }
+        }
+
         /// <summary>
         /// Initialise la connection
         /// </summary>
         public DAO()
         {
-            conn = new MySqlConnection("SERVER=" + Properties.Settings.Default.DB_Host + ";" + "DATABASE=" + Properties.Settings.Default.DB_Name + ";" + "UID=" + Properties.Settings.Default.DB_Username + ";" + "PASSWORD=" + Properties.Settings.Default.DB_Password + ";");
+            Conn = new MySqlConnection("SERVER=" + Properties.Settings.Default.DB_Host + ";" + "DATABASE=" + Properties.Settings.Default.DB_Name + ";" + "UID=" + Properties.Settings.Default.DB_Username + ";" + "PASSWORD=" + Properties.Settings.Default.DB_Password + ";");
         }
 
         /// <summary>
@@ -41,9 +54,9 @@ namespace WF_TPI_QCM
         {
             try
             {
-                if (conn.State != System.Data.ConnectionState.Open)
+                if (Conn.State != System.Data.ConnectionState.Open)
                 {
-                    conn.Open();
+                    Conn.Open();
                 }
             }
             catch (MySqlException ex)
@@ -62,7 +75,7 @@ namespace WF_TPI_QCM
                         new Exception("Erreur lors de la connection: " + ex.Message);
                         break;
                 }
-                conn = null;
+                Conn = null;
                 throw new Exception("Connection échouée !");
             }
         }
@@ -75,7 +88,7 @@ namespace WF_TPI_QCM
         {
             try
             {
-                conn.Close();
+                Conn.Close();
             }
             catch (MySqlException ex)
             {
@@ -101,7 +114,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
                 //Create a data reader and Execute the command
                 MySqlDataReader dataReader = cmd.ExecuteReader();
 
@@ -143,7 +156,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 //Parameters
                 cmd.Parameters.AddWithValue("@id", id);
@@ -189,7 +202,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 //Parameters
                 cmd.Parameters.AddWithValue("@id", id);
@@ -235,7 +248,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 //Parameters
                 cmd.Parameters.AddWithValue("@id", id);
@@ -281,7 +294,7 @@ namespace WF_TPI_QCM
             {
                 _daoTemp.OpenConnection();
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
                 //Create a data reader and Execute the command
                 MySqlDataReader dataReader = cmd.ExecuteReader();
 
@@ -323,7 +336,7 @@ namespace WF_TPI_QCM
                 QCMDatas qcmModele = null;
 
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 //Parameters
                 cmd.Parameters.AddWithValue("@idQCM", idQCM);
@@ -394,7 +407,7 @@ namespace WF_TPI_QCM
                 bool qcmExists = false;
                 OpenConnection();
                 //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
                 cmd.Parameters.AddWithValue("@nomQCM", nomQCM);
                 //Create a data reader and Execute the command
                 MySqlDataReader dataReader = cmd.ExecuteReader();
@@ -440,7 +453,7 @@ namespace WF_TPI_QCM
                 int idQCM = 0;
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@nomSubject", nomQCM);
                 cmd.Parameters.AddWithValue("@level", level);
@@ -486,7 +499,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idQCM", idQCM);
                 cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
@@ -535,7 +548,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
                 cmd.Parameters.AddWithValue("@idReponse", idReponse);
@@ -584,7 +597,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idQCM", idQCM);
                 cmd.Parameters.AddWithValue("@idMotCle", idMotCle);
@@ -632,7 +645,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@nomSubject", nomQCM);
                 cmd.Parameters.AddWithValue("@level", level);
@@ -683,7 +696,7 @@ namespace WF_TPI_QCM
                 try
                 {
                     //create command and assign the query and connection from the constructor
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                     cmd.Parameters.AddWithValue("@question", question);
                     //Create a data reader and Execute the command
@@ -744,7 +757,7 @@ namespace WF_TPI_QCM
                 try
                 {
                     //create command and assign the query and connection from the constructor
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                     cmd.Parameters.AddWithValue("@reponse", reponse);
                     //Create a data reader and Execute the command
@@ -803,7 +816,7 @@ namespace WF_TPI_QCM
                 try
                 {
                     //create command and assign the query and connection from the constructor
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                     cmd.Parameters.AddWithValue("@motCle", motCle);
                     //Create a data reader and Execute the command
@@ -863,7 +876,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idQCM", idQCM);
                 cmd.Parameters.AddWithValue("@nomQCM", nomQCM);
@@ -904,7 +917,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idReponse", idReponse);
                 cmd.Parameters.AddWithValue("@bonneReponse", bonneReponse);
@@ -944,7 +957,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idMotCle", idMotCle);
                 cmd.Parameters.AddWithValue("@motCle", motCle);
@@ -983,7 +996,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
                 cmd.Parameters.AddWithValue("@question", question);
@@ -1025,7 +1038,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
                 
                 cmd.Parameters.AddWithValue("@idReponse", idReponse);
                 cmd.Parameters.AddWithValue("@reponse", reponse);
@@ -1068,7 +1081,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@id", idMotCle);
                 try
@@ -1105,7 +1118,7 @@ namespace WF_TPI_QCM
                 DeleteReponsesByIdQuestion(idQuestion);
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@id", idQuestion);
                 try
@@ -1136,7 +1149,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idReponse", idReponse);
                 try
@@ -1172,7 +1185,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
                 try
@@ -1243,7 +1256,7 @@ namespace WF_TPI_QCM
             {
                 OpenConnection();
                 //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, conn);
+                MySqlCommand cmd = new MySqlCommand(query, Conn);
 
                 cmd.Parameters.AddWithValue("@id", idQCM);
                 try

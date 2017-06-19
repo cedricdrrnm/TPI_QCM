@@ -12,12 +12,13 @@ namespace WF_TPI_QCM
 {
     public partial class FrmCreateQuestionReponse : Form
     {
-        const string TEXT_CREATE = "Créer";
-        const string TEXT_UPDATE = "Modifier";
-        const string TEXT_QCM = "Titre du QCM: ";
-        TextBox[] _tbxReponseTab;
-        RadioButton[] _rbReponseTab;
-        private Dictionary<string,Dictionary<string,bool>> _returnDatas;
+        private const string TEXT_CREATE = "Créer";
+        private const string TEXT_UPDATE = "Modifier";
+        private const string TEXT_QCM = "Titre du QCM: ";
+        private TextBox[] _tbxReponseTab;
+        private RadioButton[] _rbReponseTab;
+        private Dictionary<string, Dictionary<string, bool>> _returnDatas;
+        private QCMController _qcmController;
 
         public Dictionary<string, Dictionary<string, bool>> ReturnDatas
         {
@@ -31,7 +32,45 @@ namespace WF_TPI_QCM
                 _returnDatas = value;
             }
         }
-        QCMController _qcmController;
+
+        private TextBox[] TbxReponseTab
+        {
+            get
+            {
+                return _tbxReponseTab;
+            }
+
+            set
+            {
+                _tbxReponseTab = value;
+            }
+        }
+
+        private RadioButton[] RbReponseTab
+        {
+            get
+            {
+                return _rbReponseTab;
+            }
+
+            set
+            {
+                _rbReponseTab = value;
+            }
+        }
+
+        private QCMController QcmController
+        {
+            get
+            {
+                return _qcmController;
+            }
+
+            set
+            {
+                _qcmController = value;
+            }
+        }
 
         /// <summary>
         /// Constructeur
@@ -40,10 +79,10 @@ namespace WF_TPI_QCM
         public FrmCreateQuestionReponse(QCMController qcmController)
         {
             InitializeComponent();
-            _qcmController = qcmController;
-            _tbxReponseTab = new TextBox[] { tbxReponse1, tbxReponse2, tbxReponse3, tbxReponse4, tbxReponse5, tbxReponse6 };
-            _rbReponseTab = new RadioButton[] { rbBonneReponse1, rbBonneReponse2, rbBonneReponse3, rbBonneReponse4, rbBonneReponse5, rbBonneReponse6 };
-            lblQCM.Text = TEXT_QCM + _qcmController.GetTitreQCM();
+            QcmController = qcmController;
+            TbxReponseTab = new TextBox[] { tbxReponse1, tbxReponse2, tbxReponse3, tbxReponse4, tbxReponse5, tbxReponse6 };
+            RbReponseTab = new RadioButton[] { rbBonneReponse1, rbBonneReponse2, rbBonneReponse3, rbBonneReponse4, rbBonneReponse5, rbBonneReponse6 };
+            lblQCM.Text = TEXT_QCM + QcmController.GetTitreQCM();
             ReturnDatas = new Dictionary<string, Dictionary<string, bool>>();
         }
 
@@ -55,12 +94,17 @@ namespace WF_TPI_QCM
         private void btnAction_Click(object sender, EventArgs e)
         {
             Dictionary<string, bool> dictReponses = new Dictionary<string, bool>();
-            for (int i = 0; i < Math.Min(_tbxReponseTab.Length, _rbReponseTab.Length); i++)
+            for (int i = 0; i < Math.Min(TbxReponseTab.Length, RbReponseTab.Length); i++)
             {
-                if (!dictReponses.ContainsKey(_tbxReponseTab[i].Text) && _tbxReponseTab[i].Text != "")
-                    dictReponses.Add(_tbxReponseTab[i].Text, _rbReponseTab[i].Checked);
+                if (!dictReponses.ContainsKey(TbxReponseTab[i].Text) && TbxReponseTab[i].Text != "")
+                    dictReponses.Add(TbxReponseTab[i].Text, RbReponseTab[i].Checked);
             }
-            MessageBox.Show(_qcmController.InsertQuestion(tbxQuestion.Text, dictReponses));
+            MessageBox.Show(QcmController.InsertQuestion(tbxQuestion.Text, dictReponses));
+        }
+
+        private void FrmCreateQuestionReponse_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

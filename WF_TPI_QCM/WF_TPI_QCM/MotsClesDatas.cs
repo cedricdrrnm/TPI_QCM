@@ -10,7 +10,7 @@ namespace WF_TPI_QCM
     {
         private string _textMotCle;
 
-        Modes _modeDatabase;
+        private Modes _modeDatabase;
 
         /// <summary>
         /// Permet de dire si c'est un nouveau mot-clé, si c'est une simple édition ou si c'est déjà dans la base de données

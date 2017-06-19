@@ -12,7 +12,20 @@ namespace WF_TPI_QCM
 {
     public partial class FrmListQCMMain : Form
     {
-        Form _frmNext;
+        private Form _frmNext;
+
+        private Form FrmNext
+        {
+            get
+            {
+                return _frmNext;
+            }
+
+            set
+            {
+                _frmNext = value;
+            }
+        }
 
         /// <summary>
         /// Constructeur
@@ -57,8 +70,8 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnCreerQCM_Click(object sender, EventArgs e)
         {
-            _frmNext = new FrmCreateQCM();
-            _frmNext.ShowDialog();
+            FrmNext = new FrmCreateQCM();
+            FrmNext.ShowDialog();
         }
 
         /// <summary>

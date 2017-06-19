@@ -14,7 +14,7 @@ namespace WF_TPI_QCM
     {
         private QCMController _qcmController;
         private int _idQCM;
-        private bool clear;
+        private bool _clear;
 
         public int IdQCM
         {
@@ -29,6 +29,32 @@ namespace WF_TPI_QCM
             }
         }
 
+        private QCMController QcmController
+        {
+            get
+            {
+                return _qcmController;
+            }
+
+            set
+            {
+                _qcmController = value;
+            }
+        }
+
+        private bool Clear
+        {
+            get
+            {
+                return _clear;
+            }
+
+            set
+            {
+                _clear = value;
+            }
+        }
+
         #region Reponse
 
         /// <summary>
@@ -40,7 +66,7 @@ namespace WF_TPI_QCM
         {
             if (e.ColumnIndex == 2)
             {
-                _qcmController.ChooseCorrectAnswer(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value));
+                QcmController.ChooseCorrectAnswer(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value));
                 RefreshQuestion();
             }
         }
@@ -53,7 +79,7 @@ namespace WF_TPI_QCM
         private void dgvReponse_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
 
-            if (_qcmController.DeleteReponseByIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(dgvReponse.Rows[e.Row.Index].Cells[0].Value)))
+            if (QcmController.DeleteReponseByIdReponse(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value), Convert.ToInt32(dgvReponse.Rows[e.Row.Index].Cells[0].Value)))
                 MessageBox.Show("Réponse supprimée avec succès !");
             else
             {
@@ -87,7 +113,7 @@ namespace WF_TPI_QCM
         /// <param name="e"></param>
         private void dgvReponse_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (!clear)
+            if (!Clear)
                 if (dgvReponse.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
                     if (dgvReponse.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim() != "")
                         if (dgvReponse.Rows[e.RowIndex].Cells[1].Value != null)
@@ -99,11 +125,11 @@ namespace WF_TPI_QCM
                             {
                                 if (dgvReponse.Rows[e.RowIndex].Cells[0].Value == null) //Create
                                 {
-                                    string returnText = _qcmController.InsertReponse(idQuestion, reponseText, bonneReponse);
+                                    string returnText = QcmController.InsertReponse(idQuestion, reponseText, bonneReponse);
                                     if (returnText == "")
                                     {
                                         MessageBox.Show("Réponse créée avec succès !");
-                                        dgvReponse.Rows[e.RowIndex].Cells[0].Value = _qcmController.GetReponsesByIdQuestion(idQuestion).Last().Key;
+                                        dgvReponse.Rows[e.RowIndex].Cells[0].Value = QcmController.GetReponsesByIdQuestion(idQuestion).Last().Key;
                                     }
                                     else
                                     {
@@ -114,7 +140,7 @@ namespace WF_TPI_QCM
                                 }
                                 else
                                 {
-                                    KeyValuePair<bool, string> retour = _qcmController.UpdateReponseByIdQuestionAndIdReponse(idQuestion, Convert.ToInt32(dgvReponse.Rows[e.RowIndex].Cells[0].Value), new ReponseDatas(reponseText, bonneReponse, Modes.Update));
+                                    KeyValuePair<bool, string> retour = QcmController.UpdateReponseByIdQuestionAndIdReponse(idQuestion, Convert.ToInt32(dgvReponse.Rows[e.RowIndex].Cells[0].Value), new ReponseDatas(reponseText, bonneReponse, Modes.Update));
                                     if (retour.Value != null)
                                     {
                                         MessageBox.Show(retour.Value);
@@ -136,7 +162,7 @@ namespace WF_TPI_QCM
         private void RefreshQuestion()
         {
             dgvQuestion.Rows.Clear();
-            foreach (KeyValuePair<int, QuestionDatas> item in _qcmController.GetQuestions())
+            foreach (KeyValuePair<int, QuestionDatas> item in QcmController.GetQuestions())
             {
                 dgvQuestion.Rows.Add(new string[] { item.Key.ToString(), item.Value.Question });
             }
@@ -152,12 +178,12 @@ namespace WF_TPI_QCM
         {
             if (dgvQuestion.SelectedRows.Count > 0)
             {
-                clear = true;
+                Clear = true;
                 dgvReponse.Rows.Clear();
                 dgvReponse.AllowUserToAddRows = true;
                 dgvReponse.AllowUserToDeleteRows = true;
-                clear = false;
-                foreach (KeyValuePair<int, ReponseDatas> item in _qcmController.GetReponsesByIdQuestion(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value)))
+                Clear = false;
+                foreach (KeyValuePair<int, ReponseDatas> item in QcmController.GetReponsesByIdQuestion(Convert.ToInt32(dgvQuestion.SelectedRows[0].Cells[0].Value)))
                 {
                     dgvReponse.Rows.Add(new string[] { item.Key.ToString(), item.Value.Reponse, item.Value.BonneReponse.ToString() });
                 }
@@ -181,7 +207,7 @@ namespace WF_TPI_QCM
             if (e.FormattedValue != null)
                 if (e.FormattedValue.ToString().Trim() != "")
                     if (e.FormattedValue.ToString() != dgvQuestion.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString())
-                        if (_qcmController.UpdateQuestionByIdQuestion(Convert.ToInt32(dgvQuestion.Rows[e.RowIndex].Cells[0].Value), e.FormattedValue.ToString()))
+                        if (QcmController.UpdateQuestionByIdQuestion(Convert.ToInt32(dgvQuestion.Rows[e.RowIndex].Cells[0].Value), e.FormattedValue.ToString()))
                             MessageBox.Show("Question modifiée avec succès !");
                         else
                         {
@@ -198,7 +224,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void dgvQuestion_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (_qcmController.DeleteQuestionByIdQuestion(Convert.ToInt32(dgvQuestion.Rows[e.Row.Index].Cells[0].Value)))
+            if (QcmController.DeleteQuestionByIdQuestion(Convert.ToInt32(dgvQuestion.Rows[e.Row.Index].Cells[0].Value)))
                 MessageBox.Show("Question supprimée avec succès !");
             else
             {
@@ -222,12 +248,12 @@ namespace WF_TPI_QCM
                 if (dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString().Trim() != "")
                     if (dgvMotCle.Rows[e.RowIndex].Cells[0].Value == null)
                     {
-                        MessageBox.Show(_qcmController.InsertMotCle(dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString()));
-                        dgvMotCle.Rows[e.RowIndex].Cells[0].Value = _qcmController.GetNextIdMotCle() - 1;
+                        MessageBox.Show(QcmController.InsertMotCle(dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString()));
+                        dgvMotCle.Rows[e.RowIndex].Cells[0].Value = QcmController.GetNextIdMotCle() - 1;
                     }
                     else
                     {
-                        string returnString = _qcmController.UpdateMotCle(Convert.ToInt32(dgvMotCle.Rows[e.RowIndex].Cells[0].Value), dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString());
+                        string returnString = QcmController.UpdateMotCle(Convert.ToInt32(dgvMotCle.Rows[e.RowIndex].Cells[0].Value), dgvMotCle.Rows[e.RowIndex].Cells[1].Value.ToString());
                         if (returnString != "")
                             MessageBox.Show(returnString);
                     }
@@ -244,8 +270,8 @@ namespace WF_TPI_QCM
         /// <param name="controller">Controlleur</param>
         public FrmInformations(QCMController controller)
         {
-            _qcmController = controller;
-            IdQCM = _qcmController.GetIdQCM();
+            QcmController = controller;
+            IdQCM = QcmController.GetIdQCM();
             LoadInformations();
         }
 
@@ -255,7 +281,7 @@ namespace WF_TPI_QCM
         /// <param name="idQCM">Id du QCM affiché</param>
         public FrmInformations(int idQCM)
         {
-            _qcmController = new QCMController(idQCM);
+            QcmController = new QCMController(idQCM);
             IdQCM = idQCM;
             LoadInformations();
         }
@@ -268,12 +294,12 @@ namespace WF_TPI_QCM
             InitializeComponent();
             RefreshQuestion();
 
-            this.Text = "QCM: " + _qcmController.GetTitreQCM();
-            tbxNomQCM.Text = _qcmController.GetTitreQCM();
-            nudLevel.Value = _qcmController.GetLevelByIdQCM();
-            clear = false;
+            this.Text = "QCM: " + QcmController.GetTitreQCM();
+            tbxNomQCM.Text = QcmController.GetTitreQCM();
+            nudLevel.Value = QcmController.GetLevelByIdQCM();
+            Clear = false;
 
-            foreach (KeyValuePair<int, MotsClesDatas> item in _qcmController.GetMotsCles())
+            foreach (KeyValuePair<int, MotsClesDatas> item in QcmController.GetMotsCles())
             {
                 dgvMotCle.Rows.Add(new string[] { item.Key.ToString(), item.Value.TextMotCle });
             }
@@ -286,7 +312,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void btnModifier_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(_qcmController.UpdateQCM(tbxNomQCM.Text, Convert.ToInt32(nudLevel.Value)));
+            MessageBox.Show(QcmController.UpdateQCM(tbxNomQCM.Text, Convert.ToInt32(nudLevel.Value)));
         }
 
         /// <summary>
@@ -298,7 +324,7 @@ namespace WF_TPI_QCM
         {
             if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce QCM ?", "Suppression de QCM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                MessageBox.Show(_qcmController.DeleteQCM());
+                MessageBox.Show(QcmController.DeleteQCM());
                 this.Close();
             }
         }
@@ -310,7 +336,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void dgvMotCle_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (_qcmController.DeleteMotCleByIdMotCle(Convert.ToInt32(dgvMotCle.Rows[e.Row. Index].Cells[0].Value)))
+            if (QcmController.DeleteMotCleByIdMotCle(Convert.ToInt32(dgvMotCle.Rows[e.Row. Index].Cells[0].Value)))
             {
                 MessageBox.Show("Mot-Clé supprimé avec succès !");
                 dgvMotCle.AllowUserToAddRows = true;
@@ -328,7 +354,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void ajouterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _qcmController.CreateQuestionReponse();
+            QcmController.CreateQuestionReponse();
             RefreshQuestion();
         }
 
@@ -339,7 +365,7 @@ namespace WF_TPI_QCM
         /// <param name="e">Evenement</param>
         private void sauvegarderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _qcmController.Save();
+            QcmController.Save();
         }
         
         /// <summary>
