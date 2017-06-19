@@ -52,6 +52,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="reponse">Text de la réponse</param>
+        /// <param name="bonneReponse">Bonne réponse ou non</param>
+        /// <param name="modeDatabase">Mode de réponse pour la base de données</param>
         public ReponseDatas(string reponse, bool bonneReponse, Modes modeDatabase)
         {
             Reponse = reponse;
