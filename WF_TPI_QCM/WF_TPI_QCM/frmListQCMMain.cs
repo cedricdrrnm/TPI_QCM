@@ -13,17 +13,31 @@ namespace WF_TPI_QCM
     public partial class FrmListQCMMain : Form
     {
         Form _frmNext;
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
         public FrmListQCMMain()
         {
             InitializeComponent();
             RefreshDataGridView();
         }
-
+        
+        /// <summary>
+        /// S'effectue lorsque la Form prend le focus
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void FrmListQCMMain_Activated(object sender, EventArgs e)
         {
             RefreshDataGridView();
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnAfficherQCM"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnAfficherQCM_Click(object sender, EventArgs e)
         {
             if (dgvQCM.SelectedRows.Count > 0)
@@ -36,12 +50,20 @@ namespace WF_TPI_QCM
                 }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnCreerQCM"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnCreerQCM_Click(object sender, EventArgs e)
         {
             _frmNext = new FrmCreateQCM();
             _frmNext.ShowDialog();
         }
 
+        /// <summary>
+        /// Permet de raffraichir la DataGridView "dgvQCM"
+        /// </summary>
         public void RefreshDataGridView()
         {
             dgvQCM.Rows.Clear();
@@ -51,10 +73,14 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnExport"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnExport_Click(object sender, EventArgs e)
         {
-            _frmNext = new FrmExportSelect(QCMController.GetListModeles());
-            _frmNext.ShowDialog();
+            QCMController.Export();
         }
     }
 }

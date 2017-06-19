@@ -25,6 +25,7 @@ namespace WF_TPI_QCM
         private int _nextIdMotCle;
         private int _nextIdQCM;
 
+        // Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
         Modes _modeDatabase;
 
         public int IdQCM
@@ -131,6 +132,10 @@ namespace WF_TPI_QCM
             }
         }
 
+
+        /// <summary>
+        /// Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
+        /// </summary>
         public Modes ModeDatabase
         {
             get
@@ -150,6 +155,13 @@ namespace WF_TPI_QCM
         public QCMModele(int idQCM, string nomQCM, int level) : this(idQCM, nomQCM, level, new Dictionary<QuestionModele, List<ReponseModele>>())
         { }*/
 
+            /// <summary>
+            /// Constructeur
+            /// </summary>
+            /// <param name="idQCM">Id du QCM</param>
+            /// <param name="nomQCM">Nom du QCM</param>
+            /// <param name="level">Niveau du QCM</param>
+            /// <param name="mode">Mode du QCM pour la base de données</param>
         public QCMDatas(int idQCM, string nomQCM, int level, Modes mode)
         {
             IdQCM = idQCM;
@@ -161,6 +173,12 @@ namespace WF_TPI_QCM
             DictQuestionModele = new Dictionary<int, QuestionDatas>();
         }
 
+        /// <summary>
+        /// Ajoute une question au QCM
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="questionModele">Question</param>
+        /// <returns></returns>
         public string AddQuestion(int idQuestion, QuestionDatas questionModele)
         {
             if (DictQuestionModele.Keys.Contains(idQuestion))
@@ -174,7 +192,12 @@ namespace WF_TPI_QCM
             }
         }
 
-
+        /// <summary>
+        /// Ajoute une reponse à une question du modèle
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <param name="reponse">Réponse</param>
         public void AddReponseToQuestion(int idQuestion, int idReponse, ReponseDatas reponse)
         {
             QuestionDatas qm;
@@ -184,6 +207,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Ajoute un mot clé
+        /// </summary>
+        /// <param name="idMotCle">Id du mot-clé</param>
+        /// <param name="motCle">Mot-clé</param>
+        /// <returns></returns>
         public string AddMotsCles(int idMotCle, MotsClesDatas motCle)
         {
             if (!DictMotCle.ContainsKey(idMotCle))

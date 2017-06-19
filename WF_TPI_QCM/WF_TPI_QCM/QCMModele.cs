@@ -33,6 +33,10 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="qcm">Modèle</param>
         public QCMModele(QCMModele qcm)
         {
             _dao = new DAO();
@@ -42,11 +46,20 @@ namespace WF_TPI_QCM
             _dictObjetDelete = new Dictionary<int, object>();
         }
 
+        /// <summary>
+        /// Vérifie si le QCM existe déjà
+        /// </summary>
+        /// <param name="titreQCM">Titre du QCM</param>
+        /// <returns>Retourne true s'il existe et false s'il existe pas</returns>
         public bool CheckExists(string titreQCM)
         {
             return _dao.QCMExists(titreQCM);
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
         public QCMModele(int idQCM)
         {
             _dao = new DAO();
@@ -54,21 +67,38 @@ namespace WF_TPI_QCM
             _dictObjetDelete = new Dictionary<int, object>();
         }
 
-        public int GetLevelByIdQCM()
+        /// <summary>
+        /// Récupère le niveau du QCM
+        /// </summary>
+        /// <returns>Niveau du QCM</returns>
+        public int GetLevel()
         {
             return Qcm.Level;
         }
 
+        /// <summary>
+        /// Récupère les questions du QCM
+        /// </summary>
+        /// <returns>Question du QCM</returns>
         public Dictionary<int, QuestionDatas> GetQuestions()
         {
             return Qcm.DictQuestionModele;
         }
 
+        /// <summary>
+        /// Récupère les mots-clés du QCM
+        /// </summary>
+        /// <returns>Mots-clés du QCM</returns>
         public Dictionary<int, MotsClesDatas> GetMotsCles()
         {
             return Qcm.DictMotCle;
         }
 
+        /// <summary>
+        /// Récupère les réponses d'une question du QCM grâce à l'id de la question
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <returns>Réponses d'une question</returns>
         public Dictionary<int, ReponseDatas> GetReponsesByIdQuestion(int idQuestion)
         {
             QuestionDatas qm;
@@ -76,6 +106,12 @@ namespace WF_TPI_QCM
             return qm.DictReponseModele;
         }
 
+        /// <summary>
+        /// Insère une question avec les informations fournies
+        /// </summary>
+        /// <param name="text">Texte de la question</param>
+        /// <param name="dictReponses">Réponses</param>
+        /// <returns>Message</returns>
         public string InsertQuestion(string text, Dictionary<string, bool> dictReponses)
         {
             QuestionDatas qm = new QuestionDatas(text, Modes.Create);
@@ -108,41 +144,79 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Récupère le titre du QCM
+        /// </summary>
+        /// <returns>Titre du QCM</returns>
         public string GetTitreQCM()
         {
             return Qcm.NomQCM;
         }
 
+        /// <summary>
+        /// Récupère l'id du QCM
+        /// </summary>
+        /// <returns>Prochaine id pour les QCMs</returns>
         public int GetIdQCM()
         {
             return Qcm.IdQCM;
         }
 
+
+        /// <summary>
+        /// Récupère le prochaine id pour les questions
+        /// </summary>
+        /// <returns>Prochaine id pour les questions</returns>
         public int GetNextIdQuestion()
         {
             return Qcm.NextIdQuestion;
         }
 
+
+        /// <summary>
+        /// Récupère le prochaine id pour les réponses
+        /// </summary>
+        /// <returns>Prochaine id pour les réponses</returns>
         public int GetNextIdReponse()
         {
             return Qcm.NextIdReponse;
         }
 
+
+        /// <summary>
+        /// Récupère le prochaine id pour les mots-clés
+        /// </summary>
+        /// <returns>Prochaine id pour les mots-clés</returns>
         public int GetNextIdMotCle()
         {
             return Qcm.NextIdMotCle;
         }
 
+
+        /// <summary>
+        /// Prochaine id pour les QCMs
+        /// </summary>
+        /// <returns></returns>
         public int GetNextIdQCM()
         {
             return _dao.NextIdQCM;
         }
 
+        /// <summary>
+        /// Ajoute un QCM
+        /// </summary>
+        /// <param name="titreQCM">Titre du QCM</param>
+        /// <param name="levelQCM">Niveau du QCM</param>
         public void InsertQCM(string titreQCM, int levelQCM)
         {
             Qcm = new QCMDatas(GetNextIdQCM(), titreQCM, levelQCM, Modes.Create);
         }
 
+        /// <summary>
+        /// Supprime une question par son id
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <returns>True si réussi, false sinon</returns>
         public bool DeleteQuestionByIdQuestion(int idQuestion)
         {
             //_listDeletedQuestion.Add(idQuestion);
@@ -159,6 +233,12 @@ namespace WF_TPI_QCM
             return false;
         }
 
+        /// <summary>
+        /// Mets à jour une question par son id et le nouveau texte
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="nouveauTexte">Nouveau texte</param>
+        /// <returns>True si réussi, false si échec</returns>
         public bool UpdateQuestionByIdQuestion(int idQuestion, string nouveauTexte)
         {
             QuestionDatas qm;
@@ -175,6 +255,13 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Mets à jour les réponses par l'id de la question et l'id de la réponse
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <param name="reponseModele">Réponse</param>
+        /// <returns></returns>
         public KeyValuePair<bool, string> UpdateReponseByIdQuestionAndIdReponse(int idQuestion, int idReponse, ReponseDatas reponseModele)
         {
             QuestionDatas qm;
@@ -201,6 +288,9 @@ namespace WF_TPI_QCM
                 return new KeyValuePair<bool, string>(true, "Echec lors de la récupération de la question contenant la réponse pour la modification !");
         }
 
+        /// <summary>
+        /// Sauvegarde dans la base de données
+        /// </summary>
         public void Save()
         {
             string saved = "QCM: " + Qcm.IdQCM + ", " + Qcm.NomQCM + ", Mode: " + Qcm.ModeDatabase + Environment.NewLine;
@@ -303,6 +393,10 @@ namespace WF_TPI_QCM
             Console.WriteLine(saved);
         }
 
+        /// <summary>
+        /// Supprime le QCM
+        /// </summary>
+        /// <returns>Message</returns>
         public string DeleteQCM()
         {
             try
@@ -319,6 +413,12 @@ namespace WF_TPI_QCM
 
         }
 
+        /// <summary>
+        /// Modifie le QCM avec les informations données
+        /// </summary>
+        /// <param name="nouveauText">Nouveau texte</param>
+        /// <param name="nouveauLevel">Nouveau niveau (level)</param>
+        /// <returns>Message</returns>
         public string UpdateQCM(string nouveauText, int nouveauLevel)
         {
             if (nouveauText.Trim() != "")
@@ -343,6 +443,13 @@ namespace WF_TPI_QCM
             return "Nom vide !";
         }
 
+        /// <summary>
+        /// Insère une réponse dans une question par l'id donnée et avec les informations données
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="reponseText">Texte de la réponse</param>
+        /// <param name="bonneReponse">Bonne réponse ou non</param>
+        /// <returns></returns>
         public string InsertReponse(int idQuestion, string reponseText, bool bonneReponse)
         {
             QuestionDatas qm = null;
@@ -368,6 +475,12 @@ namespace WF_TPI_QCM
             return "Cette question est introuvable !";
         }
 
+        /// <summary>
+        /// Supprime une réponse par son id et l'id de la question
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <returns>Vrai si réussi, sinon false</returns>
         public bool DeleteReponseByIdReponse(int idQuestion, int idReponse)
         {
             QuestionDatas qm;
@@ -386,6 +499,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Change la réponse correcte grâce à l'id de la question et de la nouvelle réponse à cette question
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idNewReponse">Id de la nouvelle bonne réponse</param>
         public void ChangeCorrectAnswer(int idQuestion, int idNewReponse)
         {
             foreach (KeyValuePair<int, ReponseDatas> item in GetReponsesByIdQuestion(idQuestion))
@@ -408,6 +526,10 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Récupère la liste des modèles
+        /// </summary>
+        /// <returns>Lsite des mpdèles</returns>
         public static List<string> GetListModeles()
         {
             List<string> listModeles = new List<string>();
@@ -429,11 +551,20 @@ namespace WF_TPI_QCM
             return listModeles;
         }
 
+        /// <summary>
+        /// Récupère la liste des QCMs
+        /// </summary>
+        /// <returns>Liste des QCMs</returns>
         public static Dictionary<int, string> GetListQCM()
         {
             return DAO.SelectAllQCM();
         }
 
+        /// <summary>
+        /// Insère un mot-clé dans le QCM avec son texte
+        /// </summary>
+        /// <param name="textMotCle">Texte du mot-clé</param>
+        /// <returns>Message</returns>
         public string InsertMotCle(string textMotCle)
         {
             if (Qcm.DictMotCle.Count < 4)
@@ -448,6 +579,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Mets à jour un mot-clé grâce à l'id et son nouveau texte
+        /// </summary>
+        /// <param name="idMotCle">Id du mot-clé</param>
+        /// <param name="textMotCle">Nouveau texte du mot-clé</param>
+        /// <returns>Message</returns>
         public string UpdateMotCle(int idMotCle, string textMotCle)
         {
             if (Qcm.DictMotCle.ContainsKey(idMotCle))
@@ -482,6 +619,11 @@ namespace WF_TPI_QCM
                 return "Ce mot-clé n'existe pas, il ne peut pas être modifié !";
         }
 
+        /// <summary>
+        /// Supprime un mot-clé par son id
+        /// </summary>
+        /// <param name="idMotCle">Id du mot-clé</param>
+        /// <returns>Message</returns>
         public bool DeleteMotCleByIdMotCle(int idMotCle)
         {
             MotsClesDatas motsCd;

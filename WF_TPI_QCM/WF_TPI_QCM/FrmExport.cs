@@ -13,25 +13,30 @@ namespace WF_TPI_QCM
 {
     public partial class FrmExport : Form
     {
-        private const string MARQUE_LOOP_QUESTION = "%loopQuestion%";
-        private const string MARQUE_LOOP_BAD_ANSWER = "%loopBadAnswer%";
-        private const string MARQUE_LOOP_GOOD_ANSWER = "%loopGoodAnswer%";
-        private const string MARQUE_TEXT_QUESTION = "%textQuestion%";
-        private const string MARQUE_TEXT_BAD_ANSWER = "%badAnswer%";
-        private const string MARQUE_TEXT_GOOD_ANSWER = "%goodAnswer%";
-        private const string MARQUE_AUTHOR = "%author%";
-        private const string MARQUE_TITLE = "%title%";
-
-        private const string FILENAME_ACCESS = ".TPI_QCM\\Models";
+        private string _filenameModel;
         private List<int> _listSelectedIdQCMs;
         SaveFileDialog _sfd;
 
-        public FrmExport(List<int> listSelectedIdQCMs) : this(listSelectedIdQCMs, null)
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="listSelectedIdQCMs">Liste des Ids de QCM à utiliser dans l'exportation</param>
+        /// <param name="marques">Marques utilisées pour faire le Latex (donnée seulement pour les mettre dans la ListBox située à gauche de la vue)</param>
+        /// <param name="filenameModel">Chemin d'accès du modèle utilisé pour le Latex</param>
+        public FrmExport(List<int> listSelectedIdQCMs, string[] marques, string filenameModel) : this(listSelectedIdQCMs, marques, filenameModel, null)
         { }
 
-        public FrmExport(List<int> listSelectedIdQCMs, string modelName)
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="listSelectedIdQCMs">Liste des Ids de QCM à utiliser dans l'exportation</param>
+        /// <param name="marques">Marques utilisées pour faire le Latex (donnée seulement pour les mettre dans la ListBox située à gauche de la vue)</param>
+        /// <param name="filenameModel">Chemin d'accès des modèles</param>
+        /// <param name="modelName">Nom du modèle utilisé pour l'exportation</param>
+        public FrmExport(List<int> listSelectedIdQCMs, string[] marques, string filenameModel, string modelName)
         {
             InitializeComponent();
+            _filenameModel = filenameModel;
 
             this._listSelectedIdQCMs = listSelectedIdQCMs;
             if (modelName != null)
@@ -42,13 +47,17 @@ namespace WF_TPI_QCM
                 tsmiModel.DropDownItems.Add(item, null, ExportToolStripMenuItem_Click);
             }
 
-            lsbMarkers.Items.AddRange(new string[] { MARQUE_LOOP_QUESTION, MARQUE_LOOP_BAD_ANSWER, MARQUE_LOOP_GOOD_ANSWER, MARQUE_TEXT_QUESTION, MARQUE_TEXT_BAD_ANSWER, MARQUE_TEXT_GOOD_ANSWER });
+            lsbMarkers.Items.AddRange(marques);
         }
 
+        /// <summary>
+        /// Charge le modèle s'il existe et l'écrit dans la propriété Text de la TextBox.
+        /// </summary>
+        /// <param name="modelName"></param>
         private void LoadModel(string modelName)
         {
             //https://msdn.microsoft.com/en-us/library/system.environment.specialfolder%28v=vs.110%29.aspx
-            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\" + modelName))
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + _filenameModel + "\\" + modelName))
             {
                 if (!QCMController.GetListModeles().Contains(modelName))
                 {
@@ -56,63 +65,39 @@ namespace WF_TPI_QCM
                     return;
                 }
             }
-            tbxContent.Text = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + FILENAME_ACCESS + "\\" + modelName);
+            tbxContent.Text = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\" + _filenameModel + "\\" + modelName);
         }
 
+        /// <summary>
+        /// Evenement effectué lors d'un clic sur le bouton "btnExport"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnExport_Click(object sender, EventArgs e)
         {
-            //https://stackoverflow.com/questions/8928601/how-can-i-split-a-string-with-a-string-delimiter
-
-            string[] str = tbxContent.Text.Split(new string[] { MARQUE_LOOP_QUESTION, MARQUE_LOOP_BAD_ANSWER, MARQUE_LOOP_GOOD_ANSWER }, StringSplitOptions.None);
-            if (str.Length == 7)
+            string stringLatex = QCMController.ExportLatex(tbxNameOfDocument.Text, tbxContent.Text, _listSelectedIdQCMs);
+            if (stringLatex != null)
             {
-                //https://msdn.microsoft.com/en-us/library/system.environment.username%28v=vs.110%29.aspx
-                string returnString = str[0].Replace(MARQUE_AUTHOR, ValidateLatexString(Environment.UserName)).Replace(MARQUE_TITLE, ValidateLatexString(tbxNameOfDocument.Text));
-                foreach (int idQCM in _listSelectedIdQCMs)
-                {
-                    QCMController _controller = new QCMController(idQCM);
-                    foreach (KeyValuePair<int,QuestionDatas> question in _controller.GetQuestions())
-                    {
-                        returnString += str[1].Replace(MARQUE_TEXT_QUESTION, ValidateLatexString(question.Value.Question));
-                        foreach (KeyValuePair<int, ReponseDatas> reponse in question.Value.DictReponseModele)
-                        {
-                            if (!reponse.Value.BonneReponse)
-                                returnString += str[2].Replace(MARQUE_TEXT_BAD_ANSWER, ValidateLatexString(reponse.Value.Reponse));
-                            else
-                                returnString += str[4].Replace(MARQUE_TEXT_GOOD_ANSWER, ValidateLatexString(reponse.Value.Reponse));
-                        }
-                        returnString += str[5];
-                    }
-                }
-
-                returnString += str[6];
-                tbxContent.Text = returnString;
                 _sfd = new SaveFileDialog();
                 _sfd.Filter = "Format texte (*.txt) | *.txt";
                 if (_sfd.ShowDialog() == DialogResult.OK)
                 {
                     if (_sfd.FileName.Split('.').Last() != "txt")
                         _sfd.FileName += ".txt";
-                    File.WriteAllText(_sfd.FileName, returnString);
+                    File.WriteAllText(_sfd.FileName, stringLatex);
                 }
+            }
+            else
+            {
+                MessageBox.Show("Le latex est incorrecte, merci de prendre exemple sur le Latex déjà créé !");
             }
         }
 
-        private string ValidateLatexString(string text)
-        {
-            return text
-                .Replace("\\", "\\textbackslash")
-                .Replace("#", "\\#")
-                .Replace("$", "\\$")
-                .Replace("%", "\\%")
-                .Replace("^", "\\^{}")
-                .Replace("&", "\\&")
-                .Replace("_", "\\_")
-                .Replace("{", "\\{")
-                .Replace("}", "\\}")
-                .Replace("~", "\\~{}");
-        }
-
+        /// <summary>
+        /// Evenement effectué lors d'un clic sur le ToolStripMenuItem "ExportToolStripMenuItem"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem)
@@ -121,6 +106,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Evenement effectué lors d'un clic sur un des items dans la ListBox "lsbMarkers".
+        /// Elle sert à insérer un marqueur dans la TextBox.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Event</param>
         private void lsbMarkers_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (lsbMarkers.SelectedItem != null)
@@ -131,7 +122,6 @@ namespace WF_TPI_QCM
                 tbxContent.Text = tbxContent.Text.Insert(selectedIndex, lsbMarkers.SelectedItem.ToString());
                 tbxContent.SelectionStart = selectedIndex + lsbMarkers.SelectedItem.ToString().Length; //Replace le curseur après l'insertion (pas à 0)
             }
-
         }
     }
 }

@@ -6,7 +6,7 @@
 \checkboxchar{$\square$}
 \parindent=0pt
 \title{%title%}
-\author{QCMCreator}
+\author{%author%}
 \date{\today}
 
 \begin{document}

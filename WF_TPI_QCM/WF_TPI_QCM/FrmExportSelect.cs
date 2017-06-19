@@ -13,9 +13,25 @@ namespace WF_TPI_QCM
     public partial class FrmExportSelect : Form
     {
         private List<string> _listModel;
-        private QCMController _controller;
-        private FrmExport _frmExport;
+        private KeyValuePair<string, List<int>> _returnItem;
 
+        public KeyValuePair<string, List<int>> ReturnItem
+        {
+            get
+            {
+                return _returnItem;
+            }
+
+            set
+            {
+                _returnItem = value;
+            }
+        }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="listModels">Liste des modèles</param>
         public FrmExportSelect(List<string> listModels)
         {
             InitializeComponent();
@@ -32,6 +48,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnSuivant"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnSuivant_Click(object sender, EventArgs e)
         {
             List<int> ListSelectedIdQCMs = new List<int>();
@@ -41,15 +62,20 @@ namespace WF_TPI_QCM
                     ListSelectedIdQCMs.Add(Convert.ToInt32(item.Name));
             }
 
+            string model = null;
             if (lsbModeles.SelectedItem != null)
-                _frmExport = new FrmExport(ListSelectedIdQCMs, lsbModeles.SelectedItem.ToString());
-            else
-                _frmExport = new FrmExport(ListSelectedIdQCMs);
+                model = lsbModeles.SelectedItem.ToString();
 
             if (ListSelectedIdQCMs.Count > 0)
-                _frmExport.ShowDialog();
+            {
+                ReturnItem = new KeyValuePair<string, List<int>>(model, ListSelectedIdQCMs);
+                this.Close();
+            }
             else
-                MessageBox.Show("Vous n'avez pas sélectionné de QCM");
+            {
+                MessageBox.Show("Aucun QCM sélectionné");
+            }
+
         }
     }
 }

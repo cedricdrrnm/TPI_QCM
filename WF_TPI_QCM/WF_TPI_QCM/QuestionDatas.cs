@@ -11,7 +11,7 @@ namespace WF_TPI_QCM
         private string _question;
         private Dictionary<int, ReponseDatas> _dictReponseModele;
 
-        Modes _modeDatabase;
+        Modes _modeDatabase; // Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
 
         public string Question
         {
@@ -39,6 +39,9 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Permet de dire si c'est un nouveau QCM, si c'est une simple édition ou si c'est déjà dans la base de données
+        /// </summary>
         public Modes ModeDatabase
         {
             get
@@ -52,6 +55,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="question">Question</param>
+        /// <param name="modeDatabase">Mode de la question dans la base de données</param>
         public QuestionDatas(string question, Modes modeDatabase)
         {
             Question = question;
@@ -59,6 +67,11 @@ namespace WF_TPI_QCM
             ModeDatabase = modeDatabase;
         }
 
+        /// <summary>
+        /// Ajoute une réponse à la question
+        /// </summary>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <param name="reponse">réponse</param>
         public void AddReponse(int idReponse, ReponseDatas reponse)
         {
             if (!DictReponseModele.Keys.Contains(idReponse))

@@ -85,6 +85,10 @@ namespace WF_TPI_QCM
 
         #region Select
 
+        /// <summary>
+        /// Sélectionne les autoincréments
+        /// </summary>
+        /// <returns>Auto-incréments</returns>
         Dictionary<string, int> SelectAutoIncrement()
         {
             string query = "SELECT `TABLE_NAME`, `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" + Properties.Settings.Default.DB_Name + "' AND AUTO_INCREMENT IS NOT null";
@@ -122,6 +126,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Retourne les questions par l'id QCM
+        /// </summary>
+        /// <param name="id">Id du QCM</param>
+        /// <returns>Question du QCM</returns>
         public Dictionary<int, QuestionDatas> SelectAllQuestionByIdQCM(int id)
         {
             string query = "SELECT qu.`idQuestion`, qu.`question` FROM `question` as qu,`qcm_has_question` as qhq, `qcm` as q WHERE qu.`idQuestion` = qhq.`idQuestion` AND qhq.`idQCM` = q.`idQCM` AND q.`idQCM` = @id";
@@ -163,6 +172,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Retourne les réponse par l'id de la question
+        /// </summary>
+        /// <param name="id">Id de la question</param>
+        /// <returns>Réponses à la question</returns>
         public Dictionary<int, ReponseDatas> SelectAllReponseByIdQuestion(int id)
         {
             string query = "SELECT r.`idReponse`, r.`reponse`, qhr.`bonneReponse` FROM `reponse` as r, `question` as q, `question_has_reponse` as qhr WHERE r.`idReponse` = qhr.`idReponse` AND qhr.`idQuestion` = q.`idQuestion` AND q.`idQuestion` = @id";
@@ -204,6 +218,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Retourne les mots clé par l'id du QCM
+        /// </summary>
+        /// <param name="id">Id du QCM</param>
+        /// <returns>Retourne l'id du QCM</returns>
         public Dictionary<int, MotsClesDatas> SelectAllMotCleByIdQCM(int id)
         {
             string query = "SELECT m.`idMotCle`, m.`motCle` FROM `motcle` as m,`qcm_has_motcle` as qhm, `qcm` as q WHERE m.`idMotCle` = qhm.`idMotCle` AND qhm.`idQCM` = q.`idQCM` AND q.`idQCM` = @id;";
@@ -245,6 +264,10 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Sélectionne tous les QCMs
+        /// </summary>
+        /// <returns>Tous les QCMs</returns>
         public static Dictionary<int, string> SelectAllQCM()
         {
             DAO _daoTemp = new DAO();
@@ -283,6 +306,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Sélectionne un QCM par son id
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <returns>QCM</returns>
         public QCMDatas SelectQCMById(int idQCM)
         {
             //Open connection
@@ -351,6 +379,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Retourne si le QCM existe
+        /// </summary>
+        /// <param name="nomQCM">Nom du QCM</param>
+        /// <returns>Si le QCM existe retourne true, sinon retourne false</returns>
         public bool QCMExists(string nomQCM)
         {
             string query = "SELECT * FROM qcm WHERE `nomQCM` = @nomQCM";
@@ -390,6 +423,13 @@ namespace WF_TPI_QCM
         #endregion
 
         #region Insert
+
+        /// <summary>
+        /// Insère une nouvelle question avec les informations données
+        /// </summary>
+        /// <param name="nomQCM">Nom du QCM</param>
+        /// <param name="level">Niveau du QCM</param>
+        /// <returns>Id du QCM</returns>
         public int InsertQCM(string nomQCM, int level)
         {
             string query = "INSERT INTO `qcm`(`nomQCM`,`level`) VALUES (@nomSubject, @level); SELECT LAST_INSERT_ID();";
@@ -808,6 +848,12 @@ namespace WF_TPI_QCM
 
         #region Update
 
+        /// <summary>
+        /// Mets à jour un QCM avec les informations fournies
+        /// </summary>
+        /// <param name="idQCM">Id du QCM</param>
+        /// <param name="nomQCM">Nom du QCM</param>
+        /// <param name="level">Niveau du QCM</param>
         public void UpdateQCMByIdQCM(int idQCM, string nomQCM, int level)
         {
             string query = "UPDATE `qcm` SET `nomQCM`=@nomQCM,`level`=@level WHERE `idQCM` = @idQCM";
@@ -843,6 +889,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Mets à jour les réponse avec les informations fournies
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <param name="bonneReponse">Bonne réponse ou non</param>
         private void UpdateCorrectAnswerByIdReponseAndIdQuestion(int idQuestion, int idReponse, bool bonneReponse)
         {
             string query = "UPDATE `question_has_reponse` SET `bonneReponse`=@bonneReponse WHERE `idQuestion`=@idQuestion AND `idReponse`=@idReponse";
@@ -878,6 +930,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Mets à jour un mot clé avec les informations fournies
+        /// </summary>
+        /// <param name="idMotCle">Id du mot-clé</param>
+        /// <param name="motCle">Texte du mot-clé</param>
         public void UpdateMotCleByIdMotCle(int idMotCle, string motCle)
         {
             string query = "UPDATE `motcle` SET `motCle`=@motCle WHERE `idMotCle`=@idMotCle";
@@ -912,6 +969,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Mets à jour une question avec les informations fournies
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="question">Texte de la question</param>
         public void UpdateQuestionByIdQuestion(int idQuestion, string question)
         {
             string query = "UPDATE `question` SET `question`=@question WHERE `idQuestion`=@idQuestion";
@@ -946,6 +1008,13 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Mets à jour une réponse avec les informations fournies
+        /// </summary>
+        /// <param name="idQuestion">Id de la question</param>
+        /// <param name="idReponse">Id de la réponse</param>
+        /// <param name="reponse">Réponse</param>
+        /// <param name="bonneReponse">Bonne réponse ou non</param>
         public void UpdateReponseByIdReponse(int idQuestion, int idReponse, string reponse, bool bonneReponse)
         {
             string query = "UPDATE `reponse` SET `reponse`=@reponse WHERE `idReponse`=@idReponse;";

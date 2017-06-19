@@ -14,6 +14,9 @@ namespace WF_TPI_QCM
     {
         private int _returnId;
 
+        /// <summary>
+        /// Id de la réponse juste sélectionné avant de quitter la Form.
+        /// </summary>
         public int ReturnId
         {
             get
@@ -27,6 +30,10 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="reponses">Toutes les réponses</param>
         public FrmChoixReponseJuste(Dictionary<int, string> reponses)
         {
             InitializeComponent();
@@ -37,6 +44,11 @@ namespace WF_TPI_QCM
             cmbReponseJuste.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Evenement lors d'un clic sur le bouton "btnValider"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnValider_Click(object sender, EventArgs e)
         {
             if (cmbReponseJuste.SelectedItem != null)

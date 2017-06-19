@@ -12,6 +12,9 @@ namespace WF_TPI_QCM
 
         Modes _modeDatabase;
 
+        /// <summary>
+        /// Permet de dire si c'est un nouveau mot-clé, si c'est une simple édition ou si c'est déjà dans la base de données
+        /// </summary>
         public Modes ModeDatabase
         {
             get
@@ -38,6 +41,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="textMotCle">Texte du mot-clé</param>
+        /// <param name="modeDatabase">Mode dans la base de données</param>
         public MotsClesDatas(string textMotCle, Modes modeDatabase)
         {
             TextMotCle = textMotCle;

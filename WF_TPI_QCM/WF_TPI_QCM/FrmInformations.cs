@@ -31,6 +31,11 @@ namespace WF_TPI_QCM
 
         #region Reponse
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur la dernière colonne de la DataGridView "dgvReponse"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvReponse_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 2)
@@ -40,6 +45,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors de la suppression d'une ligne par l'utilisateur
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvReponse_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
 
@@ -56,6 +66,12 @@ namespace WF_TPI_QCM
             dgvReponse.AllowUserToAddRows = true;
         }
 
+        /// <summary>
+        /// S'effectue lors de l'ajout d'une ligne par l'utilisateur.
+        /// Cette méthode de gérer les droits de l'utilisateur sur la suppression et l'ajout.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvReponse_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             dgvReponse.AllowUserToDeleteRows = true;
@@ -63,6 +79,12 @@ namespace WF_TPI_QCM
                 dgvReponse.AllowUserToAddRows = false;
         }
 
+        /// <summary>
+        /// S'effectue après la validation d'une ligne de la DataGridView "dgvReponse".
+        /// Cette méthode est une des plus importantes, car elle permet la création et l'édition du modèle.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgvReponse_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
             if (!clear)
@@ -108,6 +130,9 @@ namespace WF_TPI_QCM
 
         #region Questions
 
+        /// <summary>
+        /// Raffraichit les questions
+        /// </summary>
         private void RefreshQuestion()
         {
             dgvQuestion.Rows.Clear();
@@ -117,6 +142,12 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lorsque la sélection de la question change.
+        /// Affiche les réponses de la nouvelle question sélectionée.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvQuestion_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvQuestion.SelectedRows.Count > 0)
@@ -139,10 +170,12 @@ namespace WF_TPI_QCM
             }
         }
 
-        private void questionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
+        /// <summary>
+        /// S'effectue après la validation d'une cellule de la DataGridView "dgvQuestion".
+        /// Elle permet l'édition du modèle.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvQuestion_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             if (e.FormattedValue != null)
@@ -157,6 +190,12 @@ namespace WF_TPI_QCM
                         }
         }
 
+        /// <summary>
+        /// S'effectue après la suppression d'une ligne du DataGridView "dgvQuestion" par l'utilisateur.
+        /// Elle permet la suppression de question du modèle.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvQuestion_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             if (_qcmController.DeleteQuestionByIdQuestion(Convert.ToInt32(dgvQuestion.Rows[e.Row.Index].Cells[0].Value)))
@@ -172,6 +211,11 @@ namespace WF_TPI_QCM
 
         #region MotsCles
 
+        /// <summary>
+        /// S'effectue après la validation d'une ligne de la DataGridView "dgvMotCle"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvMotCle_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
             if (dgvMotCle.Rows[e.RowIndex].Cells[1].Value != null)
@@ -194,7 +238,10 @@ namespace WF_TPI_QCM
 
         #endregion
 
-
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="controller">Controlleur</param>
         public FrmInformations(QCMController controller)
         {
             _qcmController = controller;
@@ -202,6 +249,10 @@ namespace WF_TPI_QCM
             LoadInformations();
         }
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="idQCM">Id du QCM affiché</param>
         public FrmInformations(int idQCM)
         {
             _qcmController = new QCMController(idQCM);
@@ -209,6 +260,9 @@ namespace WF_TPI_QCM
             LoadInformations();
         }
 
+        /// <summary>
+        /// Affiche les informations de la Form
+        /// </summary>
         public void LoadInformations()
         {
             InitializeComponent();
@@ -225,11 +279,21 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le bouton "btnModifier"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void btnModifier_Click(object sender, EventArgs e)
         {
             MessageBox.Show(_qcmController.UpdateQCM(tbxNomQCM.Text, Convert.ToInt32(nudLevel.Value)));
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le ToolStripMenuItem "supprimerToolStripMenuItem"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void supprimerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce QCM ?", "Suppression de QCM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -239,6 +303,11 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors de la suppression d'une ligne de la DataGridView "dgvMotCle" par l'utilisateur.
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void dgvMotCle_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             if (_qcmController.DeleteMotCleByIdMotCle(Convert.ToInt32(dgvMotCle.Rows[e.Row. Index].Cells[0].Value)))
@@ -252,17 +321,32 @@ namespace WF_TPI_QCM
             }
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le ToolStripMenuItem "ajouterToolStripMenuItem"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void ajouterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _qcmController.CreateQuestionReponse();
             RefreshQuestion();
         }
 
+        /// <summary>
+        /// S'effectue lors d'un clic sur le ToolStripMenuItem "sauvegarderToolStripMenuItem"
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void sauvegarderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _qcmController.Save();
         }
-
+        
+        /// <summary>
+        /// S'effectue lors de la fermeture de la Form
+        /// </summary>
+        /// <param name="sender">Objet</param>
+        /// <param name="e">Evenement</param>
         private void FrmInformations_FormClosing(object sender, FormClosingEventArgs e)
         {
             if(MessageBox.Show("Voulez-vous sauvegarder avant de quitter ?", "Sauvegarder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
